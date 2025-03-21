@@ -1,9 +1,9 @@
-// components/Navbar.jsx
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -11,15 +11,18 @@ export default function Navbar() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    router.push(`/products/${searchQuery}`);
+    if (searchQuery.trim()) {
+      router.push(`/products/${searchQuery}`);
+    }
   };
 
   return (
-    <header className="bg-blue-600 shadow-md">
+    <header className="bg-orange-400 shadow-md">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
-        <Link href="/" className="text-3xl text-white font-bold">
-          Label Retail
+        <Link href="/" className="flex items-center space-x-2">
+          <Image src="/images/lr.png" alt="Logo Label Retail" width={40} height={40} />
         </Link>
+
         <nav className="flex items-center space-x-6">
           <Link href="/" className="text-white hover:text-blue-200 transition-colors">Accueil</Link>
           <Link href="/products" className="text-white hover:text-blue-200 transition-colors">Produits</Link>

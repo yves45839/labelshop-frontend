@@ -1,14 +1,17 @@
-// components/Footer.jsx
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
     <footer className="bg-gray-800 text-white">
       <div className="container mx-auto py-8 px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
 
-        <div>
-          <h3 className="text-xl font-bold mb-4">Label Retail</h3>
-          <p>Votre expert en solutions de sécurité et vidéosurveillance en Côte d'Ivoire.</p>
+        <div className="flex flex-col items-start">
+          <div className="flex items-center space-x-2 mb-4">
+            <Image src="/images/lr.png" alt="Logo Label Retail" width={40} height={40} />
+            <h3 className="text-xl font-bold">Label Retail</h3>
+          </div>
+          <p>N° 1 en solutions Hikvision en Côte d'Ivoire.</p>
         </div>
 
         <div>
@@ -23,13 +26,14 @@ export default function Footer() {
 
         <div>
           <h3 className="text-lg font-semibold mb-2">Contact</h3>
-          <p>Email : contact@labelretail.ci</p>
-          <p>Téléphone : +225 888 999 65</p>
+          <p>Email : info@label-ci.com</p>
+          <p>Téléphone : +225 07 888 999 65</p>
+          <p>Fixe : +225 27 21 58 56 77</p>
           <p>Adresse : Abidjan, Côte d'Ivoire</p>
         </div>
-
       </div>
-      <div className="bg-gray-900 py-4 text-center">
+
+      <div className="bg-gray-900 py-4 text-center text-sm text-gray-300">
         © {new Date().getFullYear()} Label Retail. Tous droits réservés.
       </div>
     </footer>

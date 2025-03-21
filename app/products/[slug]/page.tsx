@@ -8,23 +8,21 @@ async function getProduct(slug: string) {
   });
 
   const products = await res.json();
-
-  if (!products || products.length === 0) return null;
-
-  return products[0];
+  return products?.[0] || null;
 }
 
-// ✅ Signature correcte pour Next.js 15
+// ✅ SEO dynamique avec typage correct
 export async function generateMetadata(
-  { params }: { params: { slug: string } },
-  parent?: ResolvingMetadata
+  props: { params: Promise<{ slug: string }> },
+  _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const product = await getProduct(params.slug);
+  const { slug } = await props.params;
+  const product = await getProduct(slug);
 
   if (!product) {
     return {
-      title: "Produit introuvable",
-      description: "Le produit recherché n'existe pas.",
+      title: 'Produit introuvable',
+      description: 'Le produit recherché n\'existe pas.',
     };
   }
 
@@ -40,13 +38,14 @@ export async function generateMetadata(
   };
 }
 
-// ✅ Signature correcte aussi ici
+// ✅ Composant principal avec params typé comme Promise
 export default async function ProductDetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const product = await getProduct(params.slug);
+  const { slug } = await params;
+  const product = await getProduct(slug);
 
   if (!product) {
     return (
@@ -99,7 +98,7 @@ export default async function ProductDetailPage({
             <p>
               {product.description && product.description !== 'False'
                 ? product.description
-                : product.meta_description || "Description bientôt disponible."}
+                : product.meta_description || 'Description bientôt disponible.'}
             </p>
           </div>
 
