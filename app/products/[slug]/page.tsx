@@ -1,23 +1,25 @@
 import Image from 'next/image';
+import type { Metadata, ResolvingMetadata } from 'next';
 
-async function getProduct(slug) {
+// Fonction pour récupérer le produit
+async function getProduct(slug: string) {
   const res = await fetch(`https://labelshop-backend.onrender.com/products/search-products/?q=${slug}`, {
     cache: 'no-store',
   });
 
   const products = await res.json();
 
-  // Correction importante ici : gestion des tableaux vides !
   if (!products || products.length === 0) return null;
 
   return products[0];
 }
 
-// Correction robuste dans generateMetadata
-export async function generateMetadata({ params }) {
-  const { slug } = params;
-
-  const product = await getProduct(slug);
+// ✅ Signature correcte pour Next.js 15
+export async function generateMetadata(
+  { params }: { params: { slug: string } },
+  parent?: ResolvingMetadata
+): Promise<Metadata> {
+  const product = await getProduct(params.slug);
 
   if (!product) {
     return {
@@ -38,11 +40,13 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// Composant produit robuste
-export default async function ProductDetailPage({ params }) {
-  const { slug } = params;
-
-  const product = await getProduct(slug);
+// ✅ Signature correcte aussi ici
+export default async function ProductDetailPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const product = await getProduct(params.slug);
 
   if (!product) {
     return (
@@ -58,59 +62,59 @@ export default async function ProductDetailPage({ params }) {
   )}`;
 
   return (
-    <main className="container mx-auto py-10">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
+    <main className="container mx-auto py-12 px-6">
+      <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-lg p-8 border-t-4 border-blue-600">
         <img
           src={product.image_1024 || '/default-product.png'}
           alt={product.name}
-          className="w-full h-[500px] object-contain rounded-md"
+          className="w-full h-[400px] object-contain rounded-lg"
         />
-        <div className="mt-4">
-          <h1 className="text-4xl font-bold mb-2">{product.name}</h1>
-          <p className="text-xl text-gray-800 font-semibold my-2">
+
+        <div className="mt-6">
+          <h1 className="text-3xl font-bold text-orange-500">{product.name}</h1>
+          <p className="text-xl font-semibold text-gray-700 my-2">
             Prix : {product.list_price.toLocaleString()} FCFA
           </p>
+
           {product.discount_price && (
             <p className="text-lg text-red-500">
               Prix Promo : {product.discount_price.toLocaleString()} FCFA
             </p>
           )}
-          <p className="my-4 text-gray-700">
-            {product.description && product.description !== "False"
-              ? product.description
-              : product.short_description || "Description indisponible pour ce produit."}
-          </p>
-          <p className="font-medium">
+
+          <p className="font-medium mt-2">
             Disponibilité :
             <span className={product.is_available ? 'text-green-600' : 'text-red-600'}>
               {product.is_available ? ' En stock' : ' Indisponible'}
             </span>
           </p>
-          <div className="mt-4 flex flex-col gap-1 text-sm text-gray-700">
-            <p><span className="font-semibold">Catégorie :</span> {product.categ_id}</p>
-            <p>
-              <span className="font-semibold">Marque :</span> {product.brand || 'Hikvision'}
-            </p>
-            <p className="mt-2">
-              Référence : {product.default_code}
-            </p>
+
+          <div className="mt-4 text-gray-700">
+            <p><strong>Catégorie :</strong> {product.categ_id}</p>
+            <p><strong>Marque :</strong> {product.brand || 'Hikvision'}</p>
+            <p><strong>Référence :</strong> {product.default_code}</p>
           </div>
 
-          <div className="mt-6">
-            <h2 className="text-xl font-bold mb-2">Description :</h2>
+          <div className="mt-6 text-gray-800">
             <p>
               {product.description && product.description !== 'False'
                 ? product.description
-                : product.short_description || "Description bientôt disponible."}
+                : product.meta_description || "Description bientôt disponible."}
             </p>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-8">
             <a
               href={whatsappLink}
               target="_blank"
-              className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-5 rounded-full"
+              rel="noopener noreferrer"
+              className="inline-flex items-center bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-full transition-colors"
             >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                alt="WhatsApp"
+                className="w-6 h-6 mr-2"
+              />
               Acheter via WhatsApp
             </a>
           </div>
