@@ -14,7 +14,7 @@ async function getProduct(slug: string) {
 // ✅ SEO dynamique avec typage correct
 export async function generateMetadata(
   props: { params: Promise<{ slug: string }> },
-  _parent: ResolvingMetadata
+  parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const product = await getProduct(slug);
