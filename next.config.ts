@@ -6,4 +6,11 @@ const nextConfig: NextConfig = {
   },
 };
 
+module.exports = {
+  images: {
+    domains: ['labelshop-backend.onrender.com', 'labr1.odoo.com'],
+  },
+};
+
+
 export default nextConfig;

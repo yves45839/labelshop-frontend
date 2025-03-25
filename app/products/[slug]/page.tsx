@@ -1,20 +1,35 @@
-import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 
 // Fonction pour récupérer le produit
 async function getProduct(slug: string) {
-  const res = await fetch(`https://labelshop-backend.onrender.com/products/search-products/?q=${slug}`, {
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `https://labelshop-backend.onrender.com/products/search-products/?q=${slug}`,
+    { cache: 'no-store' }
+  );
 
   const products = await res.json();
   return products?.[0] || null;
 }
 
-// ✅ SEO dynamique avec typage correct
+// 🔁 Récupère l'image principale
+function getImageUrl(product: any): string {
+  const baseUrl = 'https://labelshop-backend.onrender.com';
+
+  if (product.image_1024?.startsWith('/media')) {
+    return `${baseUrl}${product.image_1024}`;
+  }
+
+  if (product.image_512?.startsWith('http')) {
+    return product.image_512;
+  }
+
+  return '/default-product.png';
+}
+
+// ✅ SEO dynamique
 export async function generateMetadata(
   props: { params: Promise<{ slug: string }> },
-  parent: ResolvingMetadata
+  _parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const product = await getProduct(slug);
@@ -22,7 +37,7 @@ export async function generateMetadata(
   if (!product) {
     return {
       title: 'Produit introuvable',
-      description: 'Le produit recherché n\'existe pas.',
+      description: "Le produit recherché n'existe pas.",
     };
   }
 
@@ -33,12 +48,16 @@ export async function generateMetadata(
     openGraph: {
       title: product.meta_title || product.name,
       description: product.meta_description,
-      images: [{ url: product.image_1024 || '/default-product.png' }],
+      images: [
+        {
+          url: getImageUrl(product),
+        },
+      ],
     },
   };
 }
 
-// ✅ Composant principal avec params typé comme Promise
+// ✅ Page produit avec fallback image
 export default async function ProductDetailPage({
   params,
 }: {
@@ -60,11 +79,13 @@ export default async function ProductDetailPage({
     `Je suis intéressé par le produit : ${product.name} (Ref: ${product.default_code}).`
   )}`;
 
+  const imageUrl = getImageUrl(product);
+
   return (
     <main className="container mx-auto py-12 px-6">
       <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-lg p-8 border-t-4 border-blue-600">
         <img
-          src={product.image_1024 || '/default-product.png'}
+          src={imageUrl}
           alt={product.name}
           className="w-full h-[400px] object-contain rounded-lg"
         />

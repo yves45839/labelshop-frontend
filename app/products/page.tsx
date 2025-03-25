@@ -9,14 +9,37 @@ type Product = {
   name: string;
   slug: string;
   image_512?: string;
+  image_1024?: string;
   default_code?: string;
   list_price: number;
-  [key: string]: unknown; // ✅ mieux que any
+  [key: string]: unknown;
 };
 
 const api = axios.create({
   baseURL: 'https://labelshop-backend.onrender.com',
 });
+
+function getProductImage(product: Product): string {
+  const baseUrl = 'https://labelshop-backend.onrender.com';
+
+  // 🥇 Priorité à l'image du backend si chemin /media/ est présent
+  if (
+    product.image_1024 &&
+    typeof product.image_1024 === 'string' &&
+    product.image_1024.startsWith('/media')
+  ) {
+    return `${baseUrl}${product.image_1024}`;
+  }
+
+  // 🥈 Sinon image Odoo
+  if (product.image_512) {
+    return product.image_512;
+  }
+
+  // 🥉 Sinon image par défaut
+  return '/default-product.png';
+}
+
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -56,7 +79,13 @@ export default function ProductsPage() {
       <h1 className="text-3xl font-bold text-center mb-8">Nos Produits</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={{
+              ...product,
+              imageUrl: getProductImage(product),
+            }}
+          />
         ))}
       </div>
     </main>
