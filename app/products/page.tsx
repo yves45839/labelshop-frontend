@@ -8,7 +8,6 @@ type Product = {
   id: number;
   name: string;
   slug: string;
-  image_512?: string;
   image_1024?: string;
   default_code?: string;
   list_price: number;
@@ -19,51 +18,34 @@ const api = axios.create({
   baseURL: 'https://labelshop-backend.onrender.com',
 });
 
+// ✅ Utilise uniquement image_1024 (format complet ou relatif)
 function getProductImage(product: Product): string {
   const baseUrl = 'https://labelshop-backend.onrender.com';
 
-  // 🥇 Priorité à l'image du backend si chemin /media/ est présent
-  if (
-    product.image_1024 &&
-    typeof product.image_1024 === 'string' &&
-    product.image_1024.startsWith('/media')
-  ) {
-    return `${baseUrl}${product.image_1024}`;
+  if (product.image_1024 && typeof product.image_1024 === 'string') {
+    return product.image_1024.startsWith('http')
+      ? `${product.image_1024}?t=${Date.now()}`
+      : `${baseUrl}${product.image_1024}?t=${Date.now()}`;
   }
 
-  // 🥈 Sinon image Odoo
-  if (product.image_512) {
-    return product.image_512;
-  }
-
-  // 🥉 Sinon image par défaut
   return '/default-product.png';
 }
-
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const cachedProducts = localStorage.getItem('cachedProducts');
-
-    if (cachedProducts) {
-      setProducts(JSON.parse(cachedProducts));
-      setIsLoading(false);
-    } else {
-      api
-        .get('/products/get-products/')
-        .then((res) => {
-          setProducts(res.data);
-          localStorage.setItem('cachedProducts', JSON.stringify(res.data));
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error('Erreur lors de la récupération des produits :', error);
-          setIsLoading(false);
-        });
-    }
+    api
+      .get('/products/get-products/')
+      .then((res) => {
+        setProducts(res.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la récupération des produits :', error);
+        setIsLoading(false);
+      });
   }, []);
 
   if (isLoading) {
