@@ -65,7 +65,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
-            src="https://raw.githubusercontent.com/yves45839/labelshop-frontend/refs/heads/main/public/images/lr.png"
+            src="/images/lr.png"
             alt="Logo Label Retail"
             width={40}
             height={40}
