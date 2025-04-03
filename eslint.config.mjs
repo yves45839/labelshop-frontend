@@ -15,11 +15,13 @@ const eslintConfig = [
     rules: {
       // 🚫 Désactive uniquement les règles qui bloquent le build
       '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-implicit-any': 'off', // ✅ nouvelle ligne ajoutée
       'react-hooks/exhaustive-deps': 'off',
       'react/no-unescaped-entities': 'off',
       '@next/next/no-img-element': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
     },
+    files: ['**/*.ts', '**/*.tsx'], // ✅ applique seulement aux fichiers TS/TSX
   },
 ];
 

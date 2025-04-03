@@ -6,9 +6,17 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import Link from "next/link";
 
+type Product = {
+  id: number;
+  name: string;
+  slug: string;
+  image_1024?: string;
+  is_online?: boolean;
+};
+
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   const slides = [
     { src: "/images/alarme_intrusion.jpg", desc: "Protection avancée avec nos systèmes d'alarme intrusion." },
@@ -33,8 +41,8 @@ export default function Home() {
   useEffect(() => {
     axios.get("https://labelshop-backend.onrender.com/products/get-products/")
       .then((res) => {
-        const randomProducts = res.data
-          .filter((p) => p.is_online)
+        const randomProducts = (res.data as Product[])
+          .filter((p: Product) => p.is_online)
           .sort(() => 0.5 - Math.random())
           .slice(0, 5);
         setProducts(randomProducts);
@@ -44,7 +52,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-white text-gray-900">
-
       {/* 🎞 Carousel */}
       <div className="relative w-full h-96 overflow-hidden">
         {slides.map((slide, index) => (
