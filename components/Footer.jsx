@@ -8,7 +8,7 @@ export default function Footer() {
 
         <div className="flex flex-col items-start">
           <div className="flex items-center space-x-2 mb-4">
-            <Image src="/images/LR.png" alt="Logo Label Retail" width={40} height={40} />
+            <Image src="/images/lr.png" alt="Logo Label Retail" width={40} height={40} />
             <h3 className="text-xl font-bold">Label Retail</h3>
           </div>
           <p>N° 1 en solutions Hikvision en Côte d'Ivoire.</p>
