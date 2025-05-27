@@ -46,11 +46,6 @@ export default function LoginPage() {
           Se connecter
         </button>
       </form>
-      <p className="text-center text-sm mt-4">
-        Pas encore de compte?{' '}
-        <a href="/accounts/register" className="text-blue-600 hover:underline">
-          Inscrivez-vous
-        </a>
-      </p>
+    </main>
   );
 }
