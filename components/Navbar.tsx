@@ -57,6 +57,8 @@ export default function Navbar() {
     { href: '/', label: 'ACCUEIL' },
     { href: '/about', label: 'A PROPOS' },
     { href: '/products', label: 'NOS PRODUITS' },
+    { href: '/accounts/login', label: 'CONNEXION' },
+    { href: '/accounts/register', label: 'INSCRIPTION' },
   ];
 
   return (
