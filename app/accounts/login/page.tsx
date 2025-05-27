@@ -52,6 +52,5 @@ export default function LoginPage() {
           Inscrivez-vous
         </a>
       </p>
-    </main>
   );
 }
