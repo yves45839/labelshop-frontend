@@ -1,5 +1,7 @@
+"use client";
 import Link from 'next/link';
 import Image from 'next/image';
+import { addToCart } from '@/lib/cart';
 
 export default function ProductCard({ product }) {
   const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
@@ -36,13 +38,13 @@ export default function ProductCard({ product }) {
         </div>
       </Link>
 
-      {/* ✅ Bouton WhatsApp toujours affiché */}
-      <div className="px-4 pb-4 mt-auto">
+      {/* ✅ Actions */}
+      <div className="px-4 pb-4 mt-auto space-y-2">
         <a
           href={whatsappLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center bg-green-500 hover:bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full transition"
+          className="inline-flex items-center bg-green-500 hover:bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full transition w-full justify-center"
         >
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
@@ -51,6 +53,14 @@ export default function ProductCard({ product }) {
           />
           Acheter via WhatsApp
         </a>
+        <button
+          onClick={async () => {
+            await addToCart({ product_id: product.id, quantity: 1 });
+          }}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-full transition"
+        >
+          Ajouter au panier
+        </button>
       </div>
     </div>
   );
