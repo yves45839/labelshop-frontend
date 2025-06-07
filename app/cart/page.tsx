@@ -42,20 +42,6 @@ export default function CartPage() {
     setItems(updated);
   };
 
-  const handleCheckout = async () => {
-    await createOrder({ items });
-    const text = items
-      .map((it) => `${it.product_name} x${it.quantity}`)
-      .join(', ');
-    const url = `https://wa.me/22588899965?text=${encodeURIComponent(
-      'Bonjour, je souhaite commander: ' + text
-    )}`;
-    if (!userId) {
-      localStorage.removeItem('cart');
-    }
-    router.push(url);
-  };
-
   const updateQuantity = async (item: CartItem, quantity: number) => {
     const id = item.id ?? item.product_id ?? 0;
     if (quantity <= 0) {
@@ -69,6 +55,20 @@ export default function CartPage() {
 
   const increment = (item: CartItem) => updateQuantity(item, item.quantity + 1);
   const decrement = (item: CartItem) => updateQuantity(item, item.quantity - 1);
+
+  const handleCheckout = async () => {
+    await createOrder({ items });
+    const text = items
+      .map((it) => `${it.product_name} x${it.quantity}`)
+      .join(', ');
+    const url = `https://wa.me/22588899965?text=${encodeURIComponent(
+      'Bonjour, je souhaite commander: ' + text
+    )}`;
+    if (!userId) {
+      localStorage.removeItem('cart');
+    }
+    router.push(url);
+  };
 
   if (loading) return <p className="p-4">Chargement...</p>;
 
@@ -100,13 +100,6 @@ export default function CartPage() {
                 +
               </button>
               <button
-                onClick={() => handleRemove(item.id ?? item.product_id ?? 0)}
-                className="text-red-600 text-sm"
-              >
-                Retirer
-              </button>
-            </li>
-
                 onClick={() => handleRemove(item.id ?? item.product_id ?? 0)}
                 className="text-red-600 text-sm"
               >
