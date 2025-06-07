@@ -1,12 +1,15 @@
 'use client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { verifyOTP, VerifyOTPData } from '@/lib/accounts';
 
-export default function VerifyOTPPage() {
+function VerifyOTPForm() {
   const params = useSearchParams();
   const emailParam = params.get('email') || '';
-  const [form, setForm] = useState<VerifyOTPData>({ email: emailParam, code: '' });
+  const [form, setForm] = useState<VerifyOTPData>({
+    email: emailParam,
+    code: '',
+  });
   const [message, setMessage] = useState('');
   const router = useRouter();
 
@@ -31,7 +34,6 @@ export default function VerifyOTPPage() {
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           placeholder="Email"
           className="w-full border px-3 py-2 rounded"
-          required
         />
         <input
           type="text"
@@ -47,5 +49,13 @@ export default function VerifyOTPPage() {
         </button>
       </form>
     </main>
+  );
+}
+
+export default function VerifyOTPPage() {
+  return (
+    <Suspense>
+      <VerifyOTPForm />
+    </Suspense>
   );
 }
