@@ -8,6 +8,7 @@ export default function RegisterPage() {
     username: '',
     email: '',
     password: '',
+    role: 'customer',
   });
   const [error, setError] = useState('');
   const router = useRouter();
@@ -15,8 +16,12 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await register(form);
-      router.push('/accounts/login');
+      const res = await register(form);
+      if (form.email) {
+        router.push(`/accounts/verify-otp?email=${encodeURIComponent(form.email)}`);
+      } else {
+        router.push('/accounts/login');
+      }
     } catch (err: any) {
       setError('Erreur lors de l\'inscription');
     }
@@ -42,6 +47,15 @@ export default function RegisterPage() {
           className="w-full border px-3 py-2 rounded"
           required
         />
+        <select
+          value={form.role}
+          onChange={(e) => setForm({ ...form, role: e.target.value })}
+          className="w-full border px-3 py-2 rounded"
+        >
+          <option value="customer">Client</option>
+          <option value="seller">Vendeur</option>
+          <option value="admin">Admin</option>
+        </select>
         <input
           type="password"
           value={form.password}

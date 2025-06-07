@@ -2,8 +2,9 @@ import { api } from './api';
 
 export interface RegisterData {
   username: string;
-  email: string;
+  email?: string;
   password: string;
+  role: string;
 }
 
 export interface LoginData {
@@ -28,5 +29,15 @@ export async function logout() {
 
 export async function cancelAccount() {
   const res = await api.delete('/accounts/cancel/');
+  return res.data;
+}
+
+export interface VerifyOTPData {
+  email: string;
+  code: string;
+}
+
+export async function verifyOTP(data: VerifyOTPData) {
+  const res = await api.post('/accounts/verify-otp/', data);
   return res.data;
 }

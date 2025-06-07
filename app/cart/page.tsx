@@ -13,10 +13,15 @@ interface CartItem {
 export default function CartPage() {
   const [items, setItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const userId = 1; // TODO: replace with actual user id
   const router = useRouter();
+  const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+  const userId = stored ? JSON.parse(stored).id : null;
 
   useEffect(() => {
+    if (!userId) {
+      router.push('/accounts/login');
+      return;
+    }
     viewCart(userId)
       .then(setItems)
       .catch(() => setItems([]))

@@ -17,6 +17,7 @@ type Product = {
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Product[]>([]);
+  const [user, setUser] = useState<any>(null);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -53,15 +54,22 @@ export default function Navbar() {
     fetchSuggestions();
   }, [searchQuery]);
 
+  useEffect(() => {
+    const stored = localStorage.getItem('user');
+    if (stored) setUser(JSON.parse(stored));
+  }, []);
+
   const navLinks = [
     { href: '/', label: 'ACCUEIL' },
     { href: '/about', label: 'A PROPOS' },
     { href: '/products', label: 'NOS PRODUITS' },
     { href: '/cart', label: 'PANIER' },
     { href: '/orders', label: 'COMMANDES' },
-    { href: '/accounts/login', label: 'CONNEXION' },
-    { href: '/accounts/register', label: 'INSCRIPTION' },
-  ];
+    user
+      ? { href: '/accounts/profile', label: 'MON COMPTE' }
+      : { href: '/accounts/login', label: 'CONNEXION' },
+    !user && { href: '/accounts/register', label: 'INSCRIPTION' },
+  ].filter(Boolean);
 
   return (
     <header className="bg-white shadow-sm py-4 relative z-50">
