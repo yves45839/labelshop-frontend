@@ -11,7 +11,8 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(form);
+      const data = await login(form);
+      localStorage.setItem('user', JSON.stringify(data));
       router.push('/');
     } catch (err: any) {
       setError('Erreur de connexion');

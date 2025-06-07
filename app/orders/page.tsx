@@ -11,9 +11,14 @@ interface Order {
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const userId = 1; // TODO: replace with actual user id
+  const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+  const userId = stored ? JSON.parse(stored).id : null;
 
   useEffect(() => {
+    if (!userId) {
+      window.location.href = '/accounts/login';
+      return;
+    }
     listOrders(userId)
       .then(setOrders)
       .catch(() => setOrders([]))
