@@ -4,6 +4,7 @@ export interface CartItemData {
   product_id: number;
   quantity: number;
   product_name?: string;
+  product_image?: string;
 }
 
 export interface UpdateCartData {
@@ -39,6 +40,8 @@ export async function addToCart(data: CartItemData) {
   const existing = items.find((it) => it.product_id === data.product_id);
   if (existing) {
     existing.quantity += data.quantity;
+    if (data.product_name) existing.product_name = data.product_name;
+    if (data.product_image) existing.product_image = data.product_image;
   } else {
     items.push(data);
   }

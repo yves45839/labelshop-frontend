@@ -8,7 +8,20 @@ interface CartItem {
   id?: number;
   product_id?: number;
   product_name?: string;
+  product_image?: string;
   quantity: number;
+}
+
+function getItemImage(item: any): string {
+  const base = 'https://labelshop-backend.onrender.com';
+  const img =
+    item.product_image ||
+    item.image_url ||
+    item.image_1024 ||
+    item.image ||
+    '';
+  if (!img) return '/default-product.png';
+  return img.startsWith('http') ? img : `${base}${img}`;
 }
 
 export default function CartPage() {
@@ -57,22 +70,30 @@ export default function CartPage() {
   const decrement = (item: CartItem) => updateQuantity(item, item.quantity - 1);
 
   const handleCheckout = async () => {
-    await createOrder({ items });
-    const text = items
-      .map((it) => `${it.product_name} x${it.quantity}`)
-      .join(', ');
-    const url = `https://wa.me/22588899965?text=${encodeURIComponent(
-      'Bonjour, je souhaite commander: ' + text
-    )}`;
-    if (!userId) {
-      localStorage.removeItem('cart');
-    }
-    router.push(url);
-  };
-
-  if (loading) return <p className="p-4">Chargement...</p>;
-
-  return (
+              className="flex items-center space-x-2"
+              <img
+                src={getItemImage(item)}
+                alt={item.product_name}
+                className="w-12 h-12 object-contain"
+              />
+              <span className="flex-1">{item.product_name}</span>
+              <div className="flex items-center">
+                <button
+                  onClick={() => decrement(item)}
+                  className="px-2 py-1 bg-gray-200 rounded-l"
+                >
+                  -
+                </button>
+                <span className="px-3 border-y border-gray-200">
+                  {item.quantity}
+                </span>
+                <button
+                  onClick={() => increment(item)}
+                  className="px-2 py-1 bg-gray-200 rounded-r"
+                >
+                  +
+                </button>
+              </div>
     <main className="container mx-auto py-8 px-4 space-y-4">
       <h1 className="text-2xl font-bold mb-4 text-center">Mon panier</h1>
       {items.length === 0 ? (
