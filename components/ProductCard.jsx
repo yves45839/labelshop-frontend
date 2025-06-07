@@ -55,7 +55,11 @@ export default function ProductCard({ product }) {
         </a>
         <button
           onClick={async () => {
-            await addToCart({ product_id: product.id, quantity: 1 });
+            await addToCart({
+              product_id: product.id,
+              quantity: 1,
+              product_name: product.name,
+            });
           }}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-full transition"
         >
