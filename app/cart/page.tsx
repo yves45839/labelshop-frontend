@@ -106,6 +106,13 @@ export default function CartPage() {
                 Retirer
               </button>
             </li>
+
+                onClick={() => handleRemove(item.id ?? item.product_id ?? 0)}
+                className="text-red-600 text-sm"
+              >
+                Retirer
+              </button>
+            </li>
           ))}
         </ul>
       )}
