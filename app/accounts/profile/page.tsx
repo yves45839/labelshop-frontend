@@ -10,6 +10,7 @@ export default function ProfilePage() {
   const handleLogout = async () => {
     try {
       await logout();
+      localStorage.removeItem('user');
       router.push('/');
     } catch {
       setMessage('Erreur lors de la déconnexion');
@@ -19,6 +20,7 @@ export default function ProfilePage() {
   const handleCancel = async () => {
     try {
       await cancelAccount();
+      localStorage.removeItem('user');
       router.push('/');
     } catch {
       setMessage('Erreur lors de la suppression du compte');
