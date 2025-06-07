@@ -59,19 +59,19 @@ export default function Navbar() {
     if (stored) setUser(JSON.parse(stored));
   }, []);
 
-  const navLinks: { href: string; label: string }[] = [
-    { href: '/', label: 'ACCUEIL' },
-    { href: '/about', label: 'A PROPOS' },
-    { href: '/products', label: 'NOS PRODUITS' },
-    { href: '/cart', label: 'PANIER' },
-    { href: '/orders', label: 'COMMANDES' },
-    ...(user
-      ? [{ href: '/accounts/profile', label: 'MON COMPTE' }]
-      : [
-          { href: '/accounts/login', label: 'CONNEXION' },
-          { href: '/accounts/register', label: 'INSCRIPTION' },
-        ]),
-  ];
+const navLinks: { href: string; label: string }[] = [
+  { href: '/', label: 'ACCUEIL' },
+  { href: '/about', label: 'A PROPOS' },
+  { href: '/products', label: 'NOS PRODUITS' },
+  { href: '/cart', label: 'PANIER' },
+  { href: '/orders', label: 'COMMANDES' },
+  ...(user
+    ? [{ href: '/accounts/profile', label: 'MON COMPTE' }]
+    : [
+        { href: '/accounts/login', label: 'CONNEXION' },
+        { href: '/accounts/register', label: 'INSCRIPTION' },
+      ]),
+];
 
   return (
     <header className="bg-white shadow-sm py-4 relative z-50">
