@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { viewCart, removeFromCart } from '@/lib/cart';
+import { viewCart, removeFromCart, updateCartItem } from '@/lib/cart';
 import { createOrder } from '@/lib/orders';
 
 interface CartItem {
@@ -56,6 +56,20 @@ export default function CartPage() {
     router.push(url);
   };
 
+  const updateQuantity = async (item: CartItem, quantity: number) => {
+    const id = item.id ?? item.product_id ?? 0;
+    if (quantity <= 0) {
+      await handleRemove(id);
+      return;
+    }
+    await updateCartItem({ item_id: id, quantity });
+    const updated = await viewCart(userId ?? undefined);
+    setItems(updated);
+  };
+
+  const increment = (item: CartItem) => updateQuantity(item, item.quantity + 1);
+  const decrement = (item: CartItem) => updateQuantity(item, item.quantity - 1);
+
   if (loading) return <p className="p-4">Chargement...</p>;
 
   return (
@@ -66,10 +80,25 @@ export default function CartPage() {
       ) : (
         <ul className="space-y-2">
           {items.map((item, idx) => (
-            <li key={item.id ?? item.product_id ?? idx} className="flex justify-between items-center">
-              <span>
+            <li
+              key={item.id ?? item.product_id ?? idx}
+              className="flex items-center justify-between space-x-2"
+            >
+              <button
+                onClick={() => decrement(item)}
+                className="px-2 py-1 bg-gray-200 rounded"
+              >
+                -
+              </button>
+              <span className="flex-1 text-center">
                 {item.product_name} x{item.quantity}
               </span>
+              <button
+                onClick={() => increment(item)}
+                className="px-2 py-1 bg-gray-200 rounded"
+              >
+                +
+              </button>
               <button
                 onClick={() => handleRemove(item.id ?? item.product_id ?? 0)}
                 className="text-red-600 text-sm"
