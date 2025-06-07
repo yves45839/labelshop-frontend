@@ -5,8 +5,9 @@ import { viewCart, removeFromCart } from '@/lib/cart';
 import { createOrder } from '@/lib/orders';
 
 interface CartItem {
-  id: number;
-  product_name: string;
+  id?: number;
+  product_id?: number;
+  product_name?: string;
   quantity: number;
 }
 
@@ -19,7 +20,9 @@ export default function CartPage() {
 
   useEffect(() => {
     if (!userId) {
-      router.push('/accounts/login');
+      const local = localStorage.getItem('cart');
+      setItems(local ? JSON.parse(local) : []);
+      setLoading(false);
       return;
     }
     viewCart(userId)
@@ -29,8 +32,14 @@ export default function CartPage() {
   }, []);
 
   const handleRemove = async (id: number) => {
-    await removeFromCart(id);
-    setItems(items.filter((it) => it.id !== id));
+    if (userId) {
+      await removeFromCart(id);
+      setItems(items.filter((it) => it.id !== id));
+      return;
+    }
+    const updated = items.filter((it) => it.product_id !== id && it.id !== id);
+    localStorage.setItem('cart', JSON.stringify(updated));
+    setItems(updated);
   };
 
   const handleCheckout = async () => {
@@ -41,6 +50,9 @@ export default function CartPage() {
     const url = `https://wa.me/22588899965?text=${encodeURIComponent(
       'Bonjour, je souhaite commander: ' + text
     )}`;
+    if (!userId) {
+      localStorage.removeItem('cart');
+    }
     router.push(url);
   };
 
@@ -53,13 +65,13 @@ export default function CartPage() {
         <p>Votre panier est vide.</p>
       ) : (
         <ul className="space-y-2">
-          {items.map((item) => (
-            <li key={item.id} className="flex justify-between items-center">
+          {items.map((item, idx) => (
+            <li key={item.id ?? item.product_id ?? idx} className="flex justify-between items-center">
               <span>
                 {item.product_name} x{item.quantity}
               </span>
               <button
-                onClick={() => handleRemove(item.id)}
+                onClick={() => handleRemove(item.id ?? item.product_id ?? 0)}
                 className="text-red-600 text-sm"
               >
                 Retirer
