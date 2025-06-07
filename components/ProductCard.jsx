@@ -1,7 +1,8 @@
 "use client";
 import Link from 'next/link';
 import Image from 'next/image';
-import { addToCart } from '@/lib/cart';
+import { addToCart, updateCartItem, removeFromCart } from '@/lib/cart';
+import { useState } from 'react';
 
 export default function ProductCard({ product }) {
   const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
@@ -9,6 +10,7 @@ export default function ProductCard({ product }) {
   )}`;
 
   const imageUrl = `${product.imageUrl}?t=${Date.now()}`;
+  const [qty, setQty] = useState(0);
 
   return (
     <div className="rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group bg-white flex flex-col h-full">
@@ -53,18 +55,51 @@ export default function ProductCard({ product }) {
           />
           Acheter via WhatsApp
         </a>
-        <button
-          onClick={async () => {
-            await addToCart({
-              product_id: product.id,
-              quantity: 1,
-              product_name: product.name,
-            });
-          }}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-full transition"
-        >
-          Ajouter au panier
-        </button>
+        {qty === 0 ? (
+          <button
+            onClick={async () => {
+              await addToCart({
+                product_id: product.id,
+                quantity: 1,
+                product_name: product.name,
+                product_image: product.imageUrl,
+              });
+              setQty(1);
+            }}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-full transition"
+          >
+            Ajouter au panier
+          </button>
+        ) : (
+          <div className="inline-flex border rounded w-full justify-center">
+            <button
+              onClick={async () => {
+                const newQty = qty - 1;
+                if (newQty <= 0) {
+                  await removeFromCart(product.id);
+                  setQty(0);
+                } else {
+                  await updateCartItem({ item_id: product.id, quantity: newQty });
+                  setQty(newQty);
+                }
+              }}
+              className="px-3 bg-gray-200 rounded-l"
+            >
+              -
+            </button>
+            <span className="px-4 flex items-center">{qty}</span>
+            <button
+              onClick={async () => {
+                const newQty = qty + 1;
+                await updateCartItem({ item_id: product.id, quantity: newQty });
+                setQty(newQty);
+              }}
+              className="px-3 bg-gray-200 rounded-r"
+            >
+              +
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
