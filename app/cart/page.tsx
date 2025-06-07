@@ -84,28 +84,36 @@ export default function CartPage() {
               key={item.id ?? item.product_id ?? idx}
               className="flex items-center justify-between space-x-2"
             >
-              <button
-                onClick={() => decrement(item)}
-                className="px-2 py-1 bg-gray-200 rounded"
-              >
-                -
-              </button>
-              <span className="flex-1 text-center">
-                {item.product_name} x{item.quantity}
-              </span>
-              <button
-                onClick={() => increment(item)}
-                className="px-2 py-1 bg-gray-200 rounded"
-              >
-                +
-              </button>
-              <button
-                onClick={() => handleRemove(item.id ?? item.product_id ?? 0)}
-                className="text-red-600 text-sm"
-              >
-                Retirer
-              </button>
+              <div className="flex items-center space-x-2">
+                <img
+                  src={getItemImage(item)}
+                  alt={item.product_name}
+                  className="w-12 h-12 object-contain"
+                />
+                <span className="flex-1">{item.product_name} x{item.quantity}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => decrement(item)}
+                  className="px-2 py-1 bg-gray-200 rounded"
+                >
+                  -
+                </button>
+                <button
+                  onClick={() => increment(item)}
+                  className="px-2 py-1 bg-gray-200 rounded"
+                >
+                  +
+                </button>
+                <button
+                  onClick={() => handleRemove(item.id ?? item.product_id ?? 0)}
+                  className="text-red-600 text-sm"
+                >
+                  Retirer
+                </button>
+              </div>
             </li>
+
           ))}
         </ul>
       )}
