@@ -55,20 +55,6 @@ export default function CartPage() {
     setItems(updated);
   };
 
-  const handleCheckout = async () => {
-    await createOrder({ items });
-    const text = items
-      .map((it) => `${it.product_name} x${it.quantity}`)
-      .join(', ');
-    const url = `https://wa.me/22588899965?text=${encodeURIComponent(
-      'Bonjour, je souhaite commander: ' + text
-    )}`;
-    if (!userId) {
-      localStorage.removeItem('cart');
-    }
-    router.push(url);
-  };
-
   const updateQuantity = async (item: CartItem, quantity: number) => {
     const id = item.id ?? item.product_id ?? 0;
     if (quantity <= 0) {
@@ -83,6 +69,20 @@ export default function CartPage() {
   const increment = (item: CartItem) => updateQuantity(item, item.quantity + 1);
   const decrement = (item: CartItem) => updateQuantity(item, item.quantity - 1);
 
+  const handleCheckout = async () => {
+    await createOrder({ items });
+    const text = items
+      .map((it) => `${it.product_name} x${it.quantity}`)
+      .join(', ');
+    const url = `https://wa.me/22588899965?text=${encodeURIComponent(
+      'Bonjour, je souhaite commander: ' + text
+    )}`;
+    if (!userId) {
+      localStorage.removeItem('cart');
+    }
+    router.push(url);
+  };
+
   if (loading) return <p className="p-4">Chargement...</p>;
 
   return (
@@ -95,18 +95,20 @@ export default function CartPage() {
           {items.map((item, idx) => (
             <li
               key={item.id ?? item.product_id ?? idx}
-              className="flex items-center space-x-2"
+              className="flex items-center justify-between space-x-2"
             >
-              <img
-                src={getItemImage(item)}
-                alt={item.product_name}
-                className="w-12 h-12 object-contain"
-              />
-              <span className="flex-1">{item.product_name}</span>
-              <div className="flex items-center">
+              <div className="flex items-center space-x-2">
+                <img
+                  src={getItemImage(item)}
+                  alt={item.product_name}
+                  className="w-12 h-12 object-contain"
+                />
+                <span className="flex-1">{item.product_name}</span>
+              </div>
+              <div className="flex items-center space-x-2">
                 <button
                   onClick={() => decrement(item)}
-                  className="px-2 py-1 bg-gray-200 rounded-l"
+                  className="px-2 py-1 bg-gray-200 rounded"
                 >
                   -
                 </button>
@@ -115,17 +117,17 @@ export default function CartPage() {
                 </span>
                 <button
                   onClick={() => increment(item)}
-                  className="px-2 py-1 bg-gray-200 rounded-r"
+                  className="px-2 py-1 bg-gray-200 rounded"
                 >
                   +
                 </button>
+                <button
+                  onClick={() => handleRemove(item.id ?? item.product_id ?? 0)}
+                  className="text-red-600 text-sm"
+                >
+                  Retirer
+                </button>
               </div>
-              <button
-                onClick={() => handleRemove(item.id ?? item.product_id ?? 0)}
-                className="text-red-600 text-sm"
-              >
-                Retirer
-              </button>
             </li>
           ))}
         </ul>
