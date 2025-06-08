@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import FloatingMenu from '@/components/FloatingMenu';
 import Script from 'next/script';
 import './globals.css';
 
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {children}
         </div>
         <Footer />
+        <FloatingMenu />
       </body>
     </html>
   );

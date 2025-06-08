@@ -1,13 +1,27 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { viewCart, removeFromCart } from '@/lib/cart';
+import { viewCart, removeFromCart, updateCartItem } from '@/lib/cart';
 import { createOrder } from '@/lib/orders';
 
 interface CartItem {
-  id: number;
-  product_name: string;
+  id?: number;
+  product_id?: number;
+  product_name?: string;
+  product_image?: string;
   quantity: number;
+}
+
+function getItemImage(item: any): string {
+  const base = 'https://labelshop-backend.onrender.com';
+  const img =
+    item.product_image ||
+    item.image_url ||
+    item.image_1024 ||
+    item.image ||
+    '';
+  if (!img) return '/default-product.png';
+  return img.startsWith('http') ? img : `${base}${img}`;
 }
 
 export default function CartPage() {
@@ -19,7 +33,9 @@ export default function CartPage() {
 
   useEffect(() => {
     if (!userId) {
-      router.push('/accounts/login');
+      const local = localStorage.getItem('cart');
+      setItems(local ? JSON.parse(local) : []);
+      setLoading(false);
       return;
     }
     viewCart(userId)
@@ -29,8 +45,14 @@ export default function CartPage() {
   }, []);
 
   const handleRemove = async (id: number) => {
-    await removeFromCart(id);
-    setItems(items.filter((it) => it.id !== id));
+    if (userId) {
+      await removeFromCart(id);
+      setItems(items.filter((it) => it.id !== id));
+      return;
+    }
+    const updated = items.filter((it) => it.product_id !== id && it.id !== id);
+    localStorage.setItem('cart', JSON.stringify(updated));
+    setItems(updated);
   };
 
   const handleCheckout = async () => {
@@ -41,8 +63,25 @@ export default function CartPage() {
     const url = `https://wa.me/22588899965?text=${encodeURIComponent(
       'Bonjour, je souhaite commander: ' + text
     )}`;
+    if (!userId) {
+      localStorage.removeItem('cart');
+    }
     router.push(url);
   };
+
+  const updateQuantity = async (item: CartItem, quantity: number) => {
+    const id = item.id ?? item.product_id ?? 0;
+    if (quantity <= 0) {
+      await handleRemove(id);
+      return;
+    }
+    await updateCartItem({ item_id: id, quantity });
+    const updated = await viewCart(userId ?? undefined);
+    setItems(updated);
+  };
+
+  const increment = (item: CartItem) => updateQuantity(item, item.quantity + 1);
+  const decrement = (item: CartItem) => updateQuantity(item, item.quantity - 1);
 
   if (loading) return <p className="p-4">Chargement...</p>;
 
@@ -53,13 +92,36 @@ export default function CartPage() {
         <p>Votre panier est vide.</p>
       ) : (
         <ul className="space-y-2">
-          {items.map((item) => (
-            <li key={item.id} className="flex justify-between items-center">
-              <span>
-                {item.product_name} x{item.quantity}
-              </span>
+          {items.map((item, idx) => (
+            <li
+              key={item.id ?? item.product_id ?? idx}
+              className="flex items-center space-x-2"
+            >
+              <img
+                src={getItemImage(item)}
+                alt={item.product_name}
+                className="w-12 h-12 object-contain"
+              />
+              <span className="flex-1">{item.product_name}</span>
+              <div className="flex items-center">
+                <button
+                  onClick={() => decrement(item)}
+                  className="px-2 py-1 bg-gray-200 rounded-l"
+                >
+                  -
+                </button>
+                <span className="px-3 border-y border-gray-200">
+                  {item.quantity}
+                </span>
+                <button
+                  onClick={() => increment(item)}
+                  className="px-2 py-1 bg-gray-200 rounded-r"
+                >
+                  +
+                </button>
+              </div>
               <button
-                onClick={() => handleRemove(item.id)}
+                onClick={() => handleRemove(item.id ?? item.product_id ?? 0)}
                 className="text-red-600 text-sm"
               >
                 Retirer
