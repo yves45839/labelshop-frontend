@@ -1,4 +1,4 @@
-import { initializeApp, getApps, FirebaseError } from 'firebase/app';
+import { initializeApp, getApps } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import {
   getAuth,
@@ -11,6 +11,7 @@ import {
   onAuthStateChanged,
   User,
 } from 'firebase/auth';
+import { FirebaseError } from 'firebase/app';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBQ-PvQx5TVbQu9wxTdvIpdwmro_uxHeP4',
