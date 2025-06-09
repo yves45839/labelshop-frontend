@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FloatingMenu from '@/components/FloatingMenu';
+import FirebaseInit from '@/components/FirebaseInit';
 import Script from 'next/script';
 import './globals.css';
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="flex flex-col min-h-screen">
         <Navbar />
+        <FirebaseInit />
         <div className="flex-grow">
           {children}
         </div>

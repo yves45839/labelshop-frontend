@@ -1,7 +1,10 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { logout, cancelAccount } from '@/lib/accounts';
+import {
+  firebaseLogout,
+  firebaseDeleteAccount,
+} from '@/lib/firebase';
 
 export default function ProfilePage() {
   const [message, setMessage] = useState('');
@@ -9,7 +12,7 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await firebaseLogout();
       localStorage.removeItem('user');
       router.push('/');
     } catch {
@@ -19,7 +22,7 @@ export default function ProfilePage() {
 
   const handleCancel = async () => {
     try {
-      await cancelAccount();
+      await firebaseDeleteAccount();
       localStorage.removeItem('user');
       router.push('/');
     } catch {
