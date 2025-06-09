@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { firebaseRegister } from '@/lib/firebase';
 
 export default function RegisterPage() {
@@ -10,21 +9,22 @@ export default function RegisterPage() {
     password: '',
   });
   const [error, setError] = useState('');
-  const router = useRouter();
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setMessage('');
     try {
-      const user = await firebaseRegister(
+      await firebaseRegister(
         form.email,
         form.password,
         form.displayName,
       );
-      localStorage.setItem(
-        'user',
-        JSON.stringify({ id: user.uid, email: user.email, name: user.displayName })
+      setMessage(
+        "Un email de vérification a été envoyé. Veuillez vérifier votre boîte mail."
       );
-      router.push('/');
+      setForm({ displayName: '', email: '', password: '' });
     } catch (err: any) {
       setError(err.message || "Erreur lors de l'inscription");
     }
@@ -58,6 +58,7 @@ export default function RegisterPage() {
           required
         />
         {error && <p className="text-red-600 text-sm">{error}</p>}
+        {message && <p className="text-green-600 text-sm">{message}</p>}
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"

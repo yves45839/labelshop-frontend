@@ -1,3 +1,4 @@
+  sendEmailVerification,
 import { initializeApp, getApps } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import {
@@ -35,6 +36,12 @@ export function initFirebase() {
   return app!;
 }
 
+    if (!cred.user.emailVerified) {
+      await sendEmailVerification(cred.user);
+      await signOut(auth);
+      throw new Error('Veuillez vérifier votre email pour vous connecter');
+    }
+    await sendEmailVerification(cred.user);
 export function getFirebaseAuth() {
   return getAuth(initFirebase());
 }
