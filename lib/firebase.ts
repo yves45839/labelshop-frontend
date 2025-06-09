@@ -1,4 +1,4 @@
-import { initializeApp, getApps } from 'firebase/app';
+import { initializeApp, getApps, FirebaseError } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import {
   getAuth,
@@ -38,10 +38,33 @@ export function getFirebaseAuth() {
   return getAuth(initFirebase());
 }
 
+function translateAuthError(code: string) {
+  switch (code) {
+    case 'auth/invalid-email':
+      return 'Email invalide';
+    case 'auth/user-disabled':
+      return 'Compte désactivé';
+    case 'auth/user-not-found':
+    case 'auth/wrong-password':
+      return 'Email ou mot de passe incorrect';
+    case 'auth/email-already-in-use':
+      return 'Email déjà utilisé';
+    case 'auth/weak-password':
+      return 'Mot de passe trop faible';
+    default:
+      return 'Erreur inconnue';
+  }
+}
+
 export async function firebaseLogin(email: string, password: string) {
   const auth = getFirebaseAuth();
-  const cred = await signInWithEmailAndPassword(auth, email, password);
-  return cred.user;
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    return cred.user;
+  } catch (err: any) {
+    const message = translateAuthError((err as FirebaseError).code);
+    throw new Error(message);
+  }
 }
 
 export async function firebaseRegister(
@@ -50,11 +73,16 @@ export async function firebaseRegister(
   displayName?: string,
 ) {
   const auth = getFirebaseAuth();
-  const cred = await createUserWithEmailAndPassword(auth, email, password);
-  if (displayName) {
-    await updateProfile(cred.user, { displayName });
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    if (displayName) {
+      await updateProfile(cred.user, { displayName });
+    }
+    return cred.user;
+  } catch (err: any) {
+    const message = translateAuthError((err as FirebaseError).code);
+    throw new Error(message);
   }
-  return cred.user;
 }
 
 export async function firebaseLogout() {

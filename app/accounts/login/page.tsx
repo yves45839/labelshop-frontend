@@ -18,7 +18,7 @@ export default function LoginPage() {
       );
       router.push('/');
     } catch (err: any) {
-      setError('Erreur de connexion');
+      setError(err.message || 'Erreur de connexion');
     }
   };
 
