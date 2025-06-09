@@ -26,7 +26,7 @@ export default function RegisterPage() {
       );
       router.push('/');
     } catch (err: any) {
-      setError("Erreur lors de l'inscription");
+      setError(err.message || "Erreur lors de l'inscription");
     }
   };
 
