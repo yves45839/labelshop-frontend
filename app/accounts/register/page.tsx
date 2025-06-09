@@ -1,14 +1,13 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { register, RegisterData } from '@/lib/accounts';
+import { firebaseRegister } from '@/lib/firebase';
 
 export default function RegisterPage() {
-  const [form, setForm] = useState<RegisterData>({
-    username: '',
+  const [form, setForm] = useState({
+    displayName: '',
     email: '',
     password: '',
-    role: 'customer',
   });
   const [error, setError] = useState('');
   const router = useRouter();
@@ -16,14 +15,18 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await register(form);
-      if (form.email) {
-        router.push(`/accounts/verify-otp?email=${encodeURIComponent(form.email)}`);
-      } else {
-        router.push('/accounts/login');
-      }
+      const user = await firebaseRegister(
+        form.email,
+        form.password,
+        form.displayName,
+      );
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ id: user.uid, email: user.email, name: user.displayName })
+      );
+      router.push('/');
     } catch (err: any) {
-      setError('Erreur lors de l\'inscription');
+      setError("Erreur lors de l'inscription");
     }
   };
 
@@ -33,9 +36,9 @@ export default function RegisterPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
-          value={form.username}
-          onChange={(e) => setForm({ ...form, username: e.target.value })}
-          placeholder="Nom d'utilisateur"
+          value={form.displayName}
+          onChange={(e) => setForm({ ...form, displayName: e.target.value })}
+          placeholder="Nom"
           className="w-full border px-3 py-2 rounded"
           required
         />
@@ -46,15 +49,6 @@ export default function RegisterPage() {
           placeholder="Email"
           className="w-full border px-3 py-2 rounded"
         />
-        <select
-          value={form.role}
-          onChange={(e) => setForm({ ...form, role: e.target.value })}
-          className="w-full border px-3 py-2 rounded"
-        >
-          <option value="customer">Client</option>
-          <option value="seller">Vendeur</option>
-          <option value="admin">Admin</option>
-        </select>
         <input
           type="password"
           value={form.password}
