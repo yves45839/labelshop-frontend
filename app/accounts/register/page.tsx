@@ -48,6 +48,7 @@ export default function RegisterPage() {
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           placeholder="Email"
           className="w-full border px-3 py-2 rounded"
+          required
         />
         <input
           type="password"
