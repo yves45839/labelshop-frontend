@@ -9,6 +9,7 @@ import {
   deleteUser,
   updatePassword,
   onAuthStateChanged,
+  sendEmailVerification,
   User,
 } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
@@ -61,6 +62,11 @@ export async function firebaseLogin(email: string, password: string) {
   const auth = getFirebaseAuth();
   try {
     const cred = await signInWithEmailAndPassword(auth, email, password);
+    if (!cred.user.emailVerified) {
+      await sendEmailVerification(cred.user);
+      await signOut(auth);
+      throw new Error('Veuillez vérifier votre email pour vous connecter');
+    }
     return cred.user;
   } catch (err: any) {
     const message = translateAuthError((err as FirebaseError).code);
@@ -79,6 +85,7 @@ export async function firebaseRegister(
     if (displayName) {
       await updateProfile(cred.user, { displayName });
     }
+    await sendEmailVerification(cred.user);
     return cred.user;
   } catch (err: any) {
     const message = translateAuthError((err as FirebaseError).code);
