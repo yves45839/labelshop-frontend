@@ -7,6 +7,7 @@ import {
   signOut,
   updateProfile,
   deleteUser,
+  updatePassword,
   onAuthStateChanged,
   User,
 } from 'firebase/auth';
@@ -66,6 +67,12 @@ export async function firebaseDeleteAccount() {
   if (auth.currentUser) {
     await deleteUser(auth.currentUser);
   }
+}
+
+export async function firebaseUpdatePassword(newPassword: string) {
+  const auth = getFirebaseAuth();
+  if (!auth.currentUser) throw new Error('No user');
+  await updatePassword(auth.currentUser, newPassword);
 }
 
 export function watchAuth(callback: (user: User | null) => void) {
