@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import axios from 'axios';
+import { watchAuth } from '@/lib/firebase';
 
 type Product = {
   id: number;
@@ -55,8 +56,17 @@ export default function Navbar() {
   }, [searchQuery]);
 
   useEffect(() => {
-    const stored = localStorage.getItem('user');
-    if (stored) setUser(JSON.parse(stored));
+    const unsubscribe = watchAuth((u) => {
+      if (u) {
+        const obj = { id: u.uid, email: u.email, name: u.displayName };
+        localStorage.setItem('user', JSON.stringify(obj));
+        setUser(obj);
+      } else {
+        localStorage.removeItem('user');
+        setUser(null);
+      }
+    });
+    return unsubscribe;
   }, []);
 
 const navLinks: { href: string; label: string }[] = [
