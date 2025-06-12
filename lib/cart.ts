@@ -14,6 +14,12 @@ export interface UpdateCartData {
 
 const LOCAL_KEY = 'cart';
 
+function emitCart(items: CartItemData[]) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('cart-changed', { detail: items }));
+  }
+}
+
 function readLocalCart(): CartItemData[] {
   if (typeof window === 'undefined') return [];
   try {
@@ -26,6 +32,7 @@ function readLocalCart(): CartItemData[] {
 function saveLocalCart(items: CartItemData[]) {
   if (typeof window !== 'undefined') {
     localStorage.setItem(LOCAL_KEY, JSON.stringify(items));
+    emitCart(items);
   }
 }
 
@@ -34,6 +41,8 @@ export async function addToCart(data: CartItemData) {
   const user = stored ? JSON.parse(stored) : null;
   if (user) {
     const res = await api.post('/cart/add/', data);
+    const items = await viewCart(user.id);
+    emitCart(items);
     return res.data;
   }
   const items = readLocalCart();
@@ -54,6 +63,8 @@ export async function updateCartItem(data: UpdateCartData) {
   const user = stored ? JSON.parse(stored) : null;
   if (user) {
     const res = await api.post('/cart/update/', data);
+    const items = await viewCart(user.id);
+    emitCart(items);
     return res.data;
   }
   const items = readLocalCart();
@@ -70,6 +81,8 @@ export async function removeFromCart(item_id: number) {
   const user = stored ? JSON.parse(stored) : null;
   if (user) {
     const res = await api.post('/cart/remove/', { item_id });
+    const items = await viewCart(user.id);
+    emitCart(items);
     return res.data;
   }
   const items = readLocalCart().filter(

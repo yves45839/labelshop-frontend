@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import axios from 'axios';
 import { watchAuth } from '@/lib/firebase';
+import { viewCart } from '@/lib/cart';
 
 type Product = {
   id: number;
@@ -19,6 +20,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [user, setUser] = useState<any>(null);
+  const [cartCount, setCartCount] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -67,6 +69,22 @@ export default function Navbar() {
       }
     });
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+    const id = stored ? JSON.parse(stored).id : undefined;
+    viewCart(id).then((items) => {
+      const total = items.reduce((sum: number, it: any) => sum + (it.quantity || 0), 0);
+      setCartCount(total);
+    });
+    function handle(e: any) {
+      const items = e.detail || [];
+      const total = items.reduce((sum: number, it: any) => sum + (it.quantity || 0), 0);
+      setCartCount(total);
+    }
+    window.addEventListener('cart-changed', handle);
+    return () => window.removeEventListener('cart-changed', handle);
   }, []);
 
 const navLinks: { href: string; label: string }[] = [
@@ -165,6 +183,14 @@ const navLinks: { href: string; label: string }[] = [
             </ul>
           )}
         </div>
+        <Link href="/cart" className="relative text-2xl">
+          <span role="img" aria-label="Panier">🛒</span>
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {cartCount}
+            </span>
+          )}
+        </Link>
       </div>
     </header>
   );
