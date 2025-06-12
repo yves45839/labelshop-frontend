@@ -70,6 +70,7 @@ export default function CartPage() {
   const decrement = (item: CartItem) => updateQuantity(item, item.quantity - 1);
 
   const handleCheckout = async () => {
+    const newWindow = window.open('', '_blank');
     try {
       await createOrder({ items });
     } catch (err) {
@@ -84,7 +85,11 @@ export default function CartPage() {
     if (!userId) {
       localStorage.removeItem('cart');
     }
-    window.open(url, '_blank');
+    if (newWindow) {
+      newWindow.location.href = url;
+    } else {
+      window.open(url, '_blank');
+    }
   };
 
   if (loading) return <p className="p-4">Chargement...</p>;
