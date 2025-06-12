@@ -183,8 +183,8 @@ const navLinks: { href: string; label: string }[] = [
             </ul>
           )}
         </div>
-        <Link href="/cart" className="relative text-2xl">
-          <span role="img" aria-label="Panier">🛒</span>
+        <Link href="/cart" className="relative">
+          <Image src="/cart.svg" alt="Panier" width={24} height={24} />
           {cartCount > 0 && (
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
               {cartCount}
