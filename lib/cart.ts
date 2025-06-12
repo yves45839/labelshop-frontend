@@ -5,6 +5,7 @@ export interface CartItemData {
   quantity: number;
   product_name?: string;
   product_image?: string;
+  price?: number;
 }
 
 export interface UpdateCartData {
@@ -51,6 +52,7 @@ export async function addToCart(data: CartItemData) {
     existing.quantity += data.quantity;
     if (data.product_name) existing.product_name = data.product_name;
     if (data.product_image) existing.product_image = data.product_image;
+    if (data.price) existing.price = data.price;
   } else {
     items.push(data);
   }
