@@ -30,6 +30,7 @@ export default function Navbar() {
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [user, setUser] = useState<any>(null);
   const [cartCount, setCartCount] = useState(0);
+  const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -81,6 +82,14 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    const handleScroll = () => {
+      setCollapsed(window.scrollY > 0);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
     const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
     const id = stored ? JSON.parse(stored).id : undefined;
     viewCart(id).then((items) => {
@@ -119,8 +128,20 @@ const navLinks: {
 ];
 
   return (
-    <header className="bg-white shadow-sm py-4 relative z-50">
-      <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+    <header
+      className={`bg-white shadow-sm transition-all duration-300 z-50 ${
+        collapsed
+          ? 'fixed top-0 left-0 h-screen w-16 flex flex-col items-center py-6'
+          : 'sticky top-0 w-full py-4'
+      }`}
+    >
+      <div
+        className={`mx-auto px-4 flex ${
+          collapsed
+            ? 'flex-col items-center gap-6 h-full'
+            : 'max-w-screen-xl flex-col md:flex-row items-center justify-between gap-4'
+        }`}
+      >
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
@@ -130,24 +151,38 @@ const navLinks: {
             height={40}
             className="object-contain"
           />
-          <span className="text-xs font-bold text-blue-700 tracking-wide hidden sm:inline">
+          <span
+            className={`text-xs font-bold text-blue-700 tracking-wide hidden sm:inline ${
+              collapsed ? 'opacity-0 w-0' : ''
+            }`}
+          >
             LABEL RETAIL
           </span>
         </Link>
 
         {/* Navigation centrale */}
-        <nav className="flex flex-wrap justify-center gap-4 text-sm font-bold text-orange-500">
+        <nav
+          className={`text-sm font-bold text-orange-500 ${
+            collapsed
+              ? 'flex flex-col items-center gap-6 mt-8'
+              : 'flex flex-wrap justify-center gap-4'
+          }`}
+        >
           {navLinks.map(({ href, label, icon, showCount }) => (
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-1 px-3 py-2 rounded-md transition-all duration-300 ${
+              className={`group relative transition-all duration-300 rounded-md ${
+                collapsed
+                  ? 'flex items-center justify-center w-full text-lg'
+                  : 'flex items-center gap-1 px-3 py-2'
+              } ${
                 pathname === href
                   ? 'bg-orange-400 text-white'
                   : 'hover:text-blue-600'
               }`}
             >
-              <span className="relative text-lg">
+              <span className="relative">
                 {icon}
                 {showCount && cartCount > 0 && (
                   <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
@@ -155,13 +190,21 @@ const navLinks: {
                   </span>
                 )}
               </span>
-              <span>{label}</span>
+              <span
+                className={`${
+                  collapsed
+                    ? 'absolute left-full ml-2 bg-white px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 whitespace-nowrap'
+                    : ''
+                }`}
+              >
+                {label}
+              </span>
             </Link>
           ))}
         </nav>
 
         {/* Zone de recherche */}
-        <div className="relative w-full md:w-64">
+        <div className={`relative w-full md:w-64 ${collapsed ? 'hidden' : ''}`}>
           <form onSubmit={handleSearch} className="flex">
             <input
               type="text"
