@@ -1,4 +1,5 @@
 import type { Metadata, ResolvingMetadata } from 'next';
+import AddToCart from '@/components/AddToCart';
 
 // 🔁 Récupère l'image
 function getImageUrl(product: any): string {
@@ -118,19 +119,24 @@ export default async function ProductDetailPage({
             </p>
           )}
 
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center mt-4 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full transition"
-          >
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-              alt="WhatsApp"
-              className="w-5 h-5 mr-2"
+          <div className="mt-4 space-y-2 sm:space-y-0 sm:flex sm:space-x-2">
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full transition w-full justify-center"
+            >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                alt="WhatsApp"
+                className="w-5 h-5 mr-2"
+              />
+              Acheter
+            </a>
+            <AddToCart
+              product={{ id: product.id, name: product.name, imageUrl }}
             />
-            Acheter
-          </a>
+          </div>
 
           <div className="mt-4 text-sm text-gray-700 space-y-1">
             <p><strong>Catégorie :</strong> {product.categ_id}</p>
