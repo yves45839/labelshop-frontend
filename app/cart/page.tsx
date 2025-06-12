@@ -70,7 +70,11 @@ export default function CartPage() {
   const decrement = (item: CartItem) => updateQuantity(item, item.quantity - 1);
 
   const handleCheckout = async () => {
-    await createOrder({ items });
+    try {
+      await createOrder({ items });
+    } catch (err) {
+      console.error('Failed to create order', err);
+    }
     const text = items
       .map((it) => `${it.product_name} x${it.quantity}`)
       .join(', ');
@@ -80,7 +84,7 @@ export default function CartPage() {
     if (!userId) {
       localStorage.removeItem('cart');
     }
-    router.push(url);
+    window.location.href = url;
   };
 
   if (loading) return <p className="p-4">Chargement...</p>;
