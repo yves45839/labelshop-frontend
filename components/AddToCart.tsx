@@ -7,6 +7,7 @@ interface ProductInfo {
   id: number;
   name: string;
   imageUrl?: string;
+  price?: number;
 }
 
 export default function AddToCart({ product }: { product: ProductInfo }) {
@@ -19,6 +20,7 @@ export default function AddToCart({ product }: { product: ProductInfo }) {
       quantity: 1,
       product_name: product.name,
       product_image: product.imageUrl,
+      price: product.price,
     });
     if (res && typeof res === 'object' && 'id' in res) {
       setItemId((res as any).id as number);

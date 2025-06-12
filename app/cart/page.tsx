@@ -9,6 +9,7 @@ interface CartItem {
   product_id?: number;
   product_name?: string;
   product_image?: string;
+  price?: number;
   quantity: number;
 }
 
@@ -70,21 +71,35 @@ export default function CartPage() {
   const decrement = (item: CartItem) => updateQuantity(item, item.quantity - 1);
 
   const handleCheckout = async () => {
+    const newWindow = window.open('', '_blank');
     try {
       await createOrder({ items });
     } catch (err) {
       console.error('Failed to create order', err);
     }
-    const text = items
-      .map((it) => `${it.product_name} x${it.quantity}`)
-      .join(', ');
-    const url = `https://wa.me/22588899965?text=${encodeURIComponent(
-      'Bonjour, je souhaite commander: ' + text
-    )}`;
+    const format = (n: number) => n.toLocaleString('fr-FR');
+    const lines = items.map((it) => {
+      const unit = it.price ?? 0;
+      const lineTotal = unit * it.quantity;
+      return `- ${it.product_name} x${it.quantity} = ${format(lineTotal)} FCFA`;
+    });
+    const total = items.reduce(
+      (sum, it) => sum + (it.price ?? 0) * it.quantity,
+      0
+    );
+    const message =
+      'Bonjour, je souhaite commander:\n' +
+      lines.join('\n') +
+      `\nTotal: ${format(total)} FCFA`;
+    const url = `https://wa.me/22588899965?text=${encodeURIComponent(message)}`;
     if (!userId) {
       localStorage.removeItem('cart');
     }
-    window.open(url, '_blank');
+    if (newWindow) {
+      newWindow.location.href = url;
+    } else {
+      window.open(url, '_blank');
+    }
   };
 
   if (loading) return <p className="p-4">Chargement...</p>;

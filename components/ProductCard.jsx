@@ -64,6 +64,7 @@ export default function ProductCard({ product }) {
                 quantity: 1,
                 product_name: product.name,
                 product_image: product.imageUrl,
+                price: product.list_price,
               });
               if (res && typeof res === 'object' && 'id' in res) {
                 setItemId(res.id);

@@ -134,7 +134,12 @@ export default async function ProductDetailPage({
               Acheter
             </a>
             <AddToCart
-              product={{ id: product.id, name: product.name, imageUrl }}
+              product={{
+                id: product.id,
+                name: product.name,
+                imageUrl,
+                price: product.list_price,
+              }}
             />
           </div>
 
