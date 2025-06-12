@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="flex flex-col min-h-screen">
         <Navbar />
         <FirebaseInit />
-        <div className="flex-grow">
+        <div className="flex-grow content">
           {children}
         </div>
         <Footer />
