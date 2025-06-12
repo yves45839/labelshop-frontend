@@ -36,7 +36,7 @@ export default function FloatingMenu() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="mt-2 w-40 bg-white rounded-md shadow-lg overflow-hidden"
+            className="mt-2 w-40 bg-white/80 rounded-md shadow-lg overflow-hidden"
           >
             <ul className="py-2 text-sm">
               <li>
