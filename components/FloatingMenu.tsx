@@ -50,15 +50,6 @@ export default function FloatingMenu() {
               </li>
               <li>
                 <Link
-                  href="/accounts/register"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                  onClick={() => setOpen(false)}
-                >
-                  Inscription
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/orders"
                   className="block px-4 py-2 hover:bg-gray-100"
                   onClick={() => setOpen(false)}

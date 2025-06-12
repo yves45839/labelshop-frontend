@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { firebaseLogin } from '@/lib/firebase';
 
 export default function LoginPage() {
@@ -50,6 +51,12 @@ export default function LoginPage() {
           Se connecter
         </button>
       </form>
+      <p className="mt-4 text-sm text-center">
+        Pas encore de compte ?{' '}
+        <Link href="/accounts/register" className="text-blue-600 hover:underline">
+          Inscrivez-vous
+        </Link>
+      </p>
     </main>
   );
 }
