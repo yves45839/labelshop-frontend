@@ -53,6 +53,8 @@ function translateAuthError(code: string) {
       return 'Email déjà utilisé';
     case 'auth/weak-password':
       return 'Mot de passe trop faible';
+    case 'auth/network-request-failed':
+      return 'Problème de connexion Internet';
     default:
       return 'Erreur inconnue';
   }
