@@ -84,7 +84,7 @@ export default function CartPage() {
     if (!userId) {
       localStorage.removeItem('cart');
     }
-    window.location.href = url;
+    window.open(url, '_blank');
   };
 
   if (loading) return <p className="p-4">Chargement...</p>;
