@@ -57,14 +57,14 @@ export default function ProductCard({ product }) {
         </a>
         {qty === 0 ? (
           <button
-            onClick={async () => {
-              await addToCart({
+            onClick={() => {
+              setQty(1);
+              addToCart({
                 product_id: product.id,
                 quantity: 1,
                 product_name: product.name,
                 product_image: product.imageUrl,
-              });
-              setQty(1);
+              }).catch(() => setQty(0));
             }}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-full transition"
           >
@@ -73,14 +73,15 @@ export default function ProductCard({ product }) {
         ) : (
           <div className="inline-flex border rounded w-full justify-center">
             <button
-              onClick={async () => {
+              onClick={() => {
                 const newQty = qty - 1;
+                setQty(newQty);
                 if (newQty <= 0) {
-                  await removeFromCart(product.id);
-                  setQty(0);
+                  removeFromCart(product.id).catch(() => setQty(qty));
                 } else {
-                  await updateCartItem({ item_id: product.id, quantity: newQty });
-                  setQty(newQty);
+                  updateCartItem({ item_id: product.id, quantity: newQty }).catch(
+                    () => setQty(qty)
+                  );
                 }
               }}
               className="px-3 bg-gray-200 rounded-l"
@@ -89,10 +90,12 @@ export default function ProductCard({ product }) {
             </button>
             <span className="px-4 flex items-center">{qty}</span>
             <button
-              onClick={async () => {
+              onClick={() => {
                 const newQty = qty + 1;
-                await updateCartItem({ item_id: product.id, quantity: newQty });
                 setQty(newQty);
+                updateCartItem({ item_id: product.id, quantity: newQty }).catch(
+                  () => setQty(qty)
+                );
               }}
               className="px-3 bg-gray-200 rounded-r"
             >
