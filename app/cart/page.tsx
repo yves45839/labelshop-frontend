@@ -80,7 +80,9 @@ export default function CartPage() {
     if (!userId) {
       localStorage.removeItem('cart');
     }
-    router.push(url);
+    if (typeof window !== 'undefined') {
+      window.open(url, '_blank');
+    }
   };
 
   if (loading) return <p className="p-4">Chargement...</p>;
