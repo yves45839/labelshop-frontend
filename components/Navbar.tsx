@@ -90,6 +90,17 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const body = document.body;
+      if (collapsed) {
+        body.classList.add('nav-collapsed');
+      } else {
+        body.classList.remove('nav-collapsed');
+      }
+    }
+  }, [collapsed]);
+
+  useEffect(() => {
     const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
     const id = stored ? JSON.parse(stored).id : undefined;
     viewCart(id).then((items) => {
@@ -187,9 +198,9 @@ const navLinks: {
                 )}
               </span>
               <span
-                className={`$ {
+                className={`${
                   collapsed
-                    ? 'absolute left-full ml-2 bg-white px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 whitespace-nowrap'
+                    ? 'absolute left-full ml-2 bg-white px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 whitespace-nowrap text-black'
                     : ''
                 }`}
               >
