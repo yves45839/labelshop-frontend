@@ -176,11 +176,7 @@ const navLinks: {
                 collapsed
                   ? 'flex items-center justify-center w-full text-lg'
                   : 'flex items-center gap-1 px-3 py-2'
-              } ${
-                pathname === href
-                  ? 'bg-orange-400 text-white'
-                  : 'hover:text-blue-600'
-              }`}
+              } ${pathname === href ? 'bg-orange-400 text-white' : 'hover:text-blue-600'}`}
             >
               <span className="relative">
                 {icon}
@@ -191,7 +187,7 @@ const navLinks: {
                 )}
               </span>
               <span
-                className={`${
+                className={`$ {
                   collapsed
                     ? 'absolute left-full ml-2 bg-white px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 whitespace-nowrap'
                     : ''
@@ -202,6 +198,7 @@ const navLinks: {
             </Link>
           ))}
         </nav>
+
 
         {/* Zone de recherche */}
         <div className={`relative w-full md:w-64 ${collapsed ? 'hidden' : ''}`}>
