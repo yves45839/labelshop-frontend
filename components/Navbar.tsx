@@ -7,6 +7,15 @@ import Image from 'next/image';
 import axios from 'axios';
 import { watchAuth } from '@/lib/firebase';
 import { viewCart, type CartItemData } from '@/lib/cart';
+import {
+  FaHome,
+  FaBoxOpen,
+  FaShoppingCart,
+  FaClipboardList,
+  FaSignInAlt,
+  FaInfoCircle,
+  FaUser,
+} from 'react-icons/fa';
 
 type Product = {
   id: number;
@@ -93,15 +102,20 @@ export default function Navbar() {
     return () => window.removeEventListener('cart-changed', handle);
   }, []);
 
-const navLinks: { href: string; label: string }[] = [
-  { href: '/', label: 'ACCUEIL' },
-  { href: '/about', label: 'A PROPOS' },
-  { href: '/products', label: 'NOS PRODUITS' },
-  { href: '/cart', label: 'PANIER' },
-  { href: '/orders', label: 'COMMANDES' },
+const navLinks: {
+  href: string;
+  label: string;
+  icon: JSX.Element;
+  showCount?: boolean;
+}[] = [
+  { href: '/', label: 'ACCUEIL', icon: <FaHome /> },
+  { href: '/products', label: 'NOS PRODUITS', icon: <FaBoxOpen /> },
+  { href: '/cart', label: 'PANIER', icon: <FaShoppingCart />, showCount: true },
+  { href: '/orders', label: 'COMMANDES', icon: <FaClipboardList /> },
   ...(user
-    ? [{ href: '/accounts/profile', label: 'MON COMPTE' }]
-    : [{ href: '/accounts/login', label: 'CONNEXION' }]),
+    ? [{ href: '/accounts/profile', label: 'MON COMPTE', icon: <FaUser /> }]
+    : [{ href: '/accounts/login', label: 'CONNEXION', icon: <FaSignInAlt /> }]),
+  { href: '/about', label: 'A PROPOS', icon: <FaInfoCircle /> },
 ];
 
   return (
@@ -123,17 +137,25 @@ const navLinks: { href: string; label: string }[] = [
 
         {/* Navigation centrale */}
         <nav className="flex flex-wrap justify-center gap-4 text-sm font-bold text-orange-500">
-          {navLinks.map(({ href, label }) => (
+          {navLinks.map(({ href, label, icon, showCount }) => (
             <Link
               key={href}
               href={href}
-              className={`px-3 py-2 rounded-md transition-all duration-300 ${
+              className={`flex items-center gap-1 px-3 py-2 rounded-md transition-all duration-300 ${
                 pathname === href
                   ? 'bg-orange-400 text-white'
                   : 'hover:text-blue-600'
               }`}
             >
-              {label}
+              <span className="relative text-lg">
+                {icon}
+                {showCount && cartCount > 0 && (
+                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </span>
+              <span>{label}</span>
             </Link>
           ))}
         </nav>
@@ -189,14 +211,6 @@ const navLinks: { href: string; label: string }[] = [
             </ul>
           )}
         </div>
-        <Link href="/cart" className="relative text-2xl">
-          <span role="img" aria-label="Panier">🛒</span>
-          {cartCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              {cartCount}
-            </span>
-          )}
-        </Link>
       </div>
     </header>
   );
