@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { firebaseRegister } from '@/lib/firebase';
+import Link from 'next/link';
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -67,6 +68,12 @@ export default function RegisterPage() {
           S'inscrire
         </button>
       </form>
+      <p className="mt-4 text-sm text-center">
+        Déjà un compte ?{' '}
+        <Link href="/accounts/login" className="text-blue-600 hover:underline">
+          Connectez-vous
+        </Link>
+      </p>
     </main>
   );
 }

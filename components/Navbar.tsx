@@ -77,10 +77,7 @@ const navLinks: { href: string; label: string }[] = [
   { href: '/orders', label: 'COMMANDES' },
   ...(user
     ? [{ href: '/accounts/profile', label: 'MON COMPTE' }]
-    : [
-        { href: '/accounts/login', label: 'CONNEXION' },
-        { href: '/accounts/register', label: 'INSCRIPTION' },
-      ]),
+    : [{ href: '/accounts/login', label: 'CONNEXION' }]),
 ];
 
   return (
