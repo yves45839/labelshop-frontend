@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ReactElement } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
@@ -105,7 +105,7 @@ export default function Navbar() {
 const navLinks: {
   href: string;
   label: string;
-  icon: JSX.Element;
+  icon: ReactElement;
   showCount?: boolean;
 }[] = [
   { href: '/', label: 'ACCUEIL', icon: <FaHome /> },
