@@ -6,7 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import axios from 'axios';
 import { watchAuth } from '@/lib/firebase';
-import { viewCart } from '@/lib/cart';
+import { viewCart, type CartItemData } from '@/lib/cart';
 
 type Product = {
   id: number;
@@ -75,12 +75,18 @@ export default function Navbar() {
     const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
     const id = stored ? JSON.parse(stored).id : undefined;
     viewCart(id).then((items) => {
-      const total = items.reduce((sum, it) => sum + (it.quantity || 0), 0);
+      const total = items.reduce(
+        (sum: number, it: CartItemData) => sum + (it.quantity || 0),
+        0,
+      );
       setCartCount(total);
     });
     function handle(e: any) {
-      const items = e.detail || [];
-      const total = items.reduce((sum: number, it: any) => sum + (it.quantity || 0), 0);
+      const items = (e.detail || []) as CartItemData[];
+      const total = items.reduce(
+        (sum: number, it: CartItemData) => sum + (it.quantity || 0),
+        0,
+      );
       setCartCount(total);
     }
     window.addEventListener('cart-changed', handle);
