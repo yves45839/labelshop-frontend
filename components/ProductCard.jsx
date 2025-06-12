@@ -11,6 +11,7 @@ export default function ProductCard({ product }) {
 
   const imageUrl = `${product.imageUrl}?t=${Date.now()}`;
   const [qty, setQty] = useState(0);
+  const [itemId, setItemId] = useState(null);
 
   return (
     <div className="rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group bg-white flex flex-col h-full">
@@ -58,12 +59,15 @@ export default function ProductCard({ product }) {
         {qty === 0 ? (
           <button
             onClick={async () => {
-              await addToCart({
+              const res = await addToCart({
                 product_id: product.id,
                 quantity: 1,
                 product_name: product.name,
                 product_image: product.imageUrl,
               });
+              if (res && typeof res === 'object' && 'id' in res) {
+                setItemId(res.id);
+              }
               setQty(1);
             }}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-full transition"
@@ -76,10 +80,11 @@ export default function ProductCard({ product }) {
               onClick={async () => {
                 const newQty = qty - 1;
                 if (newQty <= 0) {
-                  await removeFromCart(product.id);
+                  await removeFromCart(itemId ?? product.id);
                   setQty(0);
+                  setItemId(null);
                 } else {
-                  await updateCartItem({ item_id: product.id, quantity: newQty });
+                  await updateCartItem({ item_id: itemId ?? product.id, quantity: newQty });
                   setQty(newQty);
                 }
               }}
@@ -91,7 +96,7 @@ export default function ProductCard({ product }) {
             <button
               onClick={async () => {
                 const newQty = qty + 1;
-                await updateCartItem({ item_id: product.id, quantity: newQty });
+                await updateCartItem({ item_id: itemId ?? product.id, quantity: newQty });
                 setQty(newQty);
               }}
               className="px-3 bg-gray-200 rounded-r"
