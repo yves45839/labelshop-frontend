@@ -28,3 +28,7 @@ body {
 body.nav-collapsed .content {
   margin-left: 4rem;
 }
+
+body.nav-collapsed footer {
+  margin-left: 4rem;
+}
