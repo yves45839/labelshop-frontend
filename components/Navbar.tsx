@@ -215,7 +215,9 @@ const navLinks: {
         <div className={`relative w-full md:w-64 ${collapsed ? 'hidden' : ''}`}>
           <form onSubmit={handleSearch} className="flex">
             <input
-              type="text"
+              type="search"
+              inputMode="search"
+              autoComplete="off"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Rechercher un produit..."
