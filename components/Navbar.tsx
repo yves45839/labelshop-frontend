@@ -30,6 +30,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [user, setUser] = useState<any>(null);
+  const ADMIN_EMAILS = ['admin@example.com'];
   const [cartCount, setCartCount] = useState(0);
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
@@ -133,7 +134,9 @@ const navLinks: {
   { href: '/products', label: 'NOS PRODUITS', icon: <FaBoxOpen /> },
   { href: '/cart', label: 'PANIER', icon: <FaShoppingCart />, showCount: true },
   { href: '/orders', label: 'COMMANDES', icon: <FaClipboardList /> },
-  ...(user ? [{ href: '/stock', label: 'STOCK', icon: <FaWarehouse /> }] : []),
+  ...(user && ADMIN_EMAILS.includes(user.email)
+    ? [{ href: '/inventory', label: 'INVENTAIRE', icon: <FaWarehouse /> }]
+    : []),
   ...(user
     ? [{ href: '/accounts/profile', label: 'MON COMPTE', icon: <FaUser /> }]
     : [{ href: '/accounts/login', label: 'CONNEXION', icon: <FaSignInAlt /> }]),
