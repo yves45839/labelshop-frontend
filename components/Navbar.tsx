@@ -12,6 +12,7 @@ import {
   FaBoxOpen,
   FaShoppingCart,
   FaClipboardList,
+  FaWarehouse,
   FaSignInAlt,
   FaInfoCircle,
   FaUser,
@@ -132,6 +133,7 @@ const navLinks: {
   { href: '/products', label: 'NOS PRODUITS', icon: <FaBoxOpen /> },
   { href: '/cart', label: 'PANIER', icon: <FaShoppingCart />, showCount: true },
   { href: '/orders', label: 'COMMANDES', icon: <FaClipboardList /> },
+  ...(user ? [{ href: '/stock', label: 'STOCK', icon: <FaWarehouse /> }] : []),
   ...(user
     ? [{ href: '/accounts/profile', label: 'MON COMPTE', icon: <FaUser /> }]
     : [{ href: '/accounts/login', label: 'CONNEXION', icon: <FaSignInAlt /> }]),
