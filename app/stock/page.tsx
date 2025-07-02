@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { listStock, updateStock, type StockItem } from '@/lib/stock';
 
 export default function StockPage() {
@@ -29,6 +29,18 @@ export default function StockPage() {
     }
   };
 
+  const siteNames = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          items.flatMap((it) =>
+            it.site_quantities ? Object.keys(it.site_quantities) : []
+          )
+        )
+      ),
+    [items]
+  );
+
   if (loading) return <p className="p-4">Chargement...</p>;
 
   return (
@@ -41,7 +53,12 @@ export default function StockPage() {
           <thead>
             <tr>
               <th className="border px-2 py-1 text-left">Produit</th>
-              <th className="border px-2 py-1">Quantité</th>
+              {siteNames.map((site) => (
+                <th key={site} className="border px-2 py-1 text-center">
+                  {site}
+                </th>
+              ))}
+              <th className="border px-2 py-1">Total</th>
               <th className="border px-2 py-1">Actions</th>
             </tr>
           </thead>
@@ -49,6 +66,11 @@ export default function StockPage() {
             {items.map((item) => (
               <tr key={item.id}>
                 <td className="border px-2 py-1">{item.name}</td>
+                {siteNames.map((site) => (
+                  <td key={site} className="border px-2 py-1 text-center">
+                    {item.site_quantities?.[site] ?? 0}
+                  </td>
+                ))}
                 <td className="border px-2 py-1 text-center">{item.quantity}</td>
                 <td className="border px-2 py-1 text-center space-x-1">
                   <button
