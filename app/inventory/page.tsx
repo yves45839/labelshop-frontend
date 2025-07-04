@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
   listSites,
   createSite,
@@ -83,6 +84,14 @@ export default function InventoryPage() {
   return (
     <main className="container mx-auto py-8 px-4 space-y-6">
       <h1 className="text-2xl font-bold text-center mb-4">Gestion de stock</h1>
+      <div className="flex justify-center gap-4">
+        <Link href="/stock" className="text-blue-600 underline">
+          Voir stock
+        </Link>
+        <Link href="/products/create" className="text-blue-600 underline">
+          Ajouter produit
+        </Link>
+      </div>
 
       <section className="space-y-2">
         <h2 className="font-semibold">Sites</h2>
