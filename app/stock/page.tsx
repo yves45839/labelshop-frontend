@@ -1,16 +1,22 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { listStock, updateStock, type StockItem } from '@/lib/stock';
-import { getCurrentUser } from '@/lib/user';
+import { listStock, updateStock } from '@/lib/stock';
+import { getCurrentUser, isAdminEmail } from '@/lib/user';
+import StockGrid, { type StockProduct } from '@/components/StockGrid';
 
 export default function StockPage() {
-  const [items, setItems] = useState<StockItem[]>([]);
+  const [items, setItems] = useState<StockProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const userId = getCurrentUser()?.id ?? null;
+  const user = getCurrentUser();
+  const userId = user?.id ?? null;
 
   useEffect(() => {
     if (!userId) {
       window.location.href = '/accounts/login';
+      return;
+    }
+    if (!isAdminEmail(user?.email)) {
+      window.location.href = '/';
       return;
     }
     listStock()
@@ -19,7 +25,7 @@ export default function StockPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleUpdate = async (item: StockItem, qty: number) => {
+  const handleUpdate = async (item: StockProduct, qty: number) => {
     const quantity = Math.max(0, qty);
     try {
       await updateStock(item.id, quantity);
@@ -37,37 +43,7 @@ export default function StockPage() {
       {items.length === 0 ? (
         <p>Aucun produit en stock.</p>
       ) : (
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr>
-              <th className="border px-2 py-1 text-left">Produit</th>
-              <th className="border px-2 py-1">Quantité</th>
-              <th className="border px-2 py-1">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td className="border px-2 py-1">{item.name}</td>
-                <td className="border px-2 py-1 text-center">{item.quantity}</td>
-                <td className="border px-2 py-1 text-center space-x-1">
-                  <button
-                    onClick={() => handleUpdate(item, item.quantity + 1)}
-                    className="px-2 bg-gray-200 rounded-l"
-                  >
-                    +
-                  </button>
-                  <button
-                    onClick={() => handleUpdate(item, item.quantity - 1)}
-                    className="px-2 bg-gray-200 rounded-r"
-                  >
-                    -
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <StockGrid products={items} onUpdate={handleUpdate} />
       )}
     </main>
   );
