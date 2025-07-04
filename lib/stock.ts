@@ -4,6 +4,8 @@ export interface StockItem {
   id: number;
   name: string;
   quantity: number;
+  /** Quantités par site, clés = nom du site */
+  site_quantities?: Record<string, number>;
   [key: string]: any;
 }
 
