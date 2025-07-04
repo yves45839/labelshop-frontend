@@ -9,6 +9,7 @@ import {
   type Site,
   type StockEntry,
 } from '@/lib/inventory';
+import { getCurrentUser } from '@/lib/user';
 
 const ADMIN_EMAILS = ['admin@example.com'];
 
@@ -21,13 +22,12 @@ export default function InventoryPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('user');
-    if (!stored) {
+    const user = getCurrentUser();
+    if (!user) {
       window.location.href = '/accounts/login';
       return;
     }
-    const user = JSON.parse(stored);
-    if (!ADMIN_EMAILS.includes(user.email)) {
+    if (!ADMIN_EMAILS.includes(user.email ?? '')) {
       window.location.href = '/';
       return;
     }

@@ -1,4 +1,5 @@
 import { api } from './api';
+import { getCurrentUser } from './user';
 
 export interface CartItemData {
   product_id: number;
@@ -38,8 +39,7 @@ function saveLocalCart(items: CartItemData[]) {
 }
 
 export async function addToCart(data: CartItemData) {
-  const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-  const user = stored ? JSON.parse(stored) : null;
+  const user = getCurrentUser();
   if (user) {
     const res = await api.post('/cart/add/', data);
     const items = await viewCart(user.id);
@@ -61,8 +61,7 @@ export async function addToCart(data: CartItemData) {
 }
 
 export async function updateCartItem(data: UpdateCartData) {
-  const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-  const user = stored ? JSON.parse(stored) : null;
+  const user = getCurrentUser();
   if (user) {
     const res = await api.post('/cart/update/', data);
     const items = await viewCart(user.id);
@@ -79,8 +78,7 @@ export async function updateCartItem(data: UpdateCartData) {
 }
 
 export async function removeFromCart(item_id: number) {
-  const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-  const user = stored ? JSON.parse(stored) : null;
+  const user = getCurrentUser();
   if (user) {
     const res = await api.post('/cart/remove/', { item_id });
     const items = await viewCart(user.id);

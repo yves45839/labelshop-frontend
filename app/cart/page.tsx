@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { viewCart, removeFromCart, updateCartItem } from '@/lib/cart';
+import { getCurrentUser } from '@/lib/user';
 import { createOrder } from '@/lib/orders';
 
 interface CartItem {
@@ -29,8 +30,7 @@ export default function CartPage() {
   const [items, setItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-  const userId = stored ? JSON.parse(stored).id : null;
+  const userId = getCurrentUser()?.id ?? null;
 
   useEffect(() => {
     if (!userId) {

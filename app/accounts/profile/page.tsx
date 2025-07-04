@@ -7,6 +7,7 @@ import {
   firebaseUpdatePassword,
 } from '@/lib/firebase';
 import { listOrders } from '@/lib/orders';
+import { getCurrentUser, removeCurrentUser } from '@/lib/user';
 
 export default function ProfilePage() {
   const [message, setMessage] = useState('');
@@ -17,12 +18,11 @@ export default function ProfilePage() {
   const router = useRouter();
 
   useEffect(() => {
-    const stored = localStorage.getItem('user');
-    if (!stored) {
+    const u = getCurrentUser();
+    if (!u) {
       router.push('/accounts/login');
       return;
     }
-    const u = JSON.parse(stored);
     setUser(u);
     listOrders(u.id)
       .then(setOrders)
@@ -33,7 +33,7 @@ export default function ProfilePage() {
   const handleLogout = async () => {
     try {
       await firebaseLogout();
-      localStorage.removeItem('user');
+      removeCurrentUser();
       router.push('/');
     } catch {
       setMessage('Erreur lors de la déconnexion');
@@ -43,7 +43,7 @@ export default function ProfilePage() {
   const handleCancel = async () => {
     try {
       await firebaseDeleteAccount();
-      localStorage.removeItem('user');
+      removeCurrentUser();
       router.push('/');
     } catch {
       setMessage('Erreur lors de la suppression du compte');

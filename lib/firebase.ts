@@ -13,6 +13,7 @@ import {
   User,
 } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
+import { saveCurrentUser, removeCurrentUser, type CurrentUser } from './user';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBQ-PvQx5TVbQu9wxTdvIpdwmro_uxHeP4',
@@ -115,5 +116,18 @@ export async function firebaseUpdatePassword(newPassword: string) {
 
 export function watchAuth(callback: (user: User | null) => void) {
   const auth = getFirebaseAuth();
-  return onAuthStateChanged(auth, callback);
+  return onAuthStateChanged(auth, (u) => {
+    if (u) {
+      const obj: CurrentUser = {
+        id: u.uid,
+        email: u.email,
+        name: u.displayName,
+      };
+      saveCurrentUser(obj);
+      callback(u);
+    } else {
+      removeCurrentUser();
+      callback(null);
+    }
+  });
 }

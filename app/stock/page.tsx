@@ -1,12 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { listStock, updateStock, type StockItem } from '@/lib/stock';
+import { getCurrentUser } from '@/lib/user';
 
 export default function StockPage() {
   const [items, setItems] = useState<StockItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-  const userId = stored ? JSON.parse(stored).id : null;
+  const userId = getCurrentUser()?.id ?? null;
 
   useEffect(() => {
     if (!userId) {
