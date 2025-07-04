@@ -9,9 +9,7 @@ import {
   type Site,
   type StockEntry,
 } from '@/lib/inventory';
-import { getCurrentUser } from '@/lib/user';
-
-const ADMIN_EMAILS = ['admin@example.com'];
+import { getCurrentUser, isAdminEmail } from '@/lib/user';
 
 export default function InventoryPage() {
   const [sites, setSites] = useState<Site[]>([]);
@@ -27,7 +25,7 @@ export default function InventoryPage() {
       window.location.href = '/accounts/login';
       return;
     }
-    if (!ADMIN_EMAILS.includes(user.email ?? '')) {
+    if (!isAdminEmail(user.email)) {
       window.location.href = '/';
       return;
     }

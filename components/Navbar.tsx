@@ -6,7 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import axios from 'axios';
 import { watchAuth } from '@/lib/firebase';
-import { getCurrentUser } from '@/lib/user';
+import { getCurrentUser, isAdminEmail } from '@/lib/user';
 import { viewCart, type CartItemData } from '@/lib/cart';
 import {
   FaHome,
@@ -31,7 +31,6 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [user, setUser] = useState<any>(null);
-  const ADMIN_EMAILS = ['admin@example.com'];
   const [cartCount, setCartCount] = useState(0);
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
@@ -132,7 +131,7 @@ const navLinks: {
   { href: '/products', label: 'NOS PRODUITS', icon: <FaBoxOpen /> },
   { href: '/cart', label: 'PANIER', icon: <FaShoppingCart />, showCount: true },
   { href: '/orders', label: 'COMMANDES', icon: <FaClipboardList /> },
-  ...(user && ADMIN_EMAILS.includes(user.email)
+  ...(user && isAdminEmail(user.email)
     ? [{ href: '/inventory', label: 'INVENTAIRE', icon: <FaWarehouse /> }]
     : []),
   ...(user
