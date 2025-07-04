@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { firebaseLogin } from '@/lib/firebase';
+import { saveCurrentUser } from '@/lib/user';
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -13,10 +14,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       const user = await firebaseLogin(form.email, form.password);
-      localStorage.setItem(
-        'user',
-        JSON.stringify({ id: user.uid, email: user.email, name: user.displayName })
-      );
+      saveCurrentUser({ id: user.uid, email: user.email, name: user.displayName });
       router.push('/');
     } catch (err: any) {
       setError(err.message || 'Erreur de connexion');

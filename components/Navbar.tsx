@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import axios from 'axios';
 import { watchAuth } from '@/lib/firebase';
+import { getCurrentUser } from '@/lib/user';
 import { viewCart, type CartItemData } from '@/lib/cart';
 import {
   FaHome,
@@ -72,11 +73,8 @@ export default function Navbar() {
   useEffect(() => {
     const unsubscribe = watchAuth((u) => {
       if (u) {
-        const obj = { id: u.uid, email: u.email, name: u.displayName };
-        localStorage.setItem('user', JSON.stringify(obj));
-        setUser(obj);
+        setUser({ id: u.uid, email: u.email, name: u.displayName });
       } else {
-        localStorage.removeItem('user');
         setUser(null);
       }
     });
@@ -103,8 +101,8 @@ export default function Navbar() {
   }, [collapsed]);
 
   useEffect(() => {
-    const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-    const id = stored ? JSON.parse(stored).id : undefined;
+    const user = getCurrentUser();
+    const id = user?.id;
     viewCart(id).then((items) => {
       const total = items.reduce(
         (sum: number, it: CartItemData) => sum + (it.quantity || 0),

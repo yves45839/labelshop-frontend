@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { listOrders } from '@/lib/orders';
+import { getCurrentUser } from '@/lib/user';
 
 interface Order {
   id: number;
@@ -11,8 +12,7 @@ interface Order {
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-  const userId = stored ? JSON.parse(stored).id : null;
+  const userId = getCurrentUser()?.id ?? null;
 
   useEffect(() => {
     if (!userId) {
