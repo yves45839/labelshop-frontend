@@ -14,6 +14,8 @@ import {
   FaShoppingCart,
   FaClipboardList,
   FaWarehouse,
+  FaBoxes,
+  FaPlus,
   FaSignInAlt,
   FaInfoCircle,
   FaUser,
@@ -132,7 +134,11 @@ const navLinks: {
   { href: '/cart', label: 'PANIER', icon: <FaShoppingCart />, showCount: true },
   { href: '/orders', label: 'COMMANDES', icon: <FaClipboardList /> },
   ...(user && isAdminEmail(user.email)
-    ? [{ href: '/inventory', label: 'INVENTAIRE', icon: <FaWarehouse /> }]
+    ? [
+        { href: '/inventory', label: 'INVENTAIRE', icon: <FaWarehouse /> },
+        { href: '/stock', label: 'STOCK', icon: <FaBoxes /> },
+        { href: '/products/create', label: 'NOUVEAU', icon: <FaPlus /> },
+      ]
     : []),
   ...(user
     ? [{ href: '/accounts/profile', label: 'MON COMPTE', icon: <FaUser /> }]
