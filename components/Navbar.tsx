@@ -90,16 +90,11 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      const body = document.body;
-      if (collapsed) {
-        body.classList.add('nav-collapsed');
-      } else {
-        body.classList.remove('nav-collapsed');
-      }
-    }
-  }, [collapsed]);
+  // When the user scrolls the page we reduce the navbar height but keep it at
+  // the top instead of turning it into a sidebar.
+  // Previously we added a class to the body to shift the content when the
+  // sidebar was displayed. This behaviour is no longer required so the effect
+  // is removed.
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -149,18 +144,10 @@ const navLinks: {
   return (
     <header
       className={`bg-white shadow-sm transition-all duration-300 z-50 ${
-        collapsed
-          ? 'fixed top-0 left-0 h-screen w-16 flex flex-col items-center py-6'
-          : 'sticky top-0 w-full py-4'
+        collapsed ? 'fixed top-0 left-0 w-full py-2' : 'sticky top-0 w-full py-4'
       }`}
     >
-      <div
-        className={`mx-auto px-4 flex ${
-          collapsed
-            ? 'flex-col items-center gap-6 h-full'
-            : 'max-w-screen-xl flex-col md:flex-row items-center justify-between gap-4'
-        }`}
-      >
+      <div className="mx-auto px-4 flex max-w-screen-xl flex-col md:flex-row items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
@@ -180,22 +167,14 @@ const navLinks: {
         </Link>
 
         {/* Navigation centrale */}
-        <nav
-          className={`text-sm font-bold text-orange-500 ${
-            collapsed
-              ? 'flex flex-col items-center gap-6 mt-8'
-              : 'flex flex-wrap justify-center gap-4'
-          }`}
-        >
+        <nav className="text-sm font-bold text-orange-500 flex flex-wrap justify-center gap-4">
           {navLinks.map(({ href, label, icon, showCount }) => (
             <Link
               key={href}
               href={href}
-              className={`group relative transition-all duration-300 rounded-md ${
-                collapsed
-                  ? 'flex items-center justify-center w-full text-lg'
-                  : 'flex items-center gap-1 px-3 py-2'
-              } ${pathname === href ? 'bg-orange-400 text-white' : 'hover:text-blue-600'}`}
+              className={`group relative transition-all duration-300 rounded-md flex items-center gap-1 px-3 py-2 ${
+                pathname === href ? 'bg-orange-400 text-white' : 'hover:text-blue-600'
+              }`}
             >
               <span className="relative">
                 {icon}
@@ -205,13 +184,7 @@ const navLinks: {
                   </span>
                 )}
               </span>
-              <span
-                className={`${
-                  collapsed
-                    ? 'absolute left-full ml-2 bg-white px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 whitespace-nowrap text-black'
-                    : ''
-                }`}
-              >
+              <span className="">
                 {label}
               </span>
             </Link>
