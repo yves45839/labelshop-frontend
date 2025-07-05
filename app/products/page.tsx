@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductCard from '@/components/ProductCard';
+import { addToCart } from '@/lib/cart';
 
 type Product = {
   id: number;
@@ -60,15 +61,32 @@ export default function ProductsPage() {
     <main className="container mx-auto py-8">
       <h1 className="text-3xl font-bold text-center mb-8">Nos Produits</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={{
-              ...product,
-              imageUrl: getProductImage(product),
-            }}
-          />
-        ))}
+        {products.map((product) => {
+          const imageUrl = getProductImage(product);
+          const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
+            `Bonjour, je souhaite acheter le produit : ${product.name} (Réf : ${product.default_code}).`
+          )}`;
+          const handleAdd = async () => {
+            await addToCart({
+              product_id: product.id,
+              quantity: 1,
+              product_name: product.name,
+              product_image: imageUrl,
+              price: product.list_price,
+            });
+          };
+          return (
+            <ProductCard
+              key={product.id}
+              imageUrl={imageUrl}
+              name={product.name}
+              reference={product.default_code || ''}
+              price={product.list_price}
+              whatsappLink={whatsappLink}
+              onAddToCart={handleAdd}
+            />
+          );
+        })}
       </div>
     </main>
   );
