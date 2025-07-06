@@ -1,5 +1,12 @@
-'use client';
 import Image from 'next/image';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'À propos',
+  description:
+    "En savoir plus sur Label Retail, spécialiste des solutions de sécurité en Côte d'Ivoire",
+  alternates: { canonical: '/about' },
+};
 
 export default function AboutPage() {
   return (
