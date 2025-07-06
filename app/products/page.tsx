@@ -4,6 +4,13 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductCard from '@/components/ProductCard';
 import { addToCart } from '@/lib/cart';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Nos produits',
+  description: "Découvrez notre catalogue complet de solutions Label Retail",
+  alternates: { canonical: '/products' },
+};
 
 type Product = {
   id: number;

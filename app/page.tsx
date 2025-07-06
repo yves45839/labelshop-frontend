@@ -5,6 +5,14 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import axios from "axios";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Accueil",
+  description:
+    "Label Retail - Solutions de sécurité électronique et domotique en Côte d'Ivoire",
+  alternates: { canonical: "/" },
+};
 
 type Product = {
   id: number;
