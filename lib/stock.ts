@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { api } from './api';
 
 export interface StockItem {
@@ -7,8 +8,12 @@ export interface StockItem {
   [key: string]: any;
 }
 
+const http = axios.create({
+  baseURL: api.defaults.baseURL,
+});
+
 export async function listStock() {
-  const res = await api.get('/products/get-products/');
+  const res = await http.get('/products/get-products/');
   return (res.data as any[]).map((p) => ({
     id: p.id,
     name: p.name,
