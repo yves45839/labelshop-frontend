@@ -18,6 +18,7 @@ import {
   FaPlus,
   FaSignInAlt,
   FaInfoCircle,
+  FaNewspaper,
   FaUser,
 } from 'react-icons/fa';
 
@@ -138,6 +139,7 @@ const navLinks: {
   ...(user
     ? [{ href: '/accounts/profile', label: 'MON COMPTE', icon: <FaUser /> }]
     : [{ href: '/accounts/login', label: 'CONNEXION', icon: <FaSignInAlt /> }]),
+  { href: '/blogs', label: 'BLOG', icon: <FaNewspaper /> },
   { href: '/about', label: 'A PROPOS', icon: <FaInfoCircle /> },
 ];
 
