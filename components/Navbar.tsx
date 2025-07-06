@@ -184,7 +184,7 @@ const navLinks: {
                   </span>
                 )}
               </span>
-              <span className="">
+              <span className={`${collapsed ? 'hidden' : ''}`}>
                 {label}
               </span>
             </Link>
