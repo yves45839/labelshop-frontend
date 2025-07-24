@@ -26,10 +26,11 @@ async function getProducts(q: string): Promise<Product[]> {
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { q?: string };
+  searchParams: Promise<{ q?: string }>;
 }) {
-  const q = searchParams.q?.toString().trim() ?? '';
-  if (!q) {
+  const { q = '' } = await searchParams;
+  const query = q.toString().trim();
+  if (!query) {
     return (
       <main className="p-4 text-center">
         <p>Saisissez un terme dans la barre de recherche.</p>
@@ -37,10 +38,10 @@ export default async function SearchPage({
     );
   }
 
-  const products = await getProducts(q);
+  const products = await getProducts(query);
   if (products.length === 0) {
     notFound();
   }
 
-  return <SearchResultsClient products={products} query={q} />;
+  return <SearchResultsClient products={products} query={query} />;
 }
