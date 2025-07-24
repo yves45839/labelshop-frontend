@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import { addToCart } from '@/lib/cart';
 
@@ -48,15 +49,20 @@ export default function SearchResultsClient({
             });
           };
           return (
-            <ProductCard
+            <Link
+              href={`/products/${product.slug}`}
               key={product.id}
-              imageUrl={imageUrl}
-              name={product.name}
-              reference={product.default_code || ''}
-              price={product.list_price}
-              whatsappLink={whatsappLink}
-              onAddToCart={handleAdd}
-            />
+              className="block"
+            >
+              <ProductCard
+                imageUrl={imageUrl}
+                name={product.name}
+                reference={product.default_code || ''}
+                price={product.list_price}
+                whatsappLink={whatsappLink}
+                onAddToCart={handleAdd}
+              />
+            </Link>
           );
         })}
       </div>
