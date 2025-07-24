@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import AddToCart from '@/components/AddToCart';
+import { mapCategory } from '@/lib/category';
 
 // 🔁 Récupère l'image
 function getImageUrl(product: any): string {
@@ -144,7 +145,9 @@ export default async function ProductDetailPage({
           </div>
 
           <div className="mt-4 text-sm text-gray-700 space-y-1">
-            <p><strong>Catégorie :</strong> {product.categ_id}</p>
+            <p>
+              <strong>Catégorie :</strong> {mapCategory(product.categ_id)}
+            </p>
             <p><strong>Marque :</strong> {product.brand || 'Hikvision'}</p>
             <p><strong>Référence :</strong> {product.default_code}</p>
           </div>
