@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { api } from '@/lib/api';
 import ProductCard from '@/components/ProductCard';
 import { addToCart } from '@/lib/cart';
 import { mapCategory, MAIN_CATEGORIES } from '@/lib/category';
@@ -16,9 +16,6 @@ type Product = {
   [key: string]: unknown;
 };
 
-const api = axios.create({
-  baseURL: 'https://labelshop-backend.onrender.com',
-});
 
 // ✅ Utilise uniquement image_1024 (format complet ou relatif)
 function getProductImage(product: Product): string {
@@ -26,8 +23,8 @@ function getProductImage(product: Product): string {
 
   if (product.image_1024 && typeof product.image_1024 === 'string') {
     return product.image_1024.startsWith('http')
-      ? `${product.image_1024}?t=${Date.now()}`
-      : `${baseUrl}${product.image_1024}?t=${Date.now()}`;
+      ? product.image_1024
+      : `${baseUrl}${product.image_1024}`;
   }
 
   return '/default-product.png';

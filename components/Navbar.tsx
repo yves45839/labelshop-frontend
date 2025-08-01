@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect, type ReactElement } from 'react';
+import { useState, useEffect, useCallback, type ReactElement } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
-import axios from 'axios';
+import { api } from '@/lib/api';
 import { watchAuth } from '@/lib/firebase';
 import { getCurrentUser, isAdminEmail } from '@/lib/user';
 import { viewCart, type CartItemData } from '@/lib/cart';
@@ -48,29 +48,33 @@ export default function Navbar() {
     }
   };
 
-  useEffect(() => {
-    if (searchQuery.length < 2) {
-      setSuggestions([]);
-      return;
-    }
+  const debouncedSearch = useCallback(
+    debounce(async (query: string) => {
+      if (query.length < 2) {
+        setSuggestions([]);
+        return;
+      }
 
-    const fetchSuggestions = async () => {
       try {
-        const res = await axios.get('https://labelshop-backend.onrender.com/products/get-products/');
-        const query = searchQuery.toLowerCase();
+        const res = await api.get('/products/get-products/');
+        const queryLower = query.toLowerCase();
         const filtered = res.data.filter((p: Product) =>
-          p.name.toLowerCase().includes(query) ||
-          p.slug.toLowerCase().includes(query) ||
-          p.default_code?.toLowerCase().includes(query)
+          p.name.toLowerCase().includes(queryLower) ||
+          p.slug.toLowerCase().includes(queryLower) ||
+          p.default_code?.toLowerCase().includes(queryLower)
         );
         setSuggestions(filtered.slice(0, 5));
       } catch (err) {
         console.error('Erreur suggestions :', err);
+        setSuggestions([]);
       }
-    };
+    }, 300),
+    []
+  );
 
-    fetchSuggestions();
-  }, [searchQuery]);
+  useEffect(() => {
+    debouncedSearch(searchQuery);
+  }, [searchQuery, debouncedSearch]);
 
   useEffect(() => {
     const unsubscribe = watchAuth((u) => {
@@ -142,6 +146,17 @@ const navLinks: {
   { href: '/blogs', label: 'BLOG', icon: <FaNewspaper /> },
   { href: '/about', label: 'A PROPOS', icon: <FaInfoCircle /> },
 ];
+
+  function debounce<T extends (...args: any[]) => any>(
+    func: T,
+    wait: number
+  ): (...args: Parameters<T>) => void {
+    let timeout: NodeJS.Timeout;
+    return (...args: Parameters<T>) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  }
 
   return (
     <header
@@ -233,7 +248,7 @@ const navLinks: {
                     className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   >
                     <Image
-                      src={`${imageUrl}?t=${Date.now()}`}
+                      src={imageUrl}
                       alt={product.name}
                       width={32}
                       height={32}

@@ -39,15 +39,21 @@ export default function HomePageClient() {
   }, []);
 
   useEffect(() => {
-    axios.get("https://labelshop-backend.onrender.com/products/get-products/")
-      .then((res) => {
-        const randomProducts = (res.data as Product[])
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("https://labelshop-backend.onrender.com/products/get-products/");
+        const data = await res.json();
+        const randomProducts = (data as Product[])
           .filter((p: Product) => p.is_online)
           .sort(() => 0.5 - Math.random())
           .slice(0, 5);
         setProducts(randomProducts);
-      })
-      .catch((error) => console.error("Erreur lors de la récupération des produits :", error));
+      } catch (error) {
+        console.error("Erreur lors de la récupération des produits :", error);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   return (
@@ -82,7 +88,7 @@ export default function HomePageClient() {
               <div key={product.id} className="bg-white border rounded-lg p-4 shadow hover:shadow-md transition">
                 <Link href={`/products/${product.slug}`}>
                   <Image
-                    src={`${imageUrl}?t=${Date.now()}`}
+                    src={imageUrl}
                     alt={product.name}
                     width={300}
                     height={200}

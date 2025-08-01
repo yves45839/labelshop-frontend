@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { FaWhatsapp, FaShoppingCart } from "react-icons/fa";
 
 interface ProductCardProps {
@@ -10,7 +11,7 @@ interface ProductCardProps {
   onAddToCart: () => void;
 }
 
-export default function ProductCard({
+const ProductCard = React.memo(function ProductCard({
   imageUrl,
   name,
   reference,
@@ -52,4 +53,6 @@ export default function ProductCard({
       </div>
     </div>
   );
-}
+});
+
+export default ProductCard;
