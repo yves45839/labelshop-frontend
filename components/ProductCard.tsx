@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { FaWhatsapp, FaShoppingCart } from "react-icons/fa";
 
 interface ProductCardProps {
@@ -20,9 +21,11 @@ export default function ProductCard({
 }: ProductCardProps) {
   return (
     <div className="flex flex-col items-center w-full sm:w-72 p-4 rounded-xl shadow-md bg-white hover:scale-105 transition-transform duration-200">
-      <img
+      <Image
         src={imageUrl}
         alt={name}
+        width={288}
+        height={160}
         className="h-40 w-auto object-contain mx-auto mb-4"
       />
       <h3 className="uppercase text-orange-700 font-bold text-md text-center mb-1">
