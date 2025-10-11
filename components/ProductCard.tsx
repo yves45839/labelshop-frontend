@@ -20,38 +20,63 @@ export default function ProductCard({
   onAddToCart,
 }: ProductCardProps) {
   return (
-    <div className="flex flex-col items-center w-full sm:w-72 p-4 rounded-xl shadow-md bg-white hover:scale-105 transition-transform duration-200">
-      <Image
-        src={imageUrl}
-        alt={name}
-        width={288}
-        height={160}
-        className="h-40 w-auto object-contain mx-auto mb-4"
+    <div className="group relative w-full sm:w-80">
+      <div
+        className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-orange-500 via-pink-500 to-purple-700 opacity-60 blur-2xl transition duration-500 group-hover:opacity-80"
+        aria-hidden
       />
-      <h3 className="uppercase text-orange-700 font-bold text-md text-center mb-1">
-        {name}
-      </h3>
-      <p className="text-sm text-gray-500 text-center mb-2">{reference}</p>
-      <p className="text-xl font-extrabold text-black text-center mb-4">
-        {price.toLocaleString()} FCFA
-      </p>
-      <div className="flex flex-col sm:flex-row gap-2 mt-auto w-full">
-        <a
-          href={whatsappLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center bg-white text-green-500 rounded-lg px-4 py-2 w-full hover:bg-gray-100"
-        >
-          <FaWhatsapp className="mr-2" />
-          Acheter via WhatsApp
-        </a>
-        <button
-          onClick={onAddToCart}
-          className="flex items-center justify-center bg-white text-orange-600 rounded-lg px-4 py-2 w-full hover:bg-gray-100"
-        >
-          <FaShoppingCart className="mr-2" />
-          Ajouter au panier
-        </button>
+      <div className="relative flex h-full flex-col gap-6 rounded-[2rem] border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur-xl transition duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl">
+        <div className="flex justify-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <span className="rounded-full bg-slate-900/90 px-3 py-1 text-[0.65rem] font-medium tracking-[0.3em] text-white shadow-sm">
+            {reference}
+          </span>
+        </div>
+
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 shadow-inner">
+          <Image
+            src={imageUrl}
+            alt={name}
+            width={320}
+            height={240}
+            className="h-40 w-full object-contain transition duration-500 group-hover:scale-105"
+          />
+          <div
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),transparent_55%)]"
+            aria-hidden
+          />
+        </div>
+
+        <div className="space-y-2 text-center">
+          <h3 className="text-lg font-bold uppercase tracking-[0.25em] text-slate-900">
+            {name}
+          </h3>
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-slate-400">
+            Réf. {reference}
+          </p>
+          <p className="text-3xl font-black text-slate-900">
+            {price.toLocaleString()} FCFA
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group/whatsapp inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200/40 transition duration-300 hover:shadow-emerald-300/60 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
+          >
+            <FaWhatsapp className="text-lg transition-transform duration-300 group-hover/whatsapp:scale-110" />
+            Acheter
+          </a>
+          <button
+            type="button"
+            onClick={onAddToCart}
+            className="group/cart inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/70 px-4 py-3 text-sm font-semibold text-orange-600 shadow-lg shadow-orange-100/40 transition duration-300 hover:-translate-y-0.5 hover:border-orange-200 hover:text-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-300/60"
+          >
+            <FaShoppingCart className="text-lg transition-transform duration-300 group-hover/cart:scale-110" />
+            Ajouter au panier
+          </button>
+        </div>
       </div>
     </div>
   );
