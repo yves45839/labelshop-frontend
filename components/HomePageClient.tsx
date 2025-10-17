@@ -31,12 +31,6 @@ export default function HomePageClient() {
     { src: "/images/videosurveillance.jpg", desc: "Surveillez vos locaux en temps réel avec nos caméras haute définition." },
   ];
 
-  const stats = [
-    { label: "Projets livrés", value: "120+" },
-    { label: "Techniciens certifiés", value: "30" },
-    { label: "Années d'expertise", value: "15" },
-  ];
-
   const pillars = [
     {
       title: "Innovation sur-mesure",
@@ -154,17 +148,6 @@ export default function HomePageClient() {
               >
                 Découvrir notre équipe
               </Link>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-3">
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center shadow-2xl backdrop-blur"
-                >
-                  <p className="text-2xl font-semibold text-white">{stat.value}</p>
-                  <p className="text-xs uppercase tracking-wide text-slate-300">{stat.label}</p>
-                </div>
-              ))}
             </div>
           </div>
 
