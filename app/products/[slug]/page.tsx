@@ -280,11 +280,11 @@ export default async function ProductDetailPage({
                 l'installation de vos équipements de sécurité.
               </p>
               <a
-                href="tel:+2250101010101"
+                href="tel:+2250788899965"
                 className="mt-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-cyan-100 transition hover:text-white"
               >
                 <span className="inline-flex h-2 w-2 rounded-full bg-cyan-300" />
-                Appeler le service commercial
+                Appeler le service commercial (+225 07 888 999 65)
               </a>
             </div>
           </div>
