@@ -149,9 +149,9 @@ const navLinks: {
         collapsed ? 'fixed top-0 left-0 w-full py-2' : 'sticky top-0 w-full py-4'
       }`}
     >
-      <div className="mx-auto px-4 flex max-w-screen-xl flex-col md:flex-row items-center justify-between gap-4">
+      <div className="mx-auto flex w-full max-w-screen-xl flex-wrap items-center gap-4 px-4 md:flex-nowrap md:gap-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-2 md:flex-shrink-0">
           <Image
             src="/images/lr.png"
             alt="Logo Label Retail"
@@ -169,7 +169,7 @@ const navLinks: {
         </Link>
 
         {/* Navigation centrale */}
-        <nav className="text-sm font-bold text-orange-500 flex flex-wrap justify-center gap-4">
+        <nav className="order-3 flex w-full flex-wrap justify-center gap-3 text-sm font-bold text-orange-500 md:order-2 md:flex-1">
           {navLinks.map(({ href, label, icon, showCount }) => (
             <Link
               key={href}
@@ -195,8 +195,15 @@ const navLinks: {
 
 
         {/* Zone de recherche */}
-        <div className={`relative w-full md:w-64 ${collapsed ? 'hidden' : ''}`}>
-          <form onSubmit={handleSearch} className="flex">
+        <div
+          className={`relative order-2 w-full transition-all duration-300 md:order-3 md:w-auto md:max-w-md md:flex-shrink-0 ${
+            collapsed ? 'md:max-w-sm' : ''
+          }`}
+        >
+          <form
+            onSubmit={handleSearch}
+            className="relative flex w-full overflow-hidden rounded-full border border-gray-200 bg-white shadow-sm focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-300"
+          >
             <input
               type="search"
               inputMode="search"
@@ -204,11 +211,11 @@ const navLinks: {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Rechercher un produit..."
-              className="w-full px-3 py-2 rounded-l-md border border-gray-300 text-sm"
+              className="w-full bg-transparent px-4 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none"
             />
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md font-semibold text-sm"
+              className="flex items-center justify-center bg-blue-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2"
             >
               Rechercher
             </button>
@@ -216,7 +223,7 @@ const navLinks: {
 
           {/* Suggestions */}
           {suggestions.length > 0 && (
-            <ul className="absolute w-full bg-white border border-gray-300 rounded shadow mt-1 z-50 text-sm max-h-60 overflow-y-auto">
+            <ul className="absolute z-50 mt-2 w-full max-h-60 overflow-y-auto rounded-lg border border-gray-200 bg-white text-sm shadow-lg">
               {suggestions.map((product) => {
                 const imageUrl = product.image_1024?.startsWith('http')
                   ? product.image_1024
