@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
   },
   images: {
     domains: ['labelshop-backend.onrender.com', 'labr1.odoo.com'],
+    loader: 'custom',
+    loaderFile: './lib/imageLoader.ts',
   },
   async redirects() {
     return [
