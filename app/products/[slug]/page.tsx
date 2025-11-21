@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import AddToCart from '@/components/AddToCart';
 import { mapCategory } from '@/lib/category';
@@ -176,30 +177,78 @@ export default async function ProductDetailPage({
     },
   ];
 
-  const jsonLd = {
-    "@context": "https://schema.org/",
-    "@type": "Product",
-    name: product.name,
-    image: [imageUrl],
-    description:
-      product.meta_description || product.description || 'Produit Label Retail',
-    sku: product.default_code,
-    brand: {
-      "@type": "Brand",
-      name: brand,
-    },
-    mpn: product.default_code,
-    category: categoryName,
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "XOF",
-      price: product.list_price,
-      availability: product.is_available
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-      url: `https://labelretail.ci/products/${product.slug}`,
-      areaServed: "CI",
-    },
+  const breadcrumbList = {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: 'Accueil',
+        item: 'https://labelretail.ci/',
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: 'Produits',
+        item: 'https://labelretail.ci/products',
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: categoryName,
+        item: `https://labelretail.ci/products/categories#${categoryName?.toLowerCase().replace(/\s+/g, '-')}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: product.name,
+        item: `https://labelretail.ci/products/${product.slug}`,
+      },
+    ].filter((item) => Boolean(item.name)),
+  };
+
+  const faqJsonLd = {
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        name: product.name,
+        image: [imageUrl],
+        description:
+          product.meta_description || product.description || 'Produit Label Retail',
+        sku: product.default_code,
+        brand: {
+          "@type": "Brand",
+          name: brand,
+        },
+        mpn: product.default_code,
+        category: categoryName,
+        offers: {
+          "@type": "Offer",
+          priceCurrency: "XOF",
+          price: product.list_price,
+          availability: product.is_available
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+          url: `https://labelretail.ci/products/${product.slug}`,
+          areaServed: "CI",
+        },
+      },
+      breadcrumbList,
+      faqJsonLd,
+    ],
   };
 
   return (
@@ -209,6 +258,30 @@ export default async function ProductDetailPage({
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.25),_transparent_55%)]" />
           <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] xl:gap-16">
             <div className="flex flex-col justify-between gap-8">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-cyan-100/80">
+                <Link href="/" className="hover:text-white" prefetch={false}>
+                  Accueil
+                </Link>
+                <span className="text-cyan-300/60">/</span>
+                <Link href="/products" className="hover:text-white" prefetch={false}>
+                  Produits
+                </Link>
+                {categoryName && (
+                  <>
+                    <span className="text-cyan-300/60">/</span>
+                    <Link
+                      href={`/products/categories#${categoryName.toLowerCase().replace(/\s+/g, '-')}`}
+                      className="hover:text-white"
+                      prefetch={false}
+                    >
+                      {categoryName}
+                    </Link>
+                  </>
+                )}
+                <span className="text-cyan-300/60">/</span>
+                <span className="text-white/90">{product.name}</span>
+              </div>
+
               <div>
                 <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-200">
                   <span className={`inline-flex items-center rounded-full px-3 py-1 backdrop-blur transition ${stockStatus.className}`}>
@@ -414,6 +487,30 @@ export default async function ProductDetailPage({
                 ))}
               </dl>
             </div>
+
+            <div className="rounded-3xl border border-white/15 bg-white/5 p-8 text-slate-100 shadow-[0_30px_70px_-50px_rgba(56,189,248,0.55)] backdrop-blur">
+              <h3 className="text-lg font-semibold text-white">Ressources utiles</h3>
+              <p className="mt-2 text-sm text-slate-200/80">
+                Explorez nos guides et catégories pour préparer votre projet vidéosurveillance en Côte d'Ivoire.
+              </p>
+              <ul className="mt-4 space-y-2 text-sm text-cyan-100">
+                <li>
+                  <Link href="/blogs" className="hover:text-white" prefetch={false}>
+                    Conseils et tutoriels sécurité (blog Label Retail)
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/products/categories" className="hover:text-white" prefetch={false}>
+                    Voir toutes nos catégories produits
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/about" className="hover:text-white" prefetch={false}>
+                    Découvrir nos certifications et équipes locales
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </section>
       </div>
@@ -421,7 +518,7 @@ export default async function ProductDetailPage({
       {/* ✅ JSON-LD SEO */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
     </main>
   );
