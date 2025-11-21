@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import { addToCart } from '@/lib/cart';
 
@@ -31,6 +32,26 @@ export default function SearchResultsClient({
 }) {
   const totalResults = products.length;
   const resultLabel = totalResults > 1 ? 'résultats' : 'résultat';
+  const enhancedProducts = products.map((product) => {
+    const imageUrl = getImageUrl(product);
+    const reference = product.default_code?.trim() || 'NC';
+    const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
+      `Bonjour, je souhaite acheter le produit : ${product.name} (Réf : ${reference}).`
+    )}`;
+    const handleAdd = async () => {
+      await addToCart({
+        product_id: product.id,
+        quantity: 1,
+        product_name: product.name,
+        product_image: imageUrl,
+        price: product.list_price,
+      });
+    };
+
+    return { ...product, imageUrl, reference, whatsappLink, handleAdd };
+  });
+
+  const featuredProducts = enhancedProducts.slice(0, 3);
 
   return (
     <main className="container mx-auto space-y-8 px-4 py-10">
@@ -45,34 +66,75 @@ export default function SearchResultsClient({
           ajoutez vos produits au panier pour créer votre sélection personnalisée.
         </p>
       </header>
-      <div className="grid grid-cols-1 gap-8 justify-items-center md:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => {
-          const imageUrl = getImageUrl(product);
-          const reference = product.default_code?.trim() || 'NC';
-          const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
-            `Bonjour, je souhaite acheter le produit : ${product.name} (Réf : ${reference}).`
-          )}`;
-          const handleAdd = async () => {
-            await addToCart({
-              product_id: product.id,
-              quantity: 1,
-              product_name: product.name,
-              product_image: imageUrl,
-              price: product.list_price,
-            });
-          };
-          return (
-            <ProductCard
+      <section className="space-y-4 rounded-2xl border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-amber-50 p-6 shadow-sm">
+        <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-500">Résultats intermédiaires</p>
+            <h2 className="text-xl font-bold text-slate-900">Vos correspondances les plus prometteuses</h2>
+            <p className="text-sm text-slate-600">
+              Un aperçu rapide des meilleures options trouvées, pour vous aider à affiner immédiatement votre sélection.
+            </p>
+          </div>
+          <span className="mt-2 inline-flex items-center gap-2 rounded-full bg-orange-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-orange-700">
+            {featuredProducts.length} aperçu{featuredProducts.length > 1 ? 's' : ''}
+          </span>
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {featuredProducts.map((product) => (
+            <article
               key={product.id}
-              imageUrl={imageUrl}
-              name={product.name}
-              reference={reference}
-              price={product.list_price}
-              whatsappLink={whatsappLink}
-              onAddToCart={handleAdd}
-            />
-          );
-        })}
+              className="flex h-full flex-col justify-between gap-4 rounded-xl border border-orange-100 bg-white/80 p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <div className="flex items-start gap-3">
+                <div className="h-16 w-16 overflow-hidden rounded-lg border border-slate-100 bg-slate-50">
+                  <img src={product.imageUrl} alt={product.name} className="h-full w-full object-contain" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-500">Aperçu rapide</p>
+                  <h3 className="text-sm font-bold text-slate-900">{product.name}</h3>
+                  <p className="text-xs text-slate-500">Réf. {product.reference}</p>
+                  <p className="text-sm font-semibold text-orange-600">{product.list_price.toLocaleString()} FCFA</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href={`/products/${product.slug}`}
+                  className="inline-flex items-center justify-center rounded-lg border border-orange-200 px-3 py-2 text-xs font-semibold text-orange-700 transition duration-200 hover:border-orange-300 hover:bg-orange-50"
+                >
+                  Voir la fiche
+                </Link>
+                <a
+                  href={product.whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-3 py-2 text-xs font-semibold text-white shadow-sm transition duration-200 hover:bg-emerald-600"
+                >
+                  WhatsApp
+                </a>
+                <button
+                  type="button"
+                  onClick={product.handleAdd}
+                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-orange-700 transition duration-200 hover:border-orange-300 hover:text-orange-800"
+                >
+                  Ajouter
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+      <div className="grid grid-cols-1 gap-8 justify-items-center md:grid-cols-2 lg:grid-cols-3">
+        {enhancedProducts.map((product) => (
+          <ProductCard
+            key={product.id}
+            imageUrl={product.imageUrl}
+            name={product.name}
+            reference={product.reference}
+            price={product.list_price}
+            whatsappLink={product.whatsappLink}
+            onAddToCart={product.handleAdd}
+          />
+        ))}
       </div>
     </main>
   );
