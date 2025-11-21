@@ -39,6 +39,11 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const product = await getProduct(slug);
+  const brand = product?.brand?.trim() || 'Hikvision';
+  const isHikvision = brand.toLowerCase().includes('hikvision');
+  const canonicalUrl = product
+    ? `https://labelretail.ci/products/${product.slug}`
+    : 'https://labelretail.ci/products';
 
   if (!product) {
     return {
@@ -47,12 +52,38 @@ export async function generateMetadata(
     };
   }
 
+  const metaDescription =
+    product.meta_description ||
+    (isHikvision
+      ? `Référence Hikvision ${product.default_code || product.slug} : ${product.name}. Achat, installation et assistance en Côte d'Ivoire avec Label Retail.`
+      : `${brand} ${product.name} disponible en Côte d'Ivoire. Référence ${product.default_code || product.slug}.`);
+
   return {
-    title: product.meta_title || product.name,
-    description: product.meta_description,
+    title: product.meta_title || `${brand} ${product.name} | Réf ${product.default_code || product.slug}`,
+    description: metaDescription,
+    keywords: [
+      product.name,
+      brand,
+      product.default_code?.toString(),
+      isHikvision ? "Hikvision Côte d'Ivoire" : undefined,
+      isHikvision ? 'caméra Hikvision' : undefined,
+      isHikvision ? 'vidéosurveillance Hikvision' : 'vidéosurveillance professionnelle',
+    ].filter(Boolean) as string[],
+    alternates: { canonical: canonicalUrl },
     openGraph: {
+      title: product.meta_title || `${brand} ${product.name}`,
+      description: metaDescription,
+      url: canonicalUrl,
+      type: 'product',
       images: [{ url: getImageUrl(product) }],
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.meta_title || `${brand} ${product.name}`,
+      description: metaDescription,
+      images: [getImageUrl(product)],
+    },
+    robots: { index: true, follow: true },
   };
 }
 
@@ -75,6 +106,8 @@ export default async function ProductDetailPage({
   }
 
   const imageUrl = getImageUrl(product);
+  const brand = product.brand?.trim() || 'Hikvision';
+  const isHikvision = brand.toLowerCase().includes('hikvision');
   const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
     `Je suis intéressé par le produit : ${product.name} (Réf : ${product.default_code})`
   )}`;
@@ -97,7 +130,7 @@ export default async function ProductDetailPage({
 
   const infoHighlights = [
     { label: 'Catégorie', value: categoryName },
-    { label: 'Marque', value: product.brand || 'Hikvision' },
+    { label: 'Marque', value: brand },
     { label: 'Référence', value: product.default_code },
   ];
 
@@ -111,8 +144,10 @@ export default async function ProductDetailPage({
     sku: product.default_code,
     brand: {
       "@type": "Brand",
-      name: product.brand || 'Label Retail',
+      name: brand,
     },
+    mpn: product.default_code,
+    category: categoryName,
     offers: {
       "@type": "Offer",
       priceCurrency: "XOF",
@@ -151,6 +186,22 @@ export default async function ProductDetailPage({
                   <p className="mt-4 max-w-2xl text-base text-slate-200/80 sm:text-lg">
                     {product.meta_description}
                   </p>
+                )}
+                {isHikvision && (
+                  <div className="mt-6 space-y-2 rounded-2xl border border-red-400/30 bg-red-500/10 p-4 text-red-50 shadow-[0_30px_70px_-50px_rgba(248,113,113,0.6)]">
+                    <p className="text-sm font-semibold uppercase tracking-[0.15em] text-red-100">
+                      Optimisé pour Hikvision
+                    </p>
+                    <p className="text-sm text-red-50/90">
+                      Référence officielle {product.default_code || product.slug} disponible immédiatement chez Label Retail.
+                      Livraison et installation en Côte d'Ivoire par nos équipes certifiées.
+                    </p>
+                    <ul className="list-disc space-y-1 pl-4 text-sm text-red-50/90">
+                      <li>Compatibilité garantie avec l'écosystème Hikvision (NVR, caméras, accessoires).</li>
+                      <li>Assistance locale pour la configuration, la maintenance et les mises à jour firmware.</li>
+                      <li>Conseils personnalisés pour optimiser la sécurité et la visibilité de vos installations.</li>
+                    </ul>
+                  </div>
                 )}
               </div>
 
