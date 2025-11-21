@@ -74,7 +74,7 @@ export async function generateMetadata(
       title: product.meta_title || `${brand} ${product.name}`,
       description: metaDescription,
       url: canonicalUrl,
-      type: 'product',
+      type: 'website',
       images: [{ url: getImageUrl(product) }],
     },
     twitter: {
