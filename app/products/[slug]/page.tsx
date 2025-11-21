@@ -55,8 +55,8 @@ export async function generateMetadata(
   const metaDescription =
     product.meta_description ||
     (isHikvision
-      ? `Référence Hikvision ${product.default_code || product.slug} : ${product.name}. Achat, installation et assistance en Côte d'Ivoire avec Label Retail.`
-      : `${brand} ${product.name} disponible en Côte d'Ivoire. Référence ${product.default_code || product.slug}.`);
+      ? `Référence Hikvision ${product.default_code || product.slug} : ${product.name}. Achat, installation, configuration et support certifié en Côte d'Ivoire avec Label Retail.`
+      : `${brand} ${product.name} disponible en Côte d'Ivoire. Référence ${product.default_code || product.slug}. Livraison et installation par nos techniciens.`);
 
   return {
     title: product.meta_title || `${brand} ${product.name} | Réf ${product.default_code || product.slug}`,
@@ -134,6 +134,48 @@ export default async function ProductDetailPage({
     { label: 'Référence', value: product.default_code },
   ];
 
+  const seoIntro =
+    product.meta_description ||
+    `${brand} ${product.name} livré et installé partout en Côte d'Ivoire. Référence ${product.default_code || product.slug}. Support local et conseils sécurité.`;
+
+  const serviceHighlights = [
+    {
+      title: 'Livraison & installation rapides',
+      detail:
+        "Déploiement à Abidjan et dans toute la Côte d'Ivoire avec prise de rendez-vous et mise en service sur site.",
+    },
+    {
+      title: 'Configuration & maintenance',
+      detail:
+        'Assistance pour le paramétrage, les mises à jour firmware et l’intégration réseau par nos techniciens certifiés.',
+    },
+    {
+      title: isHikvision ? 'Compatibilité Hikvision garantie' : 'Compatibilité écosystème vidéosécurité',
+      detail: isHikvision
+        ? "Fonctionne avec les NVR, caméras et accessoires Hikvision pour une surveillance homogène."
+        : 'Intégration possible dans votre installation actuelle (NVR, stockage, réseau PoE).',
+    },
+  ];
+
+  const faqItems = [
+    {
+      question: 'La livraison et l’installation sont-elles possibles ?',
+      answer:
+        "Oui, nous livrons partout en Côte d'Ivoire et pouvons planifier une installation sur site par notre équipe Label Retail.",
+    },
+    {
+      question: 'Le produit est-il compatible avec mon enregistreur ?',
+      answer: isHikvision
+        ? 'Compatibilité native avec les NVR Hikvision. Nous vérifions aussi l’intégration avec vos accessoires existants.'
+        : 'Nous confirmons la compatibilité avec votre NVR ou solution de stockage avant l’installation.',
+    },
+    {
+      question: "Proposez-vous de l'assistance après l'achat ?",
+      answer:
+        'Oui, support local pour la configuration, la maintenance préventive et les mises à jour de sécurité.',
+    },
+  ];
+
   const jsonLd = {
     "@context": "https://schema.org/",
     "@type": "Product",
@@ -156,6 +198,7 @@ export default async function ProductDetailPage({
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       url: `https://labelretail.ci/products/${product.slug}`,
+      areaServed: "CI",
     },
   };
 
@@ -182,11 +225,9 @@ export default async function ProductDetailPage({
                 <h1 className="mt-6 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
                   {product.name}
                 </h1>
-                {product.meta_description && (
-                  <p className="mt-4 max-w-2xl text-base text-slate-200/80 sm:text-lg">
-                    {product.meta_description}
-                  </p>
-                )}
+                <p className="mt-4 max-w-2xl text-base text-slate-200/80 sm:text-lg">
+                  {seoIntro}
+                </p>
                 {isHikvision && (
                   <div className="mt-6 space-y-2 rounded-2xl border border-red-400/30 bg-red-500/10 p-4 text-red-50 shadow-[0_30px_70px_-50px_rgba(248,113,113,0.6)]">
                     <p className="text-sm font-semibold uppercase tracking-[0.15em] text-red-100">
@@ -203,6 +244,18 @@ export default async function ProductDetailPage({
                     </ul>
                   </div>
                 )}
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                  {serviceHighlights.map((item) => (
+                    <div
+                      key={item.title}
+                      className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-100 shadow-[0_20px_45px_-35px_rgba(14,165,233,0.65)]"
+                    >
+                      <p className="text-[11px] uppercase tracking-[0.28em] text-slate-300/60">{item.title}</p>
+                      <p className="mt-2 text-slate-200/80">{item.detail}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-6 shadow-inner">
@@ -288,8 +341,16 @@ export default async function ProductDetailPage({
               <p>
                 {product.description && product.description !== 'False'
                   ? product.description
-                  : product.meta_description || 'Description bientôt disponible.'}
+                  : product.meta_description || seoIntro}
               </p>
+              <ul className="mt-4 space-y-2 text-slate-100">
+                <li>Livraison et installation rapides en Côte d'Ivoire avec prise en charge sur site.</li>
+                <li>Assistance pour la configuration réseau, l'accès mobile et les mises à jour de sécurité.</li>
+                <li>
+                  Référence {product.default_code || product.slug} avec vérification de compatibilité{' '}
+                  {isHikvision ? 'Hikvision (NVR, caméras, accessoires).' : 'de votre infrastructure existante.'}
+                </li>
+              </ul>
             </div>
           </div>
 
@@ -337,6 +398,21 @@ export default async function ProductDetailPage({
                 <span className="inline-flex h-2 w-2 rounded-full bg-cyan-300" />
                 Appeler le service commercial (+225 07 888 999 65)
               </a>
+            </div>
+
+            <div className="rounded-3xl border border-white/15 bg-white/5 p-8 text-slate-100 shadow-[0_30px_70px_-50px_rgba(56,189,248,0.55)] backdrop-blur">
+              <h3 className="text-lg font-semibold text-white">FAQ rapide</h3>
+              <dl className="mt-4 space-y-4 text-sm text-slate-200/80">
+                {faqItems.map((item) => (
+                  <div
+                    key={item.question}
+                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                  >
+                    <dt className="font-semibold text-white">{item.question}</dt>
+                    <dd className="mt-1 text-slate-200/80">{item.answer}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
         </section>
