@@ -56,8 +56,8 @@ export async function generateMetadata(
   const metaDescription =
     product.meta_description ||
     (isHikvision
-      ? `Référence Hikvision ${product.default_code || product.slug} : ${product.name}. Achat, installation, configuration et support certifié en Côte d'Ivoire avec Label Retail.`
-      : `${brand} ${product.name} disponible en Côte d'Ivoire. Référence ${product.default_code || product.slug}. Livraison et installation par nos techniciens.`);
+      ? `Référence Hikvision ${product.default_code || product.slug} : ${product.name}. Achat, configuration experte et support certifié en Côte d'Ivoire avec Label Retail.`
+      : `${brand} ${product.name} disponible en Côte d'Ivoire. Référence ${product.default_code || product.slug}. Livraison sécurisée et support technique par nos équipes locales.`);
 
   return {
     title: product.meta_title || `${brand} ${product.name} | Réf ${product.default_code || product.slug}`,
@@ -117,17 +117,11 @@ export default async function ProductDetailPage({
     !product.hide_price && typeof product.list_price === 'number'
       ? `${product.list_price.toLocaleString()} FCFA`
       : null;
-  const stockStatus = product.is_available
-    ? {
-        label: 'En stock',
-        className:
-          'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-400/40 shadow-[0_0_40px_-15px_rgba(16,185,129,0.7)]',
-      }
-    : {
-        label: 'Rupture de stock',
-        className:
-          'bg-rose-500/10 text-rose-200 ring-1 ring-rose-400/40 shadow-[0_0_40px_-15px_rgba(244,63,94,0.7)]',
-      };
+  const trustBadge = {
+    label: 'Référence vérifiée Label Retail',
+    className:
+      'bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-400/40 shadow-[0_0_40px_-15px_rgba(16,185,129,0.7)]',
+  };
 
   const infoHighlights = [
     { label: 'Catégorie', value: categoryName },
@@ -137,13 +131,12 @@ export default async function ProductDetailPage({
 
   const seoIntro =
     product.meta_description ||
-    `${brand} ${product.name} livré et installé partout en Côte d'Ivoire. Référence ${product.default_code || product.slug}. Support local et conseils sécurité.`;
+    `${brand} ${product.name} livré rapidement en Côte d'Ivoire. Référence ${product.default_code || product.slug}. Support local, configuration optimisée et conseils sécurité.`;
 
   const serviceHighlights = [
     {
-      title: 'Livraison & installation rapides',
-      detail:
-        "Déploiement à Abidjan et dans toute la Côte d'Ivoire avec prise de rendez-vous et mise en service sur site.",
+      title: 'Livraison sécurisée et suivie',
+      detail: "Expédition rapide à Abidjan et en région avec numéro de suivi et emballage renforcé.",
     },
     {
       title: 'Configuration & maintenance',
@@ -154,26 +147,36 @@ export default async function ProductDetailPage({
       title: isHikvision ? 'Compatibilité Hikvision garantie' : 'Compatibilité écosystème vidéosécurité',
       detail: isHikvision
         ? "Fonctionne avec les NVR, caméras et accessoires Hikvision pour une surveillance homogène."
-        : 'Intégration possible dans votre installation actuelle (NVR, stockage, réseau PoE).',
+        : 'Intégration possible dans votre infrastructure existante (NVR, stockage, réseau PoE).',
+    },
+    {
+      title: 'Contenus experts pour le SEO',
+      detail:
+        'Guides, comparatifs et fiches techniques enrichies pour obtenir des extraits enrichis et rassurer vos clients.',
     },
   ];
 
   const faqItems = [
     {
-      question: 'La livraison et l’installation sont-elles possibles ?',
+      question: 'Quels sont les délais de livraison ?',
       answer:
-        "Oui, nous livrons partout en Côte d'Ivoire et pouvons planifier une installation sur site par notre équipe Label Retail.",
+        "Expédition rapide depuis Abidjan avec suivi : la plupart des commandes sont livrées sous 24 à 72 heures selon la localité.",
     },
     {
       question: 'Le produit est-il compatible avec mon enregistreur ?',
       answer: isHikvision
         ? 'Compatibilité native avec les NVR Hikvision. Nous vérifions aussi l’intégration avec vos accessoires existants.'
-        : 'Nous confirmons la compatibilité avec votre NVR ou solution de stockage avant l’installation.',
+        : 'Nous confirmons la compatibilité avec votre NVR ou solution de stockage avant tout déploiement.',
     },
     {
       question: "Proposez-vous de l'assistance après l'achat ?",
       answer:
         'Oui, support local pour la configuration, la maintenance préventive et les mises à jour de sécurité.',
+    },
+    {
+      question: 'Comment bénéficier de conseils personnalisés ?',
+      answer:
+        'Partagez votre projet (site, budget, usage) et nous envoyons une préconisation détaillée avec guide de pose et checklist réseau.',
     },
   ];
 
@@ -239,9 +242,6 @@ export default async function ProductDetailPage({
           "@type": "Offer",
           priceCurrency: "XOF",
           price: product.list_price,
-          availability: product.is_available
-            ? "https://schema.org/InStock"
-            : "https://schema.org/OutOfStock",
           url: `https://labelretail.ci/products/${product.slug}`,
           areaServed: "CI",
         },
@@ -283,9 +283,9 @@ export default async function ProductDetailPage({
               </div>
 
               <div>
-                <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-200">
-                  <span className={`inline-flex items-center rounded-full px-3 py-1 backdrop-blur transition ${stockStatus.className}`}>
-                    {stockStatus.label}
+              <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-200">
+                  <span className={`inline-flex items-center rounded-full px-3 py-1 backdrop-blur transition ${trustBadge.className}`}>
+                    {trustBadge.label}
                   </span>
                   {categoryName && (
                     <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs uppercase tracking-wide text-slate-100">
@@ -308,12 +308,12 @@ export default async function ProductDetailPage({
                     </p>
                     <p className="text-sm text-red-50/90">
                       Référence officielle {product.default_code || product.slug} disponible immédiatement chez Label Retail.
-                      Livraison et installation en Côte d'Ivoire par nos équipes certifiées.
+                      Livraison soignée en Côte d'Ivoire avec assistance à la configuration.
                     </p>
                     <ul className="list-disc space-y-1 pl-4 text-sm text-red-50/90">
                       <li>Compatibilité garantie avec l'écosystème Hikvision (NVR, caméras, accessoires).</li>
                       <li>Assistance locale pour la configuration, la maintenance et les mises à jour firmware.</li>
-                      <li>Conseils personnalisés pour optimiser la sécurité et la visibilité de vos installations.</li>
+                      <li>Conseils personnalisés pour optimiser la sécurité et la visibilité de vos projets.</li>
                     </ul>
                   </div>
                 )}
@@ -400,7 +400,7 @@ export default async function ProductDetailPage({
                 </div>
 
                 <p className="text-sm text-slate-300/90">
-                  Livraison rapide sur toute la Côte d'Ivoire et installation possible par nos équipes.
+                  Livraison rapide sur toute la Côte d'Ivoire et paramétrage assisté pour un démarrage immédiat.
                 </p>
               </div>
             </div>
@@ -410,22 +410,23 @@ export default async function ProductDetailPage({
         <section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-slate-100 shadow-[0_35px_80px_-45px_rgba(14,165,233,0.65)] backdrop-blur">
             <h2 className="text-xl font-semibold text-white">Description détaillée</h2>
-            <div className="prose prose-invert mt-4 max-w-none text-base leading-relaxed text-slate-200/90">
-              <p>
-                {product.description && product.description !== 'False'
-                  ? product.description
-                  : product.meta_description || seoIntro}
-              </p>
-              <ul className="mt-4 space-y-2 text-slate-100">
-                <li>Livraison et installation rapides en Côte d'Ivoire avec prise en charge sur site.</li>
-                <li>Assistance pour la configuration réseau, l'accès mobile et les mises à jour de sécurité.</li>
-                <li>
-                  Référence {product.default_code || product.slug} avec vérification de compatibilité{' '}
-                  {isHikvision ? 'Hikvision (NVR, caméras, accessoires).' : 'de votre infrastructure existante.'}
-                </li>
-              </ul>
+              <div className="prose prose-invert mt-4 max-w-none text-base leading-relaxed text-slate-200/90">
+                <p>
+                  {product.description && product.description !== 'False'
+                    ? product.description
+                    : product.meta_description || seoIntro}
+                </p>
+                <ul className="mt-4 space-y-2 text-slate-100">
+                  <li>Livraison rapide en Côte d'Ivoire avec suivi et emballage renforcé.</li>
+                  <li>Assistance pour la configuration réseau, l'accès mobile et les mises à jour de sécurité.</li>
+                  <li>
+                    Référence {product.default_code || product.slug} avec vérification de compatibilité{' '}
+                    {isHikvision ? 'Hikvision (NVR, caméras, accessoires).' : 'de votre infrastructure existante.'}
+                  </li>
+                  <li>Conseils d'experts et guides pratiques pour optimiser le référencement et la mise en service.</li>
+                </ul>
+              </div>
             </div>
-          </div>
 
           <div className="flex flex-col gap-6">
             <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_70px_-50px_rgba(56,189,248,0.55)] backdrop-blur">
@@ -451,9 +452,15 @@ export default async function ProductDetailPage({
                 </div>
                 <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                   <dt className="uppercase tracking-[0.3em] text-xs text-slate-300/70">
-                    Disponibilité
+                    Support
                   </dt>
-                  <dd className="font-semibold text-white">{stockStatus.label}</dd>
+                  <dd className="font-semibold text-white">Réponse sous 24h avec préconisation réseau</dd>
+                </div>
+                <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                  <dt className="uppercase tracking-[0.3em] text-xs text-slate-300/70">
+                    Livraison
+                  </dt>
+                  <dd className="font-semibold text-white">Suivi colis sur Abidjan et l'intérieur du pays</dd>
                 </div>
               </dl>
             </div>
@@ -461,8 +468,8 @@ export default async function ProductDetailPage({
             <div className="rounded-3xl border border-cyan-400/40 bg-cyan-500/10 p-8 text-cyan-50 shadow-[0_30px_70px_-45px_rgba(14,165,233,0.55)]">
               <h3 className="text-lg font-semibold">Besoin d'un accompagnement ?</h3>
               <p className="mt-3 text-sm text-cyan-50/80">
-                Nos experts Label Retail vous conseillent sur le choix, la configuration et
-                l'installation de vos équipements de sécurité.
+                Nos experts Label Retail vous conseillent sur le choix, la configuration et la maintenance de vos équipements de
+                sécurité.
               </p>
               <a
                 href="tel:+2250788899965"
