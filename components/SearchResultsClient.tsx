@@ -23,6 +23,56 @@ function getImageUrl(product: Product): string {
   return '/default-product.png';
 }
 
+function normalize(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .trim();
+}
+
+function diceCoefficient(a: string, b: string): number {
+  if (!a || !b) return 0;
+  if (a === b) return 1;
+
+  const bigrams = new Map<string, number>();
+  for (let i = 0; i < a.length - 1; i += 1) {
+    const gram = a.slice(i, i + 2);
+    bigrams.set(gram, (bigrams.get(gram) || 0) + 1);
+  }
+
+  let intersectionSize = 0;
+  for (let i = 0; i < b.length - 1; i += 1) {
+    const gram = b.slice(i, i + 2);
+    const count = bigrams.get(gram) || 0;
+    if (count > 0) {
+      bigrams.set(gram, count - 1);
+      intersectionSize += 1;
+    }
+  }
+
+  const totalBigrams = a.length + b.length - 2;
+  return totalBigrams === 0 ? 0 : (2 * intersectionSize) / totalBigrams;
+}
+
+function getRelevanceScore(product: Product, normalizedQuery: string): number {
+  const reference = product.default_code?.trim() || '';
+  const normalizedName = normalize(product.name);
+  const normalizedReference = normalize(reference);
+  const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
+
+  const mainSimilarity = diceCoefficient(normalizedName, normalizedQuery);
+  const tokenBonus = tokens.reduce((score, token) => {
+    if (normalizedName.startsWith(token)) return score + 0.25;
+    if (normalizedName.includes(token)) return score + 0.15;
+    return score;
+  }, 0);
+
+  const referenceBonus = normalizedReference && normalizedQuery && normalizedReference.includes(normalizedQuery) ? 0.2 : 0;
+
+  return Math.min(1, mainSimilarity + tokenBonus + referenceBonus);
+}
+
 export default function SearchResultsClient({
   products,
   query,
@@ -32,6 +82,7 @@ export default function SearchResultsClient({
 }) {
   const totalResults = products.length;
   const resultLabel = totalResults > 1 ? 'résultats' : 'résultat';
+  const normalizedQuery = normalize(query);
   const enhancedProducts = products.map((product) => {
     const imageUrl = getImageUrl(product);
     const reference = product.default_code?.trim() || 'NC';
@@ -48,10 +99,16 @@ export default function SearchResultsClient({
       });
     };
 
-    return { ...product, imageUrl, reference, whatsappLink, handleAdd };
+    const relevance = getRelevanceScore(product, normalizedQuery);
+
+    return { ...product, imageUrl, reference, whatsappLink, handleAdd, relevance };
   });
 
-  const featuredProducts = enhancedProducts.slice(0, 3);
+  const sortedProducts = enhancedProducts
+    .slice()
+    .sort((a, b) => (b.relevance || 0) - (a.relevance || 0));
+
+  const featuredProducts = sortedProducts.slice(0, 6);
 
   return (
     <main className="container mx-auto space-y-8 px-4 py-10">
@@ -124,7 +181,7 @@ export default function SearchResultsClient({
         </div>
       </section>
       <div className="grid grid-cols-1 gap-8 justify-items-center md:grid-cols-2 lg:grid-cols-3">
-        {enhancedProducts.map((product) => (
+        {sortedProducts.map((product) => (
           <ProductCard
             key={product.id}
             imageUrl={product.imageUrl}
