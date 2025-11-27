@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import SearchResultsClient from '@/components/SearchResultsClient';
 
 interface Product {
@@ -39,9 +38,9 @@ export default async function SearchPage({
   }
 
   const products = await getProducts(query);
-  if (products.length === 0) {
-    notFound();
-  }
+  const tokens = query.split(/\s+/).filter(Boolean);
+  const broadenedQuery = tokens.find((token) => token.length >= 3) || query.slice(0, Math.min(query.length, 4));
+  const suggestions = products.length === 0 && broadenedQuery ? await getProducts(broadenedQuery) : [];
 
-  return <SearchResultsClient products={products} query={query} />;
+  return <SearchResultsClient products={products} query={query} suggestions={suggestions} />;
 }
