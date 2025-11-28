@@ -123,6 +123,7 @@ export default function SearchResultsClient({
 
   const hasResults = paginatedProducts.length > 0;
   const hasSuggestions = suggestions.length > 0;
+  const showingFallbackSuggestions = !hasResults && hasSuggestions;
 
   return (
     <main className="container mx-auto space-y-8 px-4 py-10">
@@ -200,7 +201,9 @@ export default function SearchResultsClient({
         <section className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-6 text-center shadow-sm">
           <p className="text-lg font-semibold text-slate-900">Aucun produit trouvé pour «{query}»</p>
           <p className="text-sm text-slate-600">
-            Vérifiez l'orthographe ou essayez un terme plus générique. Voici quelques propositions à explorer.
+            {showingFallbackSuggestions
+              ? 'Nous avons cherché des alternatives proches pour vous proposer des produits similaires à explorer.'
+              : "Vérifiez l'orthographe ou essayez un terme plus générique."}
           </p>
         </section>
       )}
@@ -251,8 +254,16 @@ export default function SearchResultsClient({
           <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-500">Produits similaires</p>
-              <h2 className="text-xl font-bold text-slate-900">Ces articles pourraient vous intéresser</h2>
-              <p className="text-sm text-slate-600">Suggestions proches de votre recherche.</p>
+              <h2 className="text-xl font-bold text-slate-900">
+                {showingFallbackSuggestions
+                  ? 'Aucun résultat exact — voici des produits proches'
+                  : 'Ces articles pourraient vous intéresser'}
+              </h2>
+              <p className="text-sm text-slate-600">
+                {showingFallbackSuggestions
+                  ? 'Nous affichons les références les plus proches de votre recherche pour que vous puissiez choisir rapidement.'
+                  : 'Suggestions proches de votre recherche.'}
+              </p>
             </div>
             <span className="mt-2 inline-flex items-center gap-2 rounded-full bg-orange-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-orange-700">
               {suggestions.length} suggestion{suggestions.length > 1 ? 's' : ''}

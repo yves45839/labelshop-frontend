@@ -12,7 +12,7 @@ interface Product {
 
 async function getProducts(q: string): Promise<Product[]> {
   const res = await fetch(
-    `https://labelshop-backend.onrender.com/products/search-products/?q=${encodeURIComponent(q)}`,
+    `https://labelshop-backend.onrender.com/products/search-products/?q=${encodeURIComponent(q)}&limit=50`,
     { cache: 'no-store' }
   );
   if (!res.ok) {
