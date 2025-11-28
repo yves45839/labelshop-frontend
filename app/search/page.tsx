@@ -10,11 +10,30 @@ interface Product {
   [key: string]: unknown;
 }
 
+function normalize(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .trim();
+}
+
 async function getProducts(q: string): Promise<Product[]> {
   const res = await fetch(
     `https://labelshop-backend.onrender.com/products/search-products/?q=${encodeURIComponent(q)}&limit=50`,
     { cache: 'no-store' }
   );
+  if (!res.ok) {
+    return [];
+  }
+  const data = await res.json();
+  return Array.isArray(data) ? data : [];
+}
+
+async function getCatalog(): Promise<Product[]> {
+  const res = await fetch('https://labelshop-backend.onrender.com/products/get-products/', {
+    cache: 'no-store',
+  });
   if (!res.ok) {
     return [];
   }
@@ -38,9 +57,25 @@ export default async function SearchPage({
   }
 
   const products = await getProducts(query);
-  const tokens = query.split(/\s+/).filter(Boolean);
-  const broadenedQuery = tokens.find((token) => token.length >= 3) || query.slice(0, Math.min(query.length, 4));
-  const suggestions = products.length === 0 && broadenedQuery ? await getProducts(broadenedQuery) : [];
+  const normalizedQuery = normalize(query);
+  const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
+  let enrichedProducts = products;
 
-  return <SearchResultsClient products={products} query={query} suggestions={suggestions} />;
+  if (normalizedQuery && products.length <= 1) {
+    const catalog = await getCatalog();
+    const localMatches = catalog.filter((product) => {
+      const normalizedName = normalize(product.name);
+      const normalizedReference = normalize((product.default_code as string | undefined) || '');
+      return normalizedName.includes(normalizedQuery) || normalizedReference.includes(normalizedQuery);
+    });
+
+    if (localMatches.length > products.length) {
+      enrichedProducts = localMatches;
+    }
+  }
+
+  const broadenedQuery = tokens.find((token) => token.length >= 3) || normalizedQuery.slice(0, Math.min(normalizedQuery.length, 4));
+  const suggestions = enrichedProducts.length === 0 && broadenedQuery ? await getProducts(broadenedQuery) : [];
+
+  return <SearchResultsClient products={enrichedProducts} query={query} suggestions={suggestions} />;
 }
