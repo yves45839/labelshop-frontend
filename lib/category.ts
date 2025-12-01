@@ -1,59 +1,78 @@
+const normalizeCategory = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+
 export const CATEGORY_HIERARCHY: Record<string, string[]> = {
-  'Vid\u00e9o analogique': ['Cam\u00e9ras PTZ', 'Cam\u00e9ras fixes', 'DVR'],
-  'Vid\u00e9o IP': [
-    'Cam\u00e9ras PTZ',
-    'Cam\u00e9ras fixes',
-    'NVR',
-    'Switches PoE',
-    'Stockage IP SAN/NAS',
+  Accessoires: ['Accessoires', 'Kits & accessoires', 'Périphériques'],
+  'Accessoires generaux': [
+    'Accessoires divers',
+    'Alimentation & UPS',
+    'Cables & connectique',
+    'Supports & boitiers',
   ],
-  'Hybride/HCVR': ['DVR Hybride'],
-  "Contr\u00f4le d\u2019acc\u00e8s & Interphonie": [
-    'Interphonie vid\u00e9o',
-    'Door station',
-    'Indoor station',
-    'Contr\u00f4leurs & lecteurs',
+  'Affichage & mur d’images': [
+    'Moniteurs / video-wall / LED',
+    'Decoders / controleurs mur',
   ],
   'Alarme intrusion': [
+    'AX PRO & peripheriques',
     'Centrales',
-    'D\u00e9tecteurs / contacts / sir\u00e8nes',
-    'P\u00e9riph\u00e9riques',
+    'Detecteurs / contacts / sirenes',
+    'Peripheriques',
   ],
-  'Affichage & mur d\u2019images': ['Moniteurs', 'D\u00e9coders / contr\u00f4leurs'],
-  'Autres sp\u00e9cialisations': [
-    'Mobile / Bodycam',
-    'Traffic / radar',
-    'Thermique',
+  'Controle d’acces': [
+    'Badges & cartes',
+    'Controleurs & modules',
+    'Portillons & tourniquets',
+    'Serrures & ventouses',
+    'Temps de presence',
+    'Terminaux autonomes',
   ],
-  'Accessoires g\u00e9n\u00e9raux': [
-    'C\u00e2bles & connectique',
-    'Disques durs',
-    'Supports & bo\u00eetiers',
+  Enregistreurs: ['DVR analogiques', 'NVR IP'],
+  Interphonie: ['Moniteurs interieurs', 'Platines de rue & doorbells'],
+  'Reseau & transmission': [
+    'Cables reseau',
+    'Cables & transmission',
+    'Equipements reseau',
+    'Switches PoE',
   ],
+  Stockage: ['Disques durs', 'Serveurs de stockage'],
+  'Trafic / Parking': ['Gestion d’acces vehicules', 'Reconnaissance de plaques'],
+  'Videosurveillance IP': ['Cameras IP', 'Cameras PTZ', 'Kits video'],
+  'Videosurveillance analogique': ['Cameras analogiques', 'DVR analogiques'],
+  'Videosurveillance specialisee': ['Cameras panoramiques', 'Cameras thermiques'],
 };
 
 export const MAIN_CATEGORIES = [
-  'Vid\u00e9o analogique',
-  'Vid\u00e9o IP',
-  'Hybride/HCVR',
-  "Contr\u00f4le d\u2019acc\u00e8s & Interphonie",
+  'Accessoires',
+  'Accessoires generaux',
+  'Affichage & mur d’images',
   'Alarme intrusion',
-  'Affichage & mur d\u2019images',
-  'Autres sp\u00e9cialisations',
-  'Accessoires g\u00e9n\u00e9raux',
-  'Non class\u00e9',
+  'Controle d’acces',
+  'Enregistreurs',
+  'Interphonie',
+  'Reseau & transmission',
+  'Stockage',
+  'Trafic / Parking',
+  'Videosurveillance IP',
+  'Videosurveillance analogique',
+  'Videosurveillance specialisee',
+  'Non classé',
 ];
 
 export function mapCategory(raw?: string): string {
-  if (!raw) return 'Non class\u00e9';
-  const normalized = raw.toLowerCase();
+  if (!raw) return 'Non classé';
+  const normalized = normalizeCategory(raw);
   for (const [main, subs] of Object.entries(CATEGORY_HIERARCHY)) {
-    if (normalized.includes(main.toLowerCase())) {
+    const normalizedMain = normalizeCategory(main);
+    if (normalized.includes(normalizedMain)) {
       return main;
     }
-    if (subs.some((sub) => normalized.includes(sub.toLowerCase()))) {
+    if (subs.some((sub) => normalized.includes(normalizeCategory(sub)))) {
       return main;
     }
   }
-  return 'Non class\u00e9';
+  return 'Non classé';
 }
