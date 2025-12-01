@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 
+export const revalidate = 0;
+
 export async function GET() {
   const baseUrl = 'https://labelretail.ci';
 
   try {
-    const res = await fetch('https://labelshop-backend.onrender.com/products/get-products');
+    const res = await fetch('https://labelshop-backend.onrender.com/products/get-products', {
+      cache: 'no-store',
+    });
     const products = await res.json();
 
     const urls = products
