@@ -44,6 +44,8 @@ interface ProductsByCategory {
 export default function ProductsPageClient() {
   const [grouped, setGrouped] = useState<ProductsByCategory>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState('Toutes les catégories');
 
   useEffect(() => {
     api
@@ -57,6 +59,7 @@ export default function ProductsPageClient() {
           groups[category].push(p);
         });
         setGrouped(groups);
+        setCategories(MAIN_CATEGORIES.filter((c) => groups[c]?.length));
         setIsLoading(false);
       })
       .catch((error) => {
@@ -76,7 +79,25 @@ export default function ProductsPageClient() {
   return (
     <main className="container mx-auto py-8">
       <h1 className="text-3xl font-bold text-center mb-8">Nos Produits</h1>
-      {MAIN_CATEGORIES.filter((c) => grouped[c]).map((category) => (
+      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-slate-700">Filtrer par catégorie</p>
+        <select
+          value={selectedCategory}
+          onChange={(event) => setSelectedCategory(event.target.value)}
+          className="w-full max-w-xs rounded-lg border border-slate-200 px-4 py-2 text-sm shadow-sm focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
+        >
+          <option value="Toutes les catégories">Toutes les catégories</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </div>
+      {(selectedCategory === 'Toutes les catégories'
+        ? categories
+        : categories.filter((c) => c === selectedCategory)
+      ).map((category) => (
         <section key={category} className="mb-10">
           <h2 className="text-2xl font-semibold text-orange-600 mb-4">
             {category}

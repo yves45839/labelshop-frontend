@@ -113,6 +113,19 @@ export default async function ProductDetailPage({
     `Je suis intéressé par le produit : ${product.name} (Réf : ${product.default_code})`
   )}`;
   const categoryName = mapProductCategory(product);
+  const categoryChips = Array.from(
+    new Set(
+      [
+        mapProductCategory(product),
+        product.category_main,
+        product.category_sub,
+        product.category_type,
+        product.categ_id,
+      ]
+        .filter((value): value is string => Boolean(value))
+        .map((value) => value.trim())
+    )
+  );
   const priceDisplay =
     !product.hide_price && typeof product.list_price === 'number'
       ? `${product.list_price.toLocaleString()} FCFA`
@@ -283,16 +296,21 @@ export default async function ProductDetailPage({
               </div>
 
               <div>
-              <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-200">
-                  <span className={`inline-flex items-center rounded-full px-3 py-1 backdrop-blur transition ${trustBadge.className}`}>
+                <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-200">
+                  <span
+                    className={`inline-flex items-center rounded-full px-3 py-1 backdrop-blur transition ${trustBadge.className}`}
+                  >
                     {trustBadge.label}
                   </span>
-                  {categoryName && (
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs uppercase tracking-wide text-slate-100">
+                  {categoryChips.map((category) => (
+                    <span
+                      key={category}
+                      className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs uppercase tracking-wide text-slate-100"
+                    >
                       <span className="h-2 w-2 rounded-full bg-cyan-400" />
-                      {categoryName}
+                      {category}
                     </span>
-                  )}
+                  ))}
                 </div>
 
                 <h1 className="mt-6 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
