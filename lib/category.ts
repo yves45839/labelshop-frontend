@@ -76,3 +76,21 @@ export function mapCategory(raw?: string): string {
   }
   return 'Non classé';
 }
+
+type ProductCategoryFields = {
+  categ_id?: string;
+  category_main?: string;
+  category_sub?: string;
+  category_type?: string;
+};
+
+export function mapProductCategory(product?: ProductCategoryFields): string {
+  if (!product) return 'Non classé';
+  const raw =
+    product.category_main ||
+    product.category_sub ||
+    product.category_type ||
+    product.categ_id;
+
+  return mapCategory(raw);
+}
