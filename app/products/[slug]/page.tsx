@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import AddToCart from '@/components/AddToCart';
-import { mapCategory } from '@/lib/category';
+import { mapProductCategory } from '@/lib/category';
 
 // 🔁 Récupère l'image
 function getImageUrl(product: any): string {
@@ -112,7 +112,7 @@ export default async function ProductDetailPage({
   const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
     `Je suis intéressé par le produit : ${product.name} (Réf : ${product.default_code})`
   )}`;
-  const categoryName = mapCategory(product.categ_id);
+  const categoryName = mapProductCategory(product);
   const priceDisplay =
     !product.hide_price && typeof product.list_price === 'number'
       ? `${product.list_price.toLocaleString()} FCFA`

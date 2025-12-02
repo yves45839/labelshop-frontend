@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductCard from '@/components/ProductCard';
 import { addToCart } from '@/lib/cart';
-import { mapCategory, MAIN_CATEGORIES } from '@/lib/category';
+import { mapProductCategory, MAIN_CATEGORIES } from '@/lib/category';
 
 type Product = {
   id: number;
@@ -13,6 +13,10 @@ type Product = {
   image_1024?: string;
   default_code?: string;
   list_price: number;
+  categ_id?: string;
+  category_main?: string;
+  category_sub?: string;
+  category_type?: string;
   [key: string]: unknown;
 };
 
@@ -48,7 +52,7 @@ export default function ProductsPageClient() {
         const products = res.data as Product[];
         const groups: ProductsByCategory = {};
         products.forEach((p) => {
-          const category = mapCategory((p as any).categ_id);
+          const category = mapProductCategory(p);
           if (!groups[category]) groups[category] = [];
           groups[category].push(p);
         });
