@@ -85,6 +85,7 @@ export default function ProductsByCategoryClient() {
                   imageUrl={imageUrl}
                   name={product.name}
                   reference={product.default_code || ''}
+                  slug={product.slug}
                   price={product.list_price}
                   whatsappLink={whatsappLink}
                   onAddToCart={handleAdd}
