@@ -217,6 +217,7 @@ export default function SearchResultsClient({
                 imageUrl={product.imageUrl}
                 name={product.name}
                 reference={product.reference}
+                slug={product.slug}
                 price={product.list_price}
                 whatsappLink={product.whatsappLink}
                 onAddToCart={product.handleAdd}
@@ -276,6 +277,7 @@ export default function SearchResultsClient({
                 imageUrl={getImageUrl(product)}
                 name={product.name}
                 reference={product.default_code?.trim() || 'NC'}
+                slug={product.slug}
                 price={product.list_price}
                 whatsappLink={`https://wa.me/22588899965?text=${encodeURIComponent(
                   `Bonjour, je souhaite acheter le produit : ${product.name} (Réf : ${product.default_code?.trim() || 'NC'}).`
