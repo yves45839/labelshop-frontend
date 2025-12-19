@@ -21,12 +21,12 @@ type Product = {
 };
 
 const api = axios.create({
-  baseURL: 'https://labelshop-backend.onrender.com',
+  baseURL: 'https://lr-samr.pythonanywhere.com',
 });
 
 // ✅ Utilise uniquement image_1024 (format complet ou relatif)
 function getProductImage(product: Product): string {
-  const baseUrl = 'https://labelshop-backend.onrender.com';
+  const baseUrl = 'https://lr-samr.pythonanywhere.com';
 
   if (product.image_1024 && typeof product.image_1024 === 'string') {
     return product.image_1024.startsWith('http')

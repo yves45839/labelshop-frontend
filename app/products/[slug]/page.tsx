@@ -5,7 +5,7 @@ import { mapProductCategory } from '@/lib/category';
 
 // 🔁 Récupère l'image
 function getImageUrl(product: any): string {
-  const baseUrl = 'https://labelshop-backend.onrender.com';
+  const baseUrl = 'https://lr-samr.pythonanywhere.com';
 
   if (product.image_1024?.startsWith('http')) {
     return product.image_1024;
@@ -21,7 +21,7 @@ function getImageUrl(product: any): string {
 // 🔁 API : Récupère le produit
 async function getProduct(slug: string) {
   const res = await fetch(
-    `https://labelshop-backend.onrender.com/products/search-products/?q=${slug}`,
+    `https://lr-samr.pythonanywhere.com/products/search-products/?q=${slug}`,
     { cache: 'no-store' }
   );
 
