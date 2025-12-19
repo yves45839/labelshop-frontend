@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import Link from "next/link";
 
@@ -17,6 +17,7 @@ type Product = {
 export default function HomePageClient() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
+  const shouldReduceMotion = useReducedMotion();
 
   const slides = [
     { src: "/images/alarme_intrusion.jpg", desc: "Protection avancée avec nos systèmes d'alarme intrusion." },
@@ -95,9 +96,9 @@ export default function HomePageClient() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 5000);
+    }, shouldReduceMotion ? 7000 : 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [shouldReduceMotion, slides.length]);
 
   useEffect(() => {
     axios.get("https://lr-samr.pythonanywhere.com/products/get-products/")
@@ -112,93 +113,96 @@ export default function HomePageClient() {
   }, []);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-60">
-        <div className="absolute -top-56 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-gradient-to-r from-orange-500 via-amber-400 to-pink-500 blur-3xl" />
-        <div className="absolute -bottom-48 left-8 h-80 w-80 rounded-full bg-gradient-to-tr from-slate-500 via-sky-500 to-emerald-400 blur-3xl" />
-        <div className="absolute bottom-32 right-6 h-72 w-72 rounded-full bg-gradient-to-t from-indigo-600 via-purple-500 to-pink-400 blur-3xl" />
-      </div>
-
+    <main className="min-h-screen bg-white text-slate-900">
       {/* Hero section */}
-      <section className="relative px-6 pb-24 pt-32 md:px-12 lg:px-20">
-        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_420px]">
-          <div className="relative z-10 space-y-8">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-amber-200 backdrop-blur">
+      <section className="px-6 pb-16 pt-20 md:px-10 lg:px-20">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
+          <div className="space-y-6">
+            <span className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">
               Label Retail
             </span>
-            <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
-              La sécurité électronique pensée pour les entreprises ultra-connectées
+            <h1 className="text-4xl font-bold leading-tight md:text-5xl">
+              Une sécurité lisible et performante sur tous vos écrans
             </h1>
-            <p className="max-w-xl text-lg text-slate-200">
-              Des solutions immersives, intelligentes et évolutives pour protéger vos espaces, vos données et vos équipes partout en Côte d&apos;Ivoire.
+            <p className="max-w-xl text-lg text-slate-700">
+              Nous créons des parcours clairs, rapides et optimisés SEO pour que vos équipes retrouvent l'essentiel, que ce soit sur mobile, tablette ou poste de contrôle.
             </p>
-            <div className="flex flex-wrap items-center gap-4">
+            <ul className="grid gap-3 text-sm text-slate-700 sm:grid-cols-2">
+              <li className="flex items-start gap-2 rounded-xl bg-slate-50 p-3">
+                <span aria-hidden className="mt-1 text-amber-600">•</span>
+                Interfaces compatibles multisite et multi-navigateurs.
+              </li>
+              <li className="flex items-start gap-2 rounded-xl bg-slate-50 p-3">
+                <span aria-hidden className="mt-1 text-amber-600">•</span>
+                Contenus structurés pour les moteurs de recherche.
+              </li>
+              <li className="flex items-start gap-2 rounded-xl bg-slate-50 p-3">
+                <span aria-hidden className="mt-1 text-amber-600">•</span>
+                Navigation simplifiée pour des décisions plus rapides.
+              </li>
+            </ul>
+            <div className="flex flex-wrap items-center gap-3">
               <Link
                 href="/products"
-                className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-amber-500/30 transition hover:scale-[1.02]"
+                className="inline-flex items-center justify-center rounded-full bg-amber-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-amber-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600"
               >
                 Explorer les solutions
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/40 text-xs transition group-hover:translate-x-1">
-                  →
-                </span>
               </Link>
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white/80 backdrop-blur transition hover:border-white/40 hover:text-white"
+                className="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700"
               >
                 Découvrir notre équipe
               </Link>
             </div>
           </div>
 
-          <div className="relative flex items-center justify-center">
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/10 via-white/5 to-transparent blur-2xl" />
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl">
+          <div className="relative">
+            <div className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-xl">
               {slides.map((slide, index) => (
                 <motion.div
                   key={slide.src}
-                  className="absolute inset-0"
+                  className="relative aspect-[4/5]"
                   animate={{ opacity: index === currentIndex ? 1 : 0 }}
-                  transition={{ duration: 1.2 }}
+                  transition={{ duration: shouldReduceMotion ? 0.2 : 0.9 }}
+                  aria-hidden={index !== currentIndex}
                 >
-                  <Image src={slide.src} alt={slide.desc} fill className="object-cover" />
-                  <div className="absolute inset-x-4 bottom-6 rounded-2xl bg-slate-900/70 p-4 text-sm font-medium text-slate-100 shadow-lg backdrop-blur">
+                  <Image src={slide.src} alt={slide.desc} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 520px" priority={index === 0} />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900/80 via-slate-900/30 to-transparent p-4 text-sm font-medium text-white">
                     {slide.desc}
                   </div>
                 </motion.div>
               ))}
             </div>
-            <div className="absolute -bottom-10 -right-6 hidden w-48 rotate-12 rounded-3xl border border-white/20 bg-white/10 p-4 text-xs text-slate-100 shadow-lg backdrop-blur md:block">
-              <p className="font-semibold text-white">Trusted by industries</p>
-              <p className="mt-2 text-[11px] text-slate-200/80">
-                Retail, finance, énergie &amp; administrations adoptent déjà nos solutions augmentées.
-              </p>
+            <div className="mt-4 flex items-center justify-between rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm">
+              <span>Visualisation {currentIndex + 1} / {slides.length}</span>
+              <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-700">Compatibilité multi-plateforme</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured products */}
-      <section className="relative px-6 py-20 md:px-12 lg:px-20">
+      <section className="border-y border-slate-200 bg-slate-50 px-6 py-16 md:px-10 lg:px-20">
         <div className="mx-auto max-w-6xl">
-          <div className="flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-300">Catalogue</span>
-              <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">Sélection premium</h2>
-              <p className="mt-2 max-w-2xl text-sm text-slate-300">
-                Une sélection dynamique des produits en ligne les plus plébiscités par nos clients professionnels.
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Catalogue</span>
+              <h2 className="mt-2 text-3xl font-semibold md:text-4xl">Sélection prête à déployer</h2>
+              <p className="mt-2 max-w-2xl text-sm text-slate-700">
+                Produits en ligne mis en avant pour leur stabilité, leur support mobile et leur popularité chez nos clients pros.
               </p>
             </div>
             <Link
               href="/search"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/80 hover:border-white/40 hover:text-white"
+              className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-800 hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700"
             >
               Voir tout le catalogue
             </Link>
           </div>
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {products.length === 0 && (
-              <div className="col-span-full rounded-3xl border border-white/10 bg-white/5 p-10 text-center text-sm text-slate-300">
+              <div className="col-span-full rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-700">
                 Patience... Nous synchronisons nos produits phares.
               </div>
             )}
@@ -210,27 +214,27 @@ export default function HomePageClient() {
               return (
                 <motion.div
                   key={product.id}
-                  whileHover={{ y: -6, scale: 1.02 }}
-                  transition={{ type: "spring", stiffness: 240, damping: 18 }}
-                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-white/0 p-6 shadow-2xl backdrop-blur"
+                  whileHover={shouldReduceMotion ? undefined : { y: -4 }}
+                  transition={{ type: "spring", stiffness: 240, damping: 20 }}
+                  className="group relative flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-lg"
                 >
-                  <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500/40 via-rose-500/30 to-purple-500/40" />
-                  </div>
-                  <Link href={`/products/${product.slug}`} className="relative z-10 block">
-                    <div className="relative mx-auto h-48 w-full overflow-hidden rounded-2xl bg-slate-900/40">
+                  <Link href={`/products/${product.slug}`} className="space-y-4">
+                    <div className="relative h-44 w-full overflow-hidden rounded-xl bg-slate-100">
                       <Image
                         src={`${imageUrl}?t=${Date.now()}`}
                         alt={product.name}
                         fill
                         unoptimized
                         className="object-contain p-4 transition duration-500 group-hover:scale-105"
+                        sizes="(max-width: 1024px) 100vw, 350px"
                       />
                     </div>
-                    <h3 className="mt-6 text-base font-semibold text-white">{product.name}</h3>
-                    <p className="mt-2 text-xs text-slate-300">
-                      Découvrez les caractéristiques techniques détaillées et les options d&apos;installation.
-                    </p>
+                    <div className="space-y-2">
+                      <h3 className="text-base font-semibold text-slate-900">{product.name}</h3>
+                      <p className="text-sm text-slate-700">
+                        Fiche détaillée, options d'installation et compatibilité multi-site.
+                      </p>
+                    </div>
                   </Link>
                 </motion.div>
               );
@@ -240,26 +244,24 @@ export default function HomePageClient() {
       </section>
 
       {/* Why us */}
-      <section className="relative border-y border-white/10 bg-slate-900/40 px-6 py-20 backdrop-blur md:px-12 lg:px-20">
-        <div className="mx-auto max-w-6xl text-center lg:text-left">
-          <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
-            <div className="max-w-xl">
-              <span className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-300">Pourquoi nous choisir</span>
-              <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">
-                Un partenaire stratégique pour vos infrastructures critiques
-              </h2>
-              <p className="mt-4 text-sm text-slate-300">
-                De la conception à la maintenance, nous orchestrons des expériences digitales immersives qui renforcent la confiance de vos collaborateurs et de vos clients.
+      <section className="px-6 py-16 md:px-10 lg:px-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-xl space-y-4">
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Pourquoi nous choisir</span>
+              <h2 className="text-3xl font-semibold md:text-4xl">Un partenaire qui priorise la lisibilité</h2>
+              <p className="text-sm text-slate-700">
+                Chaque service est pensé pour rester performant sur mobile et bureau, avec des informations claires et indexables.
               </p>
             </div>
-            <div className="grid w-full gap-6 lg:max-w-2xl lg:grid-cols-3">
+            <div className="grid w-full gap-4 lg:max-w-2xl lg:grid-cols-3">
               {pillars.map((pillar) => (
                 <div
                   key={pillar.title}
-                  className="rounded-3xl border border-white/10 bg-white/5 p-6 text-left shadow-xl backdrop-blur"
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left shadow-sm"
                 >
-                  <h3 className="text-lg font-semibold text-white">{pillar.title}</h3>
-                  <p className="mt-3 text-xs leading-relaxed text-slate-200/90">{pillar.description}</p>
+                  <h3 className="text-lg font-semibold text-slate-900">{pillar.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-700">{pillar.description}</p>
                 </div>
               ))}
             </div>
@@ -268,32 +270,34 @@ export default function HomePageClient() {
       </section>
 
       {/* Services */}
-      <section className="relative px-6 py-24 md:px-12 lg:px-20">
+      <section className="border-y border-slate-200 bg-white px-6 py-16 md:px-10 lg:px-20">
         <div className="mx-auto max-w-6xl">
-          <div className="flex flex-col gap-4 text-center">
-            <span className="mx-auto text-xs font-semibold uppercase tracking-[0.35em] text-amber-300">Services</span>
-            <h2 className="text-3xl font-semibold text-white md:text-4xl">Un spectre complet de technologies convergées</h2>
-            <p className="mx-auto max-w-2xl text-sm text-slate-300">
-              Une équipe pluridisciplinaire pour imaginer, intégrer et faire évoluer des écosystèmes de sécurité à forte valeur ajoutée.
+          <div className="flex flex-col gap-3 text-center">
+            <span className="mx-auto text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Services</span>
+            <h2 className="text-3xl font-semibold md:text-4xl">Technologies prêtes pour tous les supports</h2>
+            <p className="mx-auto max-w-2xl text-sm text-slate-700">
+              Visualisez en un coup d'œil les offres phares, sans surcharge : idéal pour les décideurs mobiles et les équipes terrain.
             </p>
           </div>
-          <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {services.map((service) => (
               <div
                 key={service.key}
-                className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur transition hover:-translate-y-2 hover:border-amber-400/60"
+                className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm transition hover:border-amber-200 hover:bg-amber-50"
               >
-                <div className="absolute -top-32 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full bg-gradient-to-br from-amber-500/30 via-orange-400/20 to-rose-400/30 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
-                <div className="relative h-40 w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40">
+                <div className="relative h-36 w-full overflow-hidden rounded-xl bg-white">
                   <Image
                     src={`/images/${service.key}.jpg`}
                     alt={service.title}
                     fill
-                    className="object-cover transition duration-500 group-hover:scale-105"
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 260px"
                   />
                 </div>
-                <h3 className="relative mt-6 text-lg font-semibold text-white">{service.title}</h3>
-                <p className="relative mt-3 text-xs text-slate-200/90">{service.description}</p>
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold text-slate-900">{service.title}</h3>
+                  <p className="text-sm text-slate-700">{service.description}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -301,18 +305,18 @@ export default function HomePageClient() {
       </section>
 
       {/* Call to action */}
-      <section className="relative px-6 pb-24 md:px-12 lg:px-20">
-        <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-900/80 p-10 shadow-2xl backdrop-blur">
-          <div className="flex flex-col gap-6 text-center md:flex-row md:items-center md:justify-between md:text-left">
-            <div>
-              <h2 className="text-3xl font-semibold text-white md:text-4xl">Prêt à transformer vos espaces en environnements intelligents ?</h2>
-              <p className="mt-3 text-sm text-slate-300">
-                Parlez-nous de vos enjeux : nos consultants orchestreront un plan d&apos;action concret sous 48h.
+      <section className="px-6 py-16 md:px-10 lg:px-20">
+        <div className="mx-auto max-w-5xl rounded-3xl border border-slate-200 bg-gradient-to-r from-amber-50 via-white to-amber-50 p-10 shadow-lg">
+          <div className="flex flex-col gap-4 text-center md:flex-row md:items-center md:justify-between md:text-left">
+            <div className="space-y-2">
+              <h2 className="text-3xl font-semibold md:text-4xl">Planifions une démonstration fluide</h2>
+              <p className="text-sm text-slate-700">
+                Expliquez vos contraintes d'usage : nous préparons un parcours clair et compatible multi-plateforme en moins de 48h.
               </p>
             </div>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:scale-[1.02]"
+              className="inline-flex items-center justify-center rounded-full bg-amber-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-amber-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600"
             >
               Planifier un échange
             </Link>
@@ -322,4 +326,3 @@ export default function HomePageClient() {
     </main>
   );
 }
-
