@@ -15,7 +15,7 @@ interface Product {
 }
 
 function getImageUrl(product: Product): string {
-  const baseUrl = 'https://labelshop-backend.onrender.com';
+  const baseUrl = 'https://lr-samr.pythonanywhere.com';
   if (product.image_1024 && typeof product.image_1024 === 'string') {
     return product.image_1024.startsWith('http')
       ? `${product.image_1024}?t=${Date.now()}`

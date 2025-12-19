@@ -56,7 +56,7 @@ export default function Navbar() {
 
     const fetchSuggestions = async () => {
       try {
-        const res = await axios.get('https://labelshop-backend.onrender.com/products/get-products/');
+        const res = await axios.get('https://lr-samr.pythonanywhere.com/products/get-products/');
         const query = searchQuery.toLowerCase();
         const filtered = res.data.filter((p: Product) =>
           p.name.toLowerCase().includes(query) ||
@@ -227,7 +227,7 @@ const navLinks: {
               {suggestions.map((product) => {
                 const imageUrl = product.image_1024?.startsWith('http')
                   ? product.image_1024
-                  : `https://labelshop-backend.onrender.com${product.image_1024}`;
+                  : `https://lr-samr.pythonanywhere.com${product.image_1024}`;
 
                 return (
                   <li

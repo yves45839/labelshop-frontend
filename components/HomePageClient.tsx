@@ -100,7 +100,7 @@ export default function HomePageClient() {
   }, []);
 
   useEffect(() => {
-    axios.get("https://labelshop-backend.onrender.com/products/get-products/")
+    axios.get("https://lr-samr.pythonanywhere.com/products/get-products/")
       .then((res) => {
         const randomProducts = (res.data as Product[])
           .filter((p: Product) => p.is_online)
@@ -205,7 +205,7 @@ export default function HomePageClient() {
             {products.map((product) => {
               const imageUrl = product.image_1024?.startsWith("http")
                 ? product.image_1024
-                : `https://labelshop-backend.onrender.com${product.image_1024}`;
+                : `https://lr-samr.pythonanywhere.com${product.image_1024}`;
 
               return (
                 <motion.div

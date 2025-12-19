@@ -15,7 +15,7 @@ interface CartItem {
 }
 
 function getItemImage(item: any): string {
-  const base = 'https://labelshop-backend.onrender.com';
+  const base = 'https://lr-samr.pythonanywhere.com';
   const img =
     item.product_image ||
     item.image_url ||

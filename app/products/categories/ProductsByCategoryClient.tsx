@@ -30,7 +30,7 @@ export default function ProductsByCategoryClient() {
 
   useEffect(() => {
     axios
-      .get('https://labelshop-backend.onrender.com/products/get-products/')
+      .get('https://lr-samr.pythonanywhere.com/products/get-products/')
       .then((res) => {
         const products = res.data as Product[];
         const groups: ProductsByCategory = {};
@@ -66,7 +66,7 @@ export default function ProductsByCategoryClient() {
             {grouped[category].map((product) => {
               const imageUrl = product.image_1024?.startsWith('http')
                 ? `${product.image_1024}?t=${Date.now()}`
-                : `https://labelshop-backend.onrender.com${product.image_1024}?t=${Date.now()}`;
+                : `https://lr-samr.pythonanywhere.com${product.image_1024}?t=${Date.now()}`;
               const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
                 `Bonjour, je souhaite acheter le produit : ${product.name} (Réf : ${product.default_code}).`
               )}`;
