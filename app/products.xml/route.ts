@@ -6,7 +6,7 @@ export async function GET() {
   const baseUrl = 'https://labelretail.ci';
 
   try {
-    const res = await fetch('https://labelshop-backend.onrender.com/products/get-products', {
+    const res = await fetch('https://lr-samr.pythonanywhere.com/products/get-products', {
       cache: 'no-store',
     });
     const products = await res.json();
@@ -16,7 +16,7 @@ export async function GET() {
       .map((product: any) => {
         const image = product.image_1024?.startsWith('http')
           ? product.image_1024
-          : `https://labelshop-backend.onrender.com${product.image_1024}`;
+          : `https://lr-samr.pythonanywhere.com${product.image_1024}`;
 
         const price = product.hide_price
           ? '0.00 XOF'

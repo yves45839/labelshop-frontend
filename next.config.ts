@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true, // ✅ Ignore les erreurs ESLint bloquantes au build
   },
   images: {
-    domains: ['labelshop-backend.onrender.com', 'labr1.odoo.com'],
+    domains: ['lr-samr.pythonanywhere.com', 'labr1.odoo.com'],
     loader: 'custom',
     loaderFile: './lib/imageLoader.ts',
   },

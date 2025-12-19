@@ -20,7 +20,7 @@ function normalize(text: string): string {
 
 async function getProducts(q: string): Promise<Product[]> {
   const res = await fetch(
-    `https://labelshop-backend.onrender.com/products/search-products/?q=${encodeURIComponent(q)}&limit=50`,
+    `https://lr-samr.pythonanywhere.com/products/search-products/?q=${encodeURIComponent(q)}&limit=50`,
     { cache: 'no-store' }
   );
   if (!res.ok) {
@@ -31,7 +31,7 @@ async function getProducts(q: string): Promise<Product[]> {
 }
 
 async function getCatalog(): Promise<Product[]> {
-  const res = await fetch('https://labelshop-backend.onrender.com/products/get-products/', {
+  const res = await fetch('https://lr-samr.pythonanywhere.com/products/get-products/', {
     cache: 'no-store',
   });
   if (!res.ok) {
