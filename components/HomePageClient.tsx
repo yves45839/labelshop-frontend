@@ -159,20 +159,22 @@ export default function HomePageClient() {
 
           <div className="relative">
             <div className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-xl">
-              {slides.map((slide, index) => (
-                <motion.div
-                  key={slide.src}
-                  className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[16/10]"
-                  animate={{ opacity: index === currentIndex ? 1 : 0 }}
-                  transition={{ duration: shouldReduceMotion ? 0.2 : 0.9 }}
-                  aria-hidden={index !== currentIndex}
-                >
-                  <Image src={slide.src} alt={slide.desc} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 520px" priority={index === 0} />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900/80 via-slate-900/30 to-transparent p-4 text-sm font-medium text-white">
-                    {slide.desc}
-                  </div>
-                </motion.div>
-              ))}
+              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[16/10]">
+                {slides.map((slide, index) => (
+                  <motion.div
+                    key={slide.src}
+                    className="absolute inset-0"
+                    animate={{ opacity: index === currentIndex ? 1 : 0 }}
+                    transition={{ duration: shouldReduceMotion ? 0.2 : 0.9 }}
+                    aria-hidden={index !== currentIndex}
+                  >
+                    <Image src={slide.src} alt={slide.desc} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 520px" priority={index === 0} />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900/80 via-slate-900/30 to-transparent p-4 text-sm font-medium text-white">
+                      {slide.desc}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
             <div className="mt-4 flex items-center justify-between rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm">
               <span>Visualisation {currentIndex + 1} / {slides.length}</span>
