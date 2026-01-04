@@ -62,18 +62,16 @@ export async function generateMetadata(
       ? `Référence Hikvision ${product.default_code || product.slug} : ${product.name}. Achat, configuration experte et support certifié en Côte d'Ivoire avec Label Retail.`
       : `${brand} ${product.name} disponible en Côte d'Ivoire. Référence ${product.default_code || product.slug}. Livraison sécurisée et support technique par nos équipes locales.`);
 
-  const priceMeta =
-    !product.hide_price && typeof product.list_price === 'number'
+  const priceMeta: Metadata['other'] = {
+    'product:brand': brand,
+    'product:availability': 'instock',
+    ...(!product.hide_price && typeof product.list_price === 'number'
       ? {
           'product:price:amount': product.list_price.toString(),
           'product:price:currency': 'XOF',
-          'product:availability': 'instock',
-          'product:brand': brand,
         }
-      : {
-          'product:brand': brand,
-          'product:availability': 'instock',
-        };
+      : {}),
+  };
 
   return {
     title,
