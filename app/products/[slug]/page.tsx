@@ -18,11 +18,11 @@ function getImageUrl(product: any): string {
   return '/default-product.png';
 }
 
-// 🔁 API : Récupère le produit
+// 🔁 API : Récupère le produit (cache 1h pour de meilleures perfs SEO)
 async function getProduct(slug: string) {
   const res = await fetch(
     `https://lr-samr.pythonanywhere.com/products/search-products/?q=${slug}`,
-    { cache: 'no-store' }
+    { next: { revalidate: 3600 } }
   );
 
   if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) {
@@ -40,11 +40,6 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const product = await getProduct(slug);
-  const brand = product?.brand?.trim() || 'Hikvision';
-  const isHikvision = brand.toLowerCase().includes('hikvision');
-  const canonicalUrl = product
-    ? `https://labelretail.ci/products/${product.slug}`
-    : 'https://labelretail.ci/products';
 
   if (!product) {
     return {
@@ -53,38 +48,72 @@ export async function generateMetadata(
     };
   }
 
-  const metaDescription =
+  const brand = product.brand?.trim() || 'Label Retail';
+  const categoryName = mapProductCategory(product) || 'Équipement de sécurité';
+  const isHikvision = brand.toLowerCase().includes('hikvision');
+  const imageUrl = getImageUrl(product);
+  const canonicalUrl = `https://labelretail.ci/products/${product.slug}`;
+
+  const title =
+    product.meta_title || `${brand} ${product.name} | Réf ${product.default_code || product.slug}`;
+  const description =
     product.meta_description ||
     (isHikvision
       ? `Référence Hikvision ${product.default_code || product.slug} : ${product.name}. Achat, configuration experte et support certifié en Côte d'Ivoire avec Label Retail.`
       : `${brand} ${product.name} disponible en Côte d'Ivoire. Référence ${product.default_code || product.slug}. Livraison sécurisée et support technique par nos équipes locales.`);
 
+  const priceMeta =
+    !product.hide_price && typeof product.list_price === 'number'
+      ? {
+          'product:price:amount': product.list_price.toString(),
+          'product:price:currency': 'XOF',
+          'product:availability': 'instock',
+          'product:brand': brand,
+        }
+      : {
+          'product:brand': brand,
+          'product:availability': 'instock',
+        };
+
   return {
-    title: product.meta_title || `${brand} ${product.name} | Réf ${product.default_code || product.slug}`,
-    description: metaDescription,
+    title,
+    description,
     keywords: [
       product.name,
       brand,
       product.default_code?.toString(),
-      isHikvision ? "Hikvision Côte d'Ivoire" : undefined,
-      isHikvision ? 'caméra Hikvision' : undefined,
-      isHikvision ? 'vidéosurveillance Hikvision' : 'vidéosurveillance professionnelle',
+      categoryName,
+      "sécurité électronique Côte d'Ivoire",
+      'vidéosurveillance Abidjan',
+      'installation caméra de surveillance',
+      'Label Retail',
     ].filter(Boolean) as string[],
     alternates: { canonical: canonicalUrl },
     openGraph: {
-      title: product.meta_title || `${brand} ${product.name}`,
-      description: metaDescription,
+      title,
+      description,
       url: canonicalUrl,
+      siteName: 'Label Retail',
       type: 'website',
-      images: [{ url: getImageUrl(product) }],
+      locale: 'fr_CI',
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `Image de ${product.name}`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: product.meta_title || `${brand} ${product.name}`,
-      description: metaDescription,
-      images: [getImageUrl(product)],
+      title,
+      description,
+      images: [imageUrl],
+      site: '@LabelRetail',
     },
     robots: { index: true, follow: true },
+    other: priceMeta,
   };
 }
 
