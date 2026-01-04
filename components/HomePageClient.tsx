@@ -115,8 +115,8 @@ export default function HomePageClient() {
   return (
     <main className="min-h-screen bg-white text-slate-900">
       {/* Hero section */}
-      <section className="px-6 pb-16 pt-20 md:px-10 lg:px-20">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
+      <section className="px-6 pb-16 pt-24 md:px-10 lg:px-20">
+        <div className="mx-auto grid max-w-screen-xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-6">
             <span className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">
               Label Retail
@@ -162,7 +162,7 @@ export default function HomePageClient() {
               {slides.map((slide, index) => (
                 <motion.div
                   key={slide.src}
-                  className="relative aspect-[4/5]"
+                  className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[16/10]"
                   animate={{ opacity: index === currentIndex ? 1 : 0 }}
                   transition={{ duration: shouldReduceMotion ? 0.2 : 0.9 }}
                   aria-hidden={index !== currentIndex}
@@ -184,7 +184,7 @@ export default function HomePageClient() {
 
       {/* Featured products */}
       <section className="border-y border-slate-200 bg-slate-50 px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-screen-xl">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <span className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Catalogue</span>
@@ -200,7 +200,7 @@ export default function HomePageClient() {
               Voir tout le catalogue
             </Link>
           </div>
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.length === 0 && (
               <div className="col-span-full rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-700">
                 Patience... Nous synchronisons nos produits phares.
@@ -245,7 +245,7 @@ export default function HomePageClient() {
 
       {/* Why us */}
       <section className="px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-screen-xl">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-xl space-y-4">
               <span className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Pourquoi nous choisir</span>
@@ -271,7 +271,7 @@ export default function HomePageClient() {
 
       {/* Services */}
       <section className="border-y border-slate-200 bg-white px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-screen-xl">
           <div className="flex flex-col gap-3 text-center">
             <span className="mx-auto text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Services</span>
             <h2 className="text-3xl font-semibold md:text-4xl">Technologies prêtes pour tous les supports</h2>
