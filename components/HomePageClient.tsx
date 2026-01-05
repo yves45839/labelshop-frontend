@@ -119,13 +119,13 @@ export default function HomePageClient() {
         <div className="mx-auto grid max-w-screen-xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-6">
             <span className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">
-              Label Retail
+              Label Retail • Hikvision
             </span>
             <h1 className="text-4xl font-bold leading-tight md:text-5xl">
-              Une sécurité lisible et performante sur tous vos écrans
+              No 1 des solutions Hikvision en Côte d'Ivoire
             </h1>
             <p className="max-w-xl text-lg text-slate-700">
-              Nous créons des parcours clairs, rapides et optimisés SEO pour que vos équipes retrouvent l'essentiel, que ce soit sur mobile, tablette ou poste de contrôle.
+              Sécurité électronique lisible et performante sur tous vos écrans : caméras, alarmes et contrôle d'accès Hikvision installés et maintenus par une équipe locale certifiée.
             </p>
             <ul className="grid gap-3 text-sm text-slate-700 sm:grid-cols-2">
               <li className="flex items-start gap-2 rounded-xl bg-slate-50 p-3">
@@ -139,6 +139,10 @@ export default function HomePageClient() {
               <li className="flex items-start gap-2 rounded-xl bg-slate-50 p-3">
                 <span aria-hidden className="mt-1 text-amber-600">•</span>
                 Navigation simplifiée pour des décisions plus rapides.
+              </li>
+              <li className="flex items-start gap-2 rounded-xl bg-slate-50 p-3">
+                <span aria-hidden className="mt-1 text-amber-600">•</span>
+                Service officiel Hikvision en Côte d'Ivoire pour des déploiements sans surprise.
               </li>
             </ul>
             <div className="flex flex-wrap items-center gap-3">

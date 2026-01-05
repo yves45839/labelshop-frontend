@@ -2,10 +2,12 @@ import type { Metadata } from 'next';
 import HomePageClient from '@/components/HomePageClient';
 
 export const metadata: Metadata = {
-  title: 'Label Retail | Sécurité électronique & domotique en Côte d\'Ivoire',
+  title: "Label Retail | No 1 Hikvision & sécurité électronique en Côte d'Ivoire",
   description:
-    "Label Retail conçoit, installe et maintient des solutions de vidéosurveillance, contrôle d'accès et alarme en Côte d'Ivoire.",
+    "Label Retail, intégrateur Hikvision n°1 en Côte d'Ivoire, conçoit et maintient vos solutions de vidéosurveillance, contrôle d'accès et alarmes sur tous vos écrans.",
   keywords: [
+    "Hikvision Côte d'Ivoire",
+    'intégrateur Hikvision Abidjan',
     'sécurité électronique Côte d\'Ivoire',
     'installation vidéosurveillance Abidjan',
     'systèmes de contrôle d\'accès',
@@ -14,17 +16,17 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: 'https://labelretail.ci/' },
   openGraph: {
-    title: 'Label Retail | Sécurité électronique & domotique',
+    title: "Label Retail | No 1 Hikvision & sécurité électronique",
     description:
-      "Installation certifiée de caméras, alarmes et solutions connectées partout en Côte d'Ivoire.",
+      "Installation certifiée Hikvision de caméras, alarmes et solutions connectées partout en Côte d'Ivoire.",
     url: 'https://labelretail.ci/',
     type: 'website',
     locale: 'fr_FR',
   },
   twitter: {
     card: 'summary',
-    title: 'Label Retail | Spécialiste sécurité électronique',
-    description: "Conseil, installation et maintenance de systèmes de sécurité en Côte d'Ivoire.",
+    title: "Label Retail | Intégrateur Hikvision en Côte d'Ivoire",
+    description: "Conseil, installation et maintenance Hikvision de systèmes de sécurité en Côte d'Ivoire.",
   },
   robots: { index: true, follow: true },
 };
