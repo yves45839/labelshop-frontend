@@ -130,18 +130,6 @@ export default function HomePageClient() {
             <ul className="grid gap-3 text-sm text-slate-700 sm:grid-cols-2">
               <li className="flex items-start gap-2 rounded-xl bg-slate-50 p-3">
                 <span aria-hidden className="mt-1 text-amber-600">•</span>
-                Interfaces compatibles multisite et multi-navigateurs.
-              </li>
-              <li className="flex items-start gap-2 rounded-xl bg-slate-50 p-3">
-                <span aria-hidden className="mt-1 text-amber-600">•</span>
-                Contenus structurés pour les moteurs de recherche.
-              </li>
-              <li className="flex items-start gap-2 rounded-xl bg-slate-50 p-3">
-                <span aria-hidden className="mt-1 text-amber-600">•</span>
-                Navigation simplifiée pour des décisions plus rapides.
-              </li>
-              <li className="flex items-start gap-2 rounded-xl bg-slate-50 p-3">
-                <span aria-hidden className="mt-1 text-amber-600">•</span>
                 Service officiel Hikvision en Côte d'Ivoire pour des déploiements sans surprise.
               </li>
             </ul>
