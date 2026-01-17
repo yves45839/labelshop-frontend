@@ -19,6 +19,7 @@ import {
   FaSignInAlt,
   FaInfoCircle,
   FaNewspaper,
+  FaShieldAlt,
   FaUser,
 } from 'react-icons/fa';
 
@@ -127,6 +128,11 @@ const navLinks: {
 }[] = [
   { href: '/', label: 'ACCUEIL', icon: <FaHome /> },
   { href: '/products', label: 'NOS PRODUITS', icon: <FaBoxOpen /> },
+  {
+    href: '/building-security-questionnaire',
+    label: 'AUDIT SÉCURITÉ',
+    icon: <FaShieldAlt />,
+  },
   { href: '/cart', label: 'PANIER', icon: <FaShoppingCart />, showCount: true },
   { href: '/orders', label: 'COMMANDES', icon: <FaClipboardList /> },
   ...(user && isAdminEmail(user.email)
