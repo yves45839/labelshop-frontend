@@ -160,7 +160,7 @@ const navLinks: {
             className="object-contain"
           />
           <span
-            className={`text-xs font-bold text-blue-700 tracking-wide hidden sm:inline ${
+            className={`text-xs font-bold text-neutral-900 tracking-widest hidden sm:inline ${
               collapsed ? 'opacity-0 w-0' : ''
             }`}
           >
@@ -169,19 +169,19 @@ const navLinks: {
         </Link>
 
         {/* Navigation centrale */}
-        <nav className="order-3 flex w-full flex-wrap justify-center gap-3 text-sm font-bold text-orange-500 md:order-2 md:flex-1">
+        <nav className="order-3 flex w-full flex-wrap justify-center gap-3 text-sm font-bold text-neutral-600 md:order-2 md:flex-1">
           {navLinks.map(({ href, label, icon, showCount }) => (
             <Link
               key={href}
               href={href}
               className={`group relative transition-all duration-300 rounded-md flex items-center gap-1 px-3 py-2 ${
-                pathname === href ? 'bg-orange-400 text-white' : 'hover:text-blue-600'
+                pathname === href ? 'bg-brand-600 text-white shadow-sm' : 'hover:text-brand-600'
               }`}
             >
               <span className="relative">
                 {icon}
                 {showCount && cartCount > 0 && (
-                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] font-medium rounded-full w-4 h-4 flex items-center justify-center shadow-sm">
                     {cartCount}
                   </span>
                 )}
@@ -202,7 +202,7 @@ const navLinks: {
         >
           <form
             onSubmit={handleSearch}
-            className="relative flex w-full overflow-hidden rounded-full border border-gray-200 bg-white shadow-sm focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-300"
+            className="relative flex w-full overflow-hidden rounded-full border border-neutral-200 bg-white shadow-sm focus-within:border-brand-500 focus-within:ring-1 focus-within:ring-brand-500"
           >
             <input
               type="search"
@@ -211,11 +211,11 @@ const navLinks: {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Rechercher un produit..."
-              className="w-full bg-transparent px-4 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none"
+              className="w-full bg-transparent px-4 py-2 text-sm text-neutral-700 placeholder:text-neutral-400 focus:outline-none"
             />
             <button
               type="submit"
-              className="flex items-center justify-center bg-blue-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2"
+              className="flex items-center justify-center bg-brand-600 px-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
             >
               Rechercher
             </button>
