@@ -25,7 +25,7 @@ export default function FloatingMenu() {
     <div ref={menuRef} className="fixed top-4 right-4 z-50">
       <button
         onClick={() => setOpen(!open)}
-        className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg"
+        className="w-12 h-12 rounded-full bg-brand-600 text-white flex items-center justify-center shadow-lg"
       >
         <span className="text-xl">☰</span>
       </button>
