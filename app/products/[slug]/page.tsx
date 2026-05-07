@@ -2,17 +2,16 @@ import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import AddToCart from '@/components/AddToCart';
 import { mapProductCategory } from '@/lib/category';
+import { apiUrl } from '@/lib/api';
 
 // 🔁 Récupère l'image
 function getImageUrl(product: any): string {
-  const baseUrl = 'https://lr-samr.pythonanywhere.com';
-
   if (product.image_1024?.startsWith('http')) {
     return product.image_1024;
   }
 
   if (product.image_1024?.startsWith('/')) {
-    return `${baseUrl}${product.image_1024}`;
+    return apiUrl(product.image_1024);
   }
 
   return '/default-product.png';
@@ -21,7 +20,7 @@ function getImageUrl(product: any): string {
 // 🔁 API : Récupère le produit (cache 1h pour de meilleures perfs SEO)
 async function getProduct(slug: string) {
   const res = await fetch(
-    `https://lr-samr.pythonanywhere.com/products/search-products/?q=${slug}`,
+    apiUrl(`/products/search-products/?q=${slug}`),
     { next: { revalidate: 3600 } }
   );
 

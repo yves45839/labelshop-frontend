@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import { addToCart } from '@/lib/cart';
+import { apiUrl } from '@/lib/api';
 
 interface Product {
   id: number;
@@ -15,11 +16,8 @@ interface Product {
 }
 
 function getImageUrl(product: Product): string {
-  const baseUrl = 'https://lr-samr.pythonanywhere.com';
   if (product.image_1024 && typeof product.image_1024 === 'string') {
-    return product.image_1024.startsWith('http')
-      ? `${product.image_1024}?t=${Date.now()}`
-      : `${baseUrl}${product.image_1024}?t=${Date.now()}`;
+    return `${apiUrl(product.image_1024)}?t=${Date.now()}`;
   }
   return '/default-product.png';
 }

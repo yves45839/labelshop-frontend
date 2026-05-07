@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { apiUrl } from '@/lib/api';
 
 export const revalidate = 0;
 
@@ -6,7 +7,7 @@ export async function GET() {
   const baseUrl = 'https://labelretail.ci';
 
   try {
-    const res = await fetch('https://lr-samr.pythonanywhere.com/products/get-products', {
+    const res = await fetch(apiUrl('/products/get-products'), {
       cache: 'no-store',
     });
     const products = await res.json();
@@ -20,9 +21,7 @@ export async function GET() {
           ? new Date(date).toISOString()
           : new Date().toISOString();
 
-        const imageUrl = product.image_1024?.startsWith('http')
-          ? product.image_1024
-          : `https://lr-samr.pythonanywhere.com${product.image_1024}`;
+        const imageUrl = product.image_1024 ? apiUrl(product.image_1024) : '';
 
         return `
           <url>

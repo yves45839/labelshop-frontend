@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import Link from "next/link";
+import { apiUrl } from "@/lib/api";
 
 type Product = {
   id: number;
@@ -101,7 +102,7 @@ export default function HomePageClient() {
   }, [shouldReduceMotion, slides.length]);
 
   useEffect(() => {
-    axios.get("https://lr-samr.pythonanywhere.com/products/get-products/")
+    axios.get(apiUrl("/products/get-products/"))
       .then((res) => {
         const randomProducts = (res.data as Product[])
           .filter((p: Product) => p.is_online)
@@ -201,9 +202,7 @@ export default function HomePageClient() {
               </div>
             )}
             {products.map((product) => {
-              const imageUrl = product.image_1024?.startsWith("http")
-                ? product.image_1024
-                : `https://lr-samr.pythonanywhere.com${product.image_1024}`;
+              const imageUrl = product.image_1024 ? apiUrl(product.image_1024) : '';
 
               return (
                 <motion.div

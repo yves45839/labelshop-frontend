@@ -5,6 +5,7 @@ import axios from 'axios';
 import ProductCard from '@/components/ProductCard';
 import { addToCart } from '@/lib/cart';
 import { mapProductCategory, MAIN_CATEGORIES } from '@/lib/category';
+import { apiUrl } from '@/lib/api';
 
 interface Product {
   id: number;
@@ -30,7 +31,7 @@ export default function ProductsByCategoryClient() {
 
   useEffect(() => {
     axios
-      .get('https://lr-samr.pythonanywhere.com/products/get-products/')
+      .get(apiUrl('/products/get-products/'))
       .then((res) => {
         const products = res.data as Product[];
         const groups: ProductsByCategory = {};
@@ -64,9 +65,7 @@ export default function ProductsByCategoryClient() {
           <h2 className="text-2xl font-semibold text-orange-600 mb-4">{category}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {grouped[category].map((product) => {
-              const imageUrl = product.image_1024?.startsWith('http')
-                ? `${product.image_1024}?t=${Date.now()}`
-                : `https://lr-samr.pythonanywhere.com${product.image_1024}?t=${Date.now()}`;
+              const imageUrl = `${apiUrl(product.image_1024 || '')}?t=${Date.now()}`;
               const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
                 `Bonjour, je souhaite acheter le produit : ${product.name} (Réf : ${product.default_code}).`
               )}`;

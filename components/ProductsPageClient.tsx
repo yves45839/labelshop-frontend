@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import ProductCard from '@/components/ProductCard';
 import { addToCart } from '@/lib/cart';
 import { mapProductCategory, MAIN_CATEGORIES } from '@/lib/category';
+import { api, apiUrl } from '@/lib/api';
 
 type Product = {
   id: number;
@@ -20,20 +20,11 @@ type Product = {
   [key: string]: unknown;
 };
 
-const api = axios.create({
-  baseURL: 'https://lr-samr.pythonanywhere.com',
-});
-
 // ✅ Utilise uniquement image_1024 (format complet ou relatif)
 function getProductImage(product: Product): string {
-  const baseUrl = 'https://lr-samr.pythonanywhere.com';
-
   if (product.image_1024 && typeof product.image_1024 === 'string') {
-    return product.image_1024.startsWith('http')
-      ? `${product.image_1024}?t=${Date.now()}`
-      : `${baseUrl}${product.image_1024}?t=${Date.now()}`;
+    return `${apiUrl(product.image_1024)}?t=${Date.now()}`;
   }
-
   return '/default-product.png';
 }
 

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { viewCart, removeFromCart, updateCartItem } from '@/lib/cart';
 import { getCurrentUser } from '@/lib/user';
 import { createOrder } from '@/lib/orders';
+import { apiUrl } from '@/lib/api';
 
 interface CartItem {
   id?: number;
@@ -15,7 +16,6 @@ interface CartItem {
 }
 
 function getItemImage(item: any): string {
-  const base = 'https://lr-samr.pythonanywhere.com';
   const img =
     item.product_image ||
     item.image_url ||
@@ -23,7 +23,7 @@ function getItemImage(item: any): string {
     item.image ||
     '';
   if (!img) return '/default-product.png';
-  return img.startsWith('http') ? img : `${base}${img}`;
+  return apiUrl(img);
 }
 
 export default function CartPage() {

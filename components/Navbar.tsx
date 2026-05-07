@@ -8,6 +8,7 @@ import axios from 'axios';
 import { watchAuth } from '@/lib/firebase';
 import { getCurrentUser, isAdminEmail } from '@/lib/user';
 import { viewCart, type CartItemData } from '@/lib/cart';
+import { apiUrl } from '@/lib/api';
 import {
   FaHome,
   FaBoxOpen,
@@ -56,7 +57,7 @@ export default function Navbar() {
 
     const fetchSuggestions = async () => {
       try {
-        const res = await axios.get('https://lr-samr.pythonanywhere.com/products/get-products/');
+        const res = await axios.get(apiUrl('/products/get-products/'));
         const query = searchQuery.toLowerCase();
         const filtered = res.data.filter((p: Product) =>
           p.name.toLowerCase().includes(query) ||
@@ -225,9 +226,7 @@ const navLinks: {
           {suggestions.length > 0 && (
             <ul className="absolute z-50 mt-2 w-full max-h-60 overflow-y-auto rounded-lg border border-gray-200 bg-white text-sm shadow-lg">
               {suggestions.map((product) => {
-                const imageUrl = product.image_1024?.startsWith('http')
-                  ? product.image_1024
-                  : `https://lr-samr.pythonanywhere.com${product.image_1024}`;
+                const imageUrl = product.image_1024 ? apiUrl(product.image_1024) : '';
 
                 return (
                   <li
