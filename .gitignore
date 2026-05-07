@@ -16,6 +16,9 @@
 # next.js
 /.next/
 /out/
+# Cache de build d'un ancien sous-dossier Windows ("Nouveau dossier") — voir AMELIORATIONS.md §3.3
+Nouveau dossier/.next/
+Nouveau dossier/out/
 
 # production
 /build
