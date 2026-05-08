@@ -21,6 +21,8 @@ import {
   FaInfoCircle,
   FaNewspaper,
   FaUser,
+  FaClock,
+  FaGraduationCap,
 } from 'react-icons/fa';
 
 type Product = {
@@ -128,6 +130,8 @@ const navLinks: {
 }[] = [
   { href: '/', label: 'ACCUEIL', icon: <FaHome /> },
   { href: '/products', label: 'NOS PRODUITS', icon: <FaBoxOpen /> },
+  { href: '/lr-time', label: 'LR TIME', icon: <FaClock /> },
+  { href: '/formations', label: 'FORMATIONS', icon: <FaGraduationCap /> },
   { href: '/cart', label: 'PANIER', icon: <FaShoppingCart />, showCount: true },
   { href: '/orders', label: 'COMMANDES', icon: <FaClipboardList /> },
   ...(user && isAdminEmail(user.email)
