@@ -1,0 +1,17 @@
+# Default behaviour: normalise line endings on commit, leave checkout to autocrlf
+* text=auto eol=lf
+
+# Force CRLF for Windows-only scripts so PowerShell stays happy
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Treat as binary (no diff, no eol normalisation)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
