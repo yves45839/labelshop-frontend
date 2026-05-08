@@ -22,8 +22,8 @@ export function apiUrl(path: string = ''): string {
   return `${API_BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`;
 }
 
-export const api = axios.create({
-  baseURL: API_BASE_URL,
-  // ✅ permet d'envoyer les cookies de session pour l'authentification
-  withCredentials: true,
-});
+/**
+ * Client axios par défaut — utilisé pour tous les endpoints publics
+ * (produits, blogs, recherche, catégories, etc.).
+ *
+ * ⚠️ `withCredentials` e
