@@ -36,24 +36,31 @@ export default function StockPage() {
     }
   };
 
-  if (loading) return <p className="p-4">Chargement…</p>;
+  if (loading) return <p className="lr-container py-12 lr-mono text-sm text-[var(--lr-steel-500)]">// Chargement…</p>;
 
   return (
-    <main className="container mx-auto py-8 px-4 space-y-4">
-      <h1 className="text-2xl font-bold text-center mb-4">Gestion du stock</h1>
-      <div className="flex justify-center gap-4">
-        <Link href="/inventory" className="text-blue-600 underline">
-          Inventaire
-        </Link>
-        <Link href="/products/create" className="text-blue-600 underline">
-          Ajouter un produit
-        </Link>
-      </div>
-      {items.length === 0 ? (
-        <p>Le stock est vide pour le moment.</p>
-      ) : (
-        <StockGrid products={items} onUpdate={handleUpdate} />
-      )}
-    </main>
+    <div className="bg-[var(--lr-steel-50)] min-h-screen">
+      <header className="bg-[var(--lr-navy-900)] text-white border-b border-[var(--lr-orange-500)]">
+        <div className="lr-container py-10">
+          <span className="lr-eyebrow text-[var(--lr-orange-400)]">Console admin</span>
+          <h1 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight mt-1">Gestion du stock</h1>
+        </div>
+      </header>
+
+      <main className="lr-container py-10 space-y-6">
+        <div className="flex flex-wrap gap-3">
+          <Link href="/inventory" className="lr-btn-secondary">Inventaire</Link>
+          <Link href="/products/create" className="lr-btn-secondary">Ajouter un produit</Link>
+        </div>
+        {items.length === 0 ? (
+          <div className="bg-white border border-dashed border-[var(--lr-border)] py-12 text-center">
+            <span className="lr-mono text-xs text-[var(--lr-steel-400)]">// EMPTY_STOCK</span>
+            <p className="mt-2 font-display text-lg uppercase tracking-wide text-[var(--lr-navy-900)]">Le stock est vide pour le moment.</p>
+          </div>
+        ) : (
+          <StockGrid products={items} onUpdate={handleUpdate} />
+        )}
+      </main>
+    </div>
   );
 }

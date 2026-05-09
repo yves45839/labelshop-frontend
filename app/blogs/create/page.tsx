@@ -47,47 +47,43 @@ export default function CreateBlogPage() {
     }
   };
 
-  if (loading) return <p className="p-4">Chargement…</p>;
+  if (loading) return <p className="lr-container py-12 lr-mono text-sm text-[var(--lr-steel-500)]">// Chargement…</p>;
 
   return (
-    <main className="container mx-auto py-8 px-4 space-y-4 max-w-xl">
-      <h1 className="text-2xl font-bold text-center mb-4">Nouvel article</h1>
-      <form onSubmit={handleSubmit} className="space-y-2">
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Titre"
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Contenu"
-          className="w-full border px-3 py-2 rounded h-40"
-          required
-        />
-        <input
-          value={authorName}
-          onChange={(e) => setAuthorName(e.target.value)}
-          placeholder="Nom de l'auteur"
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setAuthorImage(e.target.files?.[0] || null)}
-        />
-        <input
-          type="file"
-          multiple
-          onChange={(e) => setAttachments(e.target.files)}
-        />
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
-          Créer
-        </button>
-      </form>
-    </main>
+    <div className="bg-[var(--lr-steel-50)] min-h-screen">
+      <header className="bg-[var(--lr-navy-900)] text-white border-b border-[var(--lr-orange-500)]">
+        <div className="lr-container py-10">
+          <span className="lr-eyebrow text-[var(--lr-orange-400)]">Console admin · Blog</span>
+          <h1 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight mt-1">Nouvel article</h1>
+        </div>
+      </header>
+
+      <main className="lr-container py-10 max-w-2xl">
+        <form onSubmit={handleSubmit} className="bg-white border border-[var(--lr-border)] p-6 space-y-4">
+          <div className="lr-stripe -mx-6 -mt-6 mb-4" />
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Titre</label>
+            <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Titre" className="lr-input" required />
+          </div>
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Contenu</label>
+            <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="Contenu" className="lr-input h-40" required />
+          </div>
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Auteur</label>
+            <input value={authorName} onChange={(e) => setAuthorName(e.target.value)} placeholder="Nom de l'auteur" className="lr-input" required />
+          </div>
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Photo auteur</label>
+            <input type="file" accept="image/*" onChange={(e) => setAuthorImage(e.target.files?.[0] || null)} className="lr-input" />
+          </div>
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Pièces jointes</label>
+            <input type="file" multiple onChange={(e) => setAttachments(e.target.files)} className="lr-input" />
+          </div>
+          <button type="submit" className="lr-btn-primary w-full">Créer</button>
+        </form>
+      </main>
+    </div>
   );
 }

@@ -79,141 +79,112 @@ export default function InventoryPage() {
     }
   };
 
-  if (loading) return <p className="p-4">Chargement…</p>;
+  if (loading) return <p className="lr-container py-12 lr-mono text-sm text-[var(--lr-steel-500)]">// Chargement…</p>;
 
   return (
-    <main className="container mx-auto py-8 px-4 space-y-6">
-      <h1 className="text-2xl font-bold text-center mb-4">Gestion de stock</h1>
-      <div className="flex justify-center gap-4">
-        <Link href="/stock" className="text-blue-600 underline">
-          Voir stock
-        </Link>
-        <Link href="/products/create" className="text-blue-600 underline">
-          Ajouter produit
-        </Link>
-      </div>
-
-      <section className="space-y-2">
-        <h2 className="font-semibold">Sites</h2>
-        <ul className="list-disc ml-6">
-          {sites.map((site) => (
-            <li key={site.id}>{site.name}</li>
-          ))}
-        </ul>
-        <div className="flex gap-2">
-          <input
-            value={newSite}
-            onChange={(e) => setNewSite(e.target.value)}
-            placeholder="Nouveau site"
-            className="border px-2 py-1 rounded flex-grow"
-          />
-          <button
-            onClick={handleCreateSite}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
-          >
-            Ajouter
-          </button>
+    <div className="bg-[var(--lr-steel-50)] min-h-screen">
+      <header className="bg-[var(--lr-navy-900)] text-white border-b border-[var(--lr-orange-500)]">
+        <div className="lr-container py-10">
+          <span className="lr-eyebrow text-[var(--lr-orange-400)]">Console admin</span>
+          <h1 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight mt-1">Gestion de stock</h1>
         </div>
-      </section>
+      </header>
 
-      <section className="space-y-4">
-        <div className="flex gap-2 items-end">
-          <div className="flex flex-col flex-grow">
-            <label className="text-sm">ID Produit</label>
-            <input
-              type="text"
-              value={productId}
-              onChange={(e) => setProductId(e.target.value)}
-              className="border px-2 py-1 rounded"
-            />
+      <main className="lr-container py-10 space-y-6 max-w-4xl">
+        <div className="flex flex-wrap gap-3">
+          <Link href="/stock" className="lr-btn-secondary">Voir stock</Link>
+          <Link href="/products/create" className="lr-btn-secondary">Ajouter produit</Link>
+        </div>
+
+        <section className="bg-white border border-[var(--lr-border)] p-6">
+          <div className="lr-section-heading mb-4">
+            <span className="bar" />
+            <h2 className="font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">Sites</h2>
           </div>
-          <button
-            onClick={fetchStock}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
-          >
-            Voir stock
-          </button>
-        </div>
-
-        {stock.length > 0 && (
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr>
-                <th className="border px-2 py-1 text-left">Site</th>
-                <th className="border px-2 py-1">Quantité</th>
-                <th className="border px-2 py-1">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stock.map((entry) => (
-                <tr key={entry.site_id}>
-                  <td className="border px-2 py-1">{entry.site_name}</td>
-                  <td className="border px-2 py-1 text-center">{entry.quantity}</td>
-                  <td className="border px-2 py-1 text-center space-x-1">
-                    <button
-                      onClick={() => handleUpdate(entry.site_id, entry.quantity + 1)}
-                      className="px-2 bg-gray-200 rounded-l"
-                    >
-                      +
-                    </button>
-                    <button
-                      onClick={() => handleUpdate(entry.site_id, Math.max(0, entry.quantity - 1))}
-                      className="px-2 bg-gray-200 rounded-r"
-                    >
-                      -
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
-
-      {sites.length >= 2 && (
-        <section className="space-y-2">
-          <h2 className="font-semibold">Transférer du stock</h2>
-          <div className="flex flex-wrap gap-2 items-end">
-            <select
-              value={transfer.from}
-              onChange={(e) => setTransfer({ ...transfer, from: e.target.value })}
-              className="border px-2 py-1 rounded"
-            >
-              <option value="">Depuis…</option>
-              {sites.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-            <select
-              value={transfer.to}
-              onChange={(e) => setTransfer({ ...transfer, to: e.target.value })}
-              className="border px-2 py-1 rounded"
-            >
-              <option value="">Vers…</option>
-              {sites.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-            <input
-              type="number"
-              min={1}
-              value={transfer.qty}
-              onChange={(e) => setTransfer({ ...transfer, qty: parseInt(e.target.value, 10) || 1 })}
-              className="border w-24 px-2 py-1 rounded"
-            />
-            <button
-              onClick={handleTransfer}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
-            >
-              Transférer
-            </button>
+          <ul className="grid grid-cols-2 md:grid-cols-3 gap-px bg-[var(--lr-border)] border border-[var(--lr-border)] mb-4">
+            {sites.map((site, idx) => (
+              <li key={site.id} className="bg-white p-3">
+                <span className="lr-mono text-[10px] text-[var(--lr-steel-400)]">SITE.{String(idx + 1).padStart(2, '0')}</span>
+                <p className="font-display font-semibold uppercase text-sm text-[var(--lr-navy-900)] mt-1">{site.name}</p>
+              </li>
+            ))}
+          </ul>
+          <div className="flex gap-2">
+            <input value={newSite} onChange={(e) => setNewSite(e.target.value)} placeholder="Nouveau site" className="lr-input flex-grow" />
+            <button onClick={handleCreateSite} className="lr-btn-primary">Ajouter</button>
           </div>
         </section>
-      )}
-    </main>
+
+        <section className="bg-white border border-[var(--lr-border)] p-6 space-y-4">
+          <div className="lr-section-heading">
+            <span className="bar" />
+            <h2 className="font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">Stock par produit</h2>
+          </div>
+          <div className="flex gap-2 items-end">
+            <div className="flex flex-col flex-grow">
+              <label className="lr-eyebrow text-[var(--lr-steel-500)] mb-1">ID Produit</label>
+              <input type="text" value={productId} onChange={(e) => setProductId(e.target.value)} className="lr-input lr-mono" />
+            </div>
+            <button onClick={fetchStock} className="lr-btn-primary">Voir stock</button>
+          </div>
+
+          {stock.length > 0 && (
+            <table className="w-full text-sm border border-[var(--lr-border)]">
+              <thead className="bg-[var(--lr-navy-900)] text-white">
+                <tr>
+                  <th className="px-3 py-2 text-left font-display uppercase tracking-widest text-xs">Site</th>
+                  <th className="px-3 py-2 font-display uppercase tracking-widest text-xs">Quantité</th>
+                  <th className="px-3 py-2 font-display uppercase tracking-widest text-xs">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--lr-border)]">
+                {stock.map((entry) => (
+                  <tr key={entry.site_id} className="hover:bg-[var(--lr-steel-50)]">
+                    <td className="px-3 py-2 font-display font-semibold text-[var(--lr-navy-900)]">{entry.site_name}</td>
+                    <td className="px-3 py-2 text-center lr-mono lr-tnum text-[var(--lr-navy-900)]">{entry.quantity}</td>
+                    <td className="px-3 py-2 text-center">
+                      <div className="inline-flex border border-[var(--lr-navy-900)]">
+                        <button onClick={() => handleUpdate(entry.site_id, entry.quantity + 1)} className="px-3 py-1 bg-[var(--lr-steel-100)] hover:bg-[var(--lr-orange-500)] hover:text-white font-display font-bold transition-colors border-r border-[var(--lr-navy-900)]">+</button>
+                        <button onClick={() => handleUpdate(entry.site_id, Math.max(0, entry.quantity - 1))} className="px-3 py-1 bg-[var(--lr-steel-100)] hover:bg-[var(--lr-orange-500)] hover:text-white font-display font-bold transition-colors">−</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </section>
+
+        {sites.length >= 2 && (
+          <section className="bg-white border border-[var(--lr-border)] p-6">
+            <div className="lr-section-heading mb-4">
+              <span className="bar" />
+              <h2 className="font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">Transférer du stock</h2>
+            </div>
+            <div className="flex flex-wrap gap-2 items-end">
+              <div className="flex flex-col">
+                <label className="lr-eyebrow text-[var(--lr-steel-500)] mb-1">Depuis</label>
+                <select value={transfer.from} onChange={(e) => setTransfer({ ...transfer, from: e.target.value })} className="lr-input">
+                  <option value="">Depuis…</option>
+                  {sites.map((s) => (<option key={s.id} value={s.id}>{s.name}</option>))}
+                </select>
+              </div>
+              <div className="flex flex-col">
+                <label className="lr-eyebrow text-[var(--lr-steel-500)] mb-1">Vers</label>
+                <select value={transfer.to} onChange={(e) => setTransfer({ ...transfer, to: e.target.value })} className="lr-input">
+                  <option value="">Vers…</option>
+                  {sites.map((s) => (<option key={s.id} value={s.id}>{s.name}</option>))}
+                </select>
+              </div>
+              <div className="flex flex-col">
+                <label className="lr-eyebrow text-[var(--lr-steel-500)] mb-1">Qté</label>
+                <input type="number" min={1} value={transfer.qty} onChange={(e) => setTransfer({ ...transfer, qty: parseInt(e.target.value, 10) || 1 })} className="lr-input lr-mono w-24" />
+              </div>
+              <button onClick={handleTransfer} className="lr-btn-primary">Transférer</button>
+            </div>
+          </section>
+        )}
+      </main>
+    </div>
   );
 }

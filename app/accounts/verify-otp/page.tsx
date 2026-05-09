@@ -25,29 +25,43 @@ function VerifyOTPForm() {
   };
 
   return (
-    <main className="container mx-auto py-12 px-4 max-w-md">
-      <h1 className="text-2xl font-bold mb-4 text-center">Vérification du code</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          placeholder="Email"
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input
-          type="text"
-          value={form.code}
-          onChange={(e) => setForm({ ...form, code: e.target.value })}
-          placeholder="Code reçu par e-mail"
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        {message && <p className="text-red-600 text-sm">{message}</p>}
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-          Vérifier
-        </button>
-      </form>
+    <main className="min-h-[80vh] bg-[var(--lr-steel-50)] flex items-center justify-center py-12 px-4">
+      <div className="w-full max-w-md bg-white border border-[var(--lr-border)] shadow-lg">
+        <div className="bg-[var(--lr-navy-900)] text-white px-6 py-5">
+          <span className="lr-eyebrow text-[var(--lr-orange-400)]">2/2 — Vérification</span>
+          <h1 className="font-display text-2xl font-bold uppercase tracking-tight mt-1">Vérification du code</h1>
+        </div>
+        <div className="lr-stripe" />
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Email</label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="Email"
+              className="lr-input"
+            />
+          </div>
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Code OTP</label>
+            <input
+              type="text"
+              value={form.code}
+              onChange={(e) => setForm({ ...form, code: e.target.value })}
+              placeholder="Code reçu par e-mail"
+              className="lr-input lr-mono text-center text-lg tracking-[0.4em]"
+              required
+            />
+          </div>
+          {message && (
+            <div className="border border-rose-300 bg-rose-50 px-3 py-2">
+              <p className="lr-mono text-xs text-rose-700">// {message}</p>
+            </div>
+          )}
+          <button type="submit" className="lr-btn-primary w-full">Vérifier</button>
+        </form>
+      </div>
     </main>
   );
 }

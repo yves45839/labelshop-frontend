@@ -25,24 +25,42 @@ export default function OrdersPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="p-4">Chargement…</p>;
+  if (loading) return <p className="lr-container py-12 lr-mono text-sm text-[var(--lr-steel-500)]">// Chargement…</p>;
 
   return (
-    <main className="container mx-auto py-8 px-4 space-y-4">
-      <h1 className="text-2xl font-bold text-center mb-4">Mes commandes</h1>
-      {orders.length === 0 ? (
-        <p>Pas encore de commande à votre actif.</p>
-      ) : (
-        <ul className="space-y-2">
-          {orders.map((order) => (
-            <li key={order.id} className="border p-3 rounded">
-              <p>Commande #{order.id}</p>
-              <p>Date : {new Date(order.created_at).toLocaleDateString()}</p>
-              <p>Total : {order.total} FCFA</p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </main>
+    <div className="bg-[var(--lr-steel-50)] min-h-screen">
+      <header className="bg-[var(--lr-navy-900)] text-white border-b border-[var(--lr-orange-500)]">
+        <div className="lr-container py-10">
+          <span className="lr-eyebrow text-[var(--lr-orange-400)]">Espace client · Historique</span>
+          <h1 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight mt-1">Mes commandes</h1>
+        </div>
+      </header>
+
+      <main className="lr-container py-10 max-w-3xl">
+        {orders.length === 0 ? (
+          <div className="bg-white border border-dashed border-[var(--lr-border)] py-12 text-center">
+            <span className="lr-mono text-xs text-[var(--lr-steel-400)]">// NO_ORDERS</span>
+            <p className="mt-2 font-display text-lg uppercase tracking-wide text-[var(--lr-navy-900)]">Pas encore de commande à votre actif.</p>
+          </div>
+        ) : (
+          <div className="bg-white border border-[var(--lr-border)] overflow-hidden">
+            <div className="bg-[var(--lr-navy-900)] text-white grid grid-cols-3 gap-3 px-5 py-3 font-display text-xs uppercase tracking-widest">
+              <span>Commande</span>
+              <span>Date</span>
+              <span className="text-right">Total</span>
+            </div>
+            <ul className="divide-y divide-[var(--lr-border)]">
+              {orders.map((order) => (
+                <li key={order.id} className="grid grid-cols-3 gap-3 px-5 py-4 text-sm hover:bg-[var(--lr-steel-50)] transition-colors">
+                  <span className="lr-mono font-semibold text-[var(--lr-navy-900)]">#{order.id}</span>
+                  <span className="text-[var(--lr-steel-700)] lr-mono text-xs">{new Date(order.created_at).toLocaleDateString()}</span>
+                  <span className="font-display font-bold text-[var(--lr-navy-900)] lr-tnum text-right">{order.total.toLocaleString()} <span className="text-xs text-[var(--lr-steel-500)]">FCFA</span></span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </main>
+    </div>
   );
 }

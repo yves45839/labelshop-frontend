@@ -6,56 +6,62 @@ import { motion } from 'framer-motion';
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-white px-6 text-center">
+    <main className="min-h-[80vh] bg-[var(--lr-steel-50)] flex items-center justify-center px-6 py-16">
+      <div className="max-w-2xl w-full bg-white border border-[var(--lr-border)] shadow-lg lr-corners overflow-hidden">
+        <div className="lr-stripe" />
+        <div className="grid md:grid-cols-[1fr_auto] gap-6 p-8 md:p-10 items-center">
+          <div>
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <span className="lr-mono text-xs text-[var(--lr-orange-600)] tracking-widest">// HTTP 404 · NOT_FOUND</span>
+              <h1 className="font-display text-6xl md:text-7xl font-bold text-[var(--lr-navy-900)] leading-none mt-2">
+                404
+              </h1>
+              <div className="lr-stripe mt-4 max-w-xs" />
+            </motion.div>
 
-      {/* Animation du titre 404 */}
-      <motion.h1
-        className="text-7xl font-extrabold text-orange-500 mb-4"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.6, type: 'spring' }}
-      >
-      </motion.h1>
+            <motion.p
+              className="mt-5 text-[var(--lr-steel-700)]"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              On ne retrouve plus cette page. Elle a peut-être déménagé.
+            </motion.p>
 
-      {/* Animation du texte */}
-      <motion.p
-        className="text-lg text-gray-700 mb-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        On ne retrouve plus cette page. Elle a peut-être déménagé.
-      </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="mt-6"
+            >
+              <Link href="/" className="lr-btn-primary">
+                Retour à l'accueil
+              </Link>
+            </motion.div>
+          </div>
 
-      {/* Animation de l’image */}
-      <motion.div
-        className="mb-8"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.4 }}
-      >
-        <Image
-          src="/images/404-illustration.svg" // Mets une image ici
-          alt="Erreur 404"
-          width={300}
-          height={300}
-          className="mx-auto"
-        />
-      </motion.div>
-
-      {/* Bouton animé */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-      >
-        <Link
-          href="/"
-          className="inline-block bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition"
-        >
-          Retour à l'accueil
-        </Link>
-      </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+            className="hidden md:block"
+          >
+            <div className="border border-[var(--lr-navy-900)] bg-[var(--lr-navy-900)] p-2">
+              <Image
+                src="/images/404-illustration.svg"
+                alt="Erreur 404"
+                width={220}
+                height={220}
+                className="invert opacity-80"
+              />
+            </div>
+          </motion.div>
+        </div>
+      </div>
     </main>
   );
 }
