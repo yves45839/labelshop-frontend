@@ -23,17 +23,17 @@ export default function RegisterPage() {
         form.displayName,
       );
       setMessage(
-        "Un email de vérification a été envoyé. Veuillez vérifier votre boîte mail."
+        "Un e-mail de vérification vient de partir. Jetez un œil à votre boîte (et au dossier spam, au cas où)."
       );
       setForm({ displayName: '', email: '', password: '' });
     } catch (err: any) {
-      setError(err.message || "Erreur lors de l'inscription");
+      setError(err.message || "L'inscription n'a pas abouti. Réessayez ou contactez-nous.");
     }
   };
 
   return (
     <main className="container mx-auto py-12 px-4 max-w-md">
-      <h1 className="text-2xl font-bold mb-4 text-center">Inscription</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">Créer un compte</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
@@ -69,7 +69,7 @@ export default function RegisterPage() {
         </button>
       </form>
       <p className="mt-4 text-sm text-center">
-        Déjà un compte ?{' '}
+        Vous avez déjà un compte ?{' '}
         <Link href="/accounts/login" className="text-blue-600 hover:underline">
           Connectez-vous
         </Link>

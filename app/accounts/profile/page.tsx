@@ -36,7 +36,7 @@ export default function ProfilePage() {
       removeCurrentUser();
       router.push('/');
     } catch {
-      setMessage('Erreur lors de la déconnexion');
+      setMessage("La déconnexion n'a pas abouti. Réessayez dans un instant.");
     }
   };
 
@@ -46,7 +46,7 @@ export default function ProfilePage() {
       removeCurrentUser();
       router.push('/');
     } catch {
-      setMessage('Erreur lors de la suppression du compte');
+      setMessage("La suppression du compte n'a pas pu se faire. Reconnectez-vous puis réessayez.");
     }
   };
 
@@ -54,10 +54,10 @@ export default function ProfilePage() {
     e.preventDefault();
     try {
       await firebaseUpdatePassword(password);
-      setMessage('Mot de passe mis à jour');
+      setMessage('Mot de passe mis à jour.');
       setPassword('');
     } catch {
-      setMessage('Erreur lors du changement de mot de passe');
+      setMessage("Le mot de passe n'a pas pu être modifié. Réessayez ou reconnectez-vous.");
     }
   };
 
@@ -90,9 +90,9 @@ export default function ProfilePage() {
       <div className="space-y-2">
         <h2 className="text-xl font-semibold">Mes commandes</h2>
         {loading ? (
-          <p>Chargement...</p>
+          <p>Chargement…</p>
         ) : orders.length === 0 ? (
-          <p>Aucune commande pour le moment.</p>
+          <p>Pas encore de commande à votre actif.</p>
         ) : (
           <ul className="space-y-2">
             {orders.map((order) => (

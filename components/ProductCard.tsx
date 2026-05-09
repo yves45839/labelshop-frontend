@@ -24,85 +24,92 @@ export default function ProductCard({
 }: ProductCardProps) {
   return (
     <article
-      className="group relative w-full sm:w-80"
+      className="group relative w-full sm:w-80 bg-white border border-[var(--lr-border)] hover:border-[var(--lr-navy-800)] transition-all duration-200 hover:shadow-[0_12px_32px_-16px_rgba(11,37,69,0.4)]"
       itemScope
       itemType="https://schema.org/Product"
     >
       <meta itemProp="sku" content={reference} />
       <link itemProp="url" href={whatsappLink} />
-      <div
-        className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-orange-500 via-pink-500 to-purple-700 opacity-60 blur-2xl transition duration-500 group-hover:opacity-80"
-        aria-hidden
-      />
-      <div className="relative flex h-full flex-col gap-6 rounded-[2rem] border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur-xl transition duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl">
-        <Link
-          href={`/products/${slug}`}
-          className="space-y-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-        >
-          <div className="flex justify-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-            <span className="rounded-full bg-slate-900/90 px-3 py-1 text-[0.65rem] font-medium tracking-[0.3em] text-white shadow-sm">
-              {reference}
-            </span>
-          </div>
 
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 shadow-inner">
-            <Image
-              src={imageUrl}
-              alt={name}
-              width={320}
-              height={240}
-              className="h-40 w-full object-contain transition duration-500 group-hover:scale-105"
-              itemProp="image"
-            />
-            <div
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),transparent_55%)]"
-              aria-hidden
-            />
-          </div>
+      {/* Header technique : référence + statut */}
+      <div className="flex items-center justify-between border-b border-[var(--lr-border)] bg-[var(--lr-steel-50)] px-4 py-2">
+        <span className="lr-mono text-[10px] font-semibold tracking-wider text-[var(--lr-navy-800)]">
+          REF · {reference}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block w-1.5 h-1.5 bg-emerald-500" />
+          <span className="lr-eyebrow text-emerald-700">Stock</span>
+        </span>
+      </div>
 
-          <div className="space-y-2 text-center">
-            <h3 className="text-lg font-bold uppercase tracking-[0.25em] text-slate-900" itemProp="name">
-              {name}
-            </h3>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-slate-400" itemProp="sku">
-              Réf. {reference}
-            </p>
+      <Link
+        href={`/products/${slug}`}
+        className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--lr-orange-500)] focus-visible:ring-offset-2"
+      >
+        {/* Visuel produit sur fond blueprint */}
+        <div className="relative bg-white p-6 lr-blueprint border-b border-[var(--lr-border)]">
+          <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[var(--lr-orange-500)]" />
+          <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[var(--lr-orange-500)]" />
+          <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[var(--lr-orange-500)]" />
+          <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[var(--lr-orange-500)]" />
+          <Image
+            src={imageUrl}
+            alt={name}
+            width={320}
+            height={240}
+            className="h-44 w-full object-contain transition duration-300 group-hover:scale-105"
+            itemProp="image"
+          />
+        </div>
+
+        {/* Bloc info */}
+        <div className="px-4 py-4 space-y-2">
+          <h3
+            className="font-display text-lg font-semibold uppercase tracking-wide leading-tight text-[var(--lr-navy-900)] line-clamp-2 min-h-[2.6rem]"
+            itemProp="name"
+          >
+            {name}
+          </h3>
+          <div className="flex items-baseline justify-between border-t border-dashed border-[var(--lr-border)] pt-2">
+            <span className="lr-eyebrow text-[var(--lr-steel-500)]">Prix HT</span>
             <div
-              className="text-3xl font-black text-slate-900"
+              className="font-display text-2xl font-bold text-[var(--lr-navy-900)] lr-tnum"
               itemProp="offers"
               itemScope
               itemType="https://schema.org/Offer"
             >
               <meta itemProp="priceCurrency" content="XOF" />
-              <span itemProp="price">{price.toLocaleString()}</span> FCFA
+              <span itemProp="price">{price.toLocaleString()}</span>
+              <span className="text-xs font-normal text-[var(--lr-steel-500)] ml-1.5 tracking-wider">FCFA</span>
             </div>
           </div>
-        </Link>
-
-        <div className="grid gap-3 sm:grid-cols-2">
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group/whatsapp inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200/40 transition duration-300 hover:shadow-emerald-300/60 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
-            itemProp="potentialAction"
-            itemScope
-            itemType="https://schema.org/BuyAction"
-          >
-            <meta itemProp="target" content={whatsappLink} />
-            <FaWhatsapp className="text-lg transition-transform duration-300 group-hover/whatsapp:scale-110" />
-            Acheter
-          </a>
-          <button
-            type="button"
-            onClick={onAddToCart}
-            className="group/cart inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/70 px-4 py-3 text-sm font-semibold text-orange-600 shadow-lg shadow-orange-100/40 transition duration-300 hover:-translate-y-0.5 hover:border-orange-200 hover:text-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-300/60"
-            aria-label={`Ajouter ${name} au panier`}
-          >
-            <FaShoppingCart className="text-lg transition-transform duration-300 group-hover/cart:scale-110" />
-            Ajouter au panier
-          </button>
         </div>
+      </Link>
+
+      {/* Actions */}
+      <div className="grid grid-cols-2 border-t border-[var(--lr-border)]">
+        <a
+          href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 bg-emerald-600 px-3 py-3 font-display text-xs font-semibold uppercase tracking-widest text-white hover:bg-emerald-700 transition-colors border-r border-emerald-700"
+          itemProp="potentialAction"
+          itemScope
+          itemType="https://schema.org/BuyAction"
+        >
+          <meta itemProp="target" content={whatsappLink} />
+          <FaWhatsapp className="text-base" />
+          Acheter
+        </a>
+        <button
+          type="button"
+          onClick={onAddToCart}
+          className="flex items-center justify-center gap-2 bg-[var(--lr-navy-900)] px-3 py-3 font-display text-xs font-semibold uppercase tracking-widest text-white hover:bg-[var(--lr-orange-600)] transition-colors"
+          aria-label={`Ajouter ${name} au panier`}
+        >
+          <FaShoppingCart className="text-base" />
+          Ajouter au panier
+        </button>
       </div>
     </article>
   );

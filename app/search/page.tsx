@@ -51,8 +51,9 @@ export default async function SearchPage({
   const query = q.toString().trim();
   if (!query) {
     return (
-      <main className="p-4 text-center">
-        <p>Saisissez un terme dans la barre de recherche.</p>
+      <main className="lr-container py-16 text-center">
+        <span className="lr-mono text-xs text-[var(--lr-orange-600)]">// EMPTY_QUERY</span>
+        <p className="mt-2 font-display text-xl font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">Saisissez un terme dans la barre de recherche.</p>
       </main>
     );
   }

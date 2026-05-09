@@ -58,8 +58,8 @@ export async function generateMetadata(
   const description =
     product.meta_description ||
     (isHikvision
-      ? `Référence Hikvision ${product.default_code || product.slug} : ${product.name}. Achat, configuration experte et support certifié en Côte d'Ivoire avec Label Retail.`
-      : `${brand} ${product.name} disponible en Côte d'Ivoire. Référence ${product.default_code || product.slug}. Livraison sécurisée et support technique par nos équipes locales.`);
+      ? `${product.name}, référence Hikvision ${product.default_code || product.slug}. Disponible chez Label Retail à Abidjan, configuration et support assurés par nos techniciens.`
+      : `${brand} ${product.name}, en stock à Abidjan. Référence ${product.default_code || product.slug}. Livraison suivie et support technique par notre équipe locale.`);
 
   const priceMeta: Metadata['other'] = {
     'product:brand': brand,
@@ -125,9 +125,10 @@ export default async function ProductDetailPage({
 
   if (!product) {
     return (
-      <div className="text-center py-20">
-        <h1 className="text-2xl font-bold">Produit introuvable</h1>
-        <p>Le produit demandé n'existe pas ou a été supprimé.</p>
+      <div className="lr-container py-24 text-center">
+        <span className="lr-mono text-xs text-[var(--lr-orange-600)]">// 404 / NOT_FOUND</span>
+        <h1 className="font-display text-3xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)] mt-3">Produit introuvable</h1>
+        <p className="mt-3 text-[var(--lr-steel-700)]">Cette référence n'est plus en ligne. Elle a peut-être changé de nom ou été retirée.</p>
       </div>
     );
   }
@@ -136,7 +137,7 @@ export default async function ProductDetailPage({
   const brand = product.brand?.trim() || 'Hikvision';
   const isHikvision = brand.toLowerCase().includes('hikvision');
   const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
-    `Je suis intéressé par le produit : ${product.name} (Réf : ${product.default_code})`
+    `Bonjour Label Retail, je m'intéresse au produit ${product.name} (Réf : ${product.default_code}). Pouvez-vous m'en dire plus ?`
   )}`;
   const categoryName = mapProductCategory(product);
   const categoryChips = Array.from(
@@ -157,9 +158,9 @@ export default async function ProductDetailPage({
       ? `${product.list_price.toLocaleString()} FCFA`
       : null;
   const trustBadge = {
-    label: 'Référence vérifiée Label Retail',
+    label: 'Vérifié par Label Retail',
     className:
-      'bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-400/40 shadow-[0_0_40px_-15px_rgba(16,185,129,0.7)]',
+      'bg-emerald-50 text-emerald-700 border border-emerald-300',
   };
 
   const infoHighlights = [
@@ -170,28 +171,28 @@ export default async function ProductDetailPage({
 
   const seoIntro =
     product.meta_description ||
-    `${brand} ${product.name} livré rapidement en Côte d'Ivoire. Référence ${product.default_code || product.slug}. Support local, configuration optimisée et conseils sécurité.`;
+    `${brand} ${product.name}, en stock à Abidjan. Référence ${product.default_code || product.slug}. Nos techniciens s'occupent du paramétrage et restent joignables après installation.`;
 
   const serviceHighlights = [
     {
-      title: 'Livraison sécurisée et suivie',
-      detail: "Expédition rapide à Abidjan et en région avec numéro de suivi et emballage renforcé.",
+      title: 'Livraison suivie',
+      detail: "Expédition depuis Abidjan, avec numéro de suivi et emballage renforcé pour les zones reculées.",
     },
     {
       title: 'Configuration & maintenance',
       detail:
-        'Assistance pour le paramétrage, les mises à jour firmware et l’intégration réseau par nos techniciens certifiés.',
+        "Nos techniciens certifiés s'occupent du paramétrage, des mises à jour firmware et de l'intégration sur votre réseau.",
     },
     {
-      title: isHikvision ? 'Compatibilité Hikvision garantie' : 'Compatibilité écosystème vidéosécurité',
+      title: isHikvision ? 'Compatibilité Hikvision garantie' : "Compatibilité avec votre installation",
       detail: isHikvision
-        ? "Fonctionne avec les NVR, caméras et accessoires Hikvision pour une surveillance homogène."
-        : 'Intégration possible dans votre infrastructure existante (NVR, stockage, réseau PoE).',
+        ? "Fonctionne avec les NVR, caméras et accessoires Hikvision déjà en place."
+        : "On vérifie l'intégration avec votre infrastructure (NVR, stockage, réseau PoE) avant de livrer.",
     },
     {
-      title: 'Contenus experts pour le SEO',
+      title: 'Conseil avant achat',
       detail:
-        'Guides, comparatifs et fiches techniques enrichies pour obtenir des extraits enrichis et rassurer vos clients.',
+        "Un doute sur le modèle, le nombre d'unités ou le câblage ? On en discute avant la commande.",
     },
   ];
 
@@ -199,23 +200,23 @@ export default async function ProductDetailPage({
     {
       question: 'Quels sont les délais de livraison ?',
       answer:
-        "Expédition rapide depuis Abidjan avec suivi : la plupart des commandes sont livrées sous 24 à 72 heures selon la localité.",
+        "Comptez 24 à 72 heures selon la localité. Pour Abidjan, c'est en général le jour même ou le lendemain.",
     },
     {
       question: 'Le produit est-il compatible avec mon enregistreur ?',
       answer: isHikvision
-        ? 'Compatibilité native avec les NVR Hikvision. Nous vérifions aussi l’intégration avec vos accessoires existants.'
-        : 'Nous confirmons la compatibilité avec votre NVR ou solution de stockage avant tout déploiement.',
+        ? "Oui, c'est nativement compatible avec les NVR Hikvision. On vérifie aussi avec vos accessoires existants."
+        : "On confirme la compatibilité avec votre NVR ou votre solution de stockage avant de lancer le déploiement.",
     },
     {
       question: "Proposez-vous de l'assistance après l'achat ?",
       answer:
-        'Oui, support local pour la configuration, la maintenance préventive et les mises à jour de sécurité.',
+        "Oui. On reste joignables pour la configuration, la maintenance préventive et les mises à jour de sécurité.",
     },
     {
-      question: 'Comment bénéficier de conseils personnalisés ?',
+      question: 'Comment obtenir des conseils personnalisés ?',
       answer:
-        'Partagez votre projet (site, budget, usage) et nous envoyons une préconisation détaillée avec guide de pose et checklist réseau.',
+        "Décrivez-nous votre site (taille, usage, budget). On vous renvoie une préconisation, un guide de pose et une checklist réseau.",
     },
   ];
 
@@ -291,286 +292,302 @@ export default async function ProductDetailPage({
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-16 px-6 text-white">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10">
-        <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 px-8 py-10 shadow-[0_45px_100px_-40px_rgba(56,189,248,0.35)] backdrop-blur">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.25),_transparent_55%)]" />
-          <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] xl:gap-16">
-            <div className="flex flex-col justify-between gap-8">
-              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-cyan-100/80">
-                <Link href="/" className="hover:text-white" prefetch={false}>
-                  Accueil
+    <div className="min-h-screen bg-[var(--lr-steel-50)]">
+      {/* Header navy avec breadcrumb */}
+      <header className="bg-[var(--lr-navy-900)] text-white border-b border-[var(--lr-orange-500)]">
+        <div className="lr-container py-4">
+          <nav className="flex items-center gap-2 lr-mono text-[11px] text-white/60 flex-wrap">
+            <Link href="/" className="hover:text-[var(--lr-orange-400)]" prefetch={false}>Accueil</Link>
+            <span className="text-white/30">/</span>
+            <Link href="/products" className="hover:text-[var(--lr-orange-400)]" prefetch={false}>Produits</Link>
+            {categoryName && (
+              <>
+                <span className="text-white/30">/</span>
+                <Link
+                  href={`/products/categories#${categoryName.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="hover:text-[var(--lr-orange-400)]"
+                  prefetch={false}
+                >
+                  {categoryName}
                 </Link>
-                <span className="text-cyan-300/60">/</span>
-                <Link href="/products" className="hover:text-white" prefetch={false}>
-                  Produits
-                </Link>
-                {categoryName && (
-                  <>
-                    <span className="text-cyan-300/60">/</span>
-                    <Link
-                      href={`/products/categories#${categoryName.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="hover:text-white"
-                      prefetch={false}
-                    >
-                      {categoryName}
-                    </Link>
-                  </>
-                )}
-                <span className="text-cyan-300/60">/</span>
-                <span className="text-white/90">{product.name}</span>
-              </div>
+              </>
+            )}
+            <span className="text-white/30">/</span>
+            <span className="text-white">{product.name}</span>
+          </nav>
+        </div>
+      </header>
 
-              <div>
-                <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-200">
-                  <span
-                    className={`inline-flex items-center rounded-full px-3 py-1 backdrop-blur transition ${trustBadge.className}`}
-                  >
-                    {trustBadge.label}
-                  </span>
-                  {categoryChips.map((category) => (
-                    <span
-                      key={category}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs uppercase tracking-wide text-slate-100"
-                    >
-                      <span className="h-2 w-2 rounded-full bg-cyan-400" />
-                      {category}
-                    </span>
-                  ))}
-                </div>
+      <main className="lr-container py-10">
+        {/* Bloc principal : visuel + identité + achat */}
+        <section className="bg-white border border-[var(--lr-border)] shadow-sm">
+          <div className="lr-stripe" />
+          <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
 
-                <h1 className="mt-6 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
-                  {product.name}
-                </h1>
-                <p className="mt-4 max-w-2xl text-base text-slate-200/80 sm:text-lg">
-                  {seoIntro}
-                </p>
-                {isHikvision && (
-                  <div className="mt-6 space-y-2 rounded-2xl border border-red-400/30 bg-red-500/10 p-4 text-red-50 shadow-[0_30px_70px_-50px_rgba(248,113,113,0.6)]">
-                    <p className="text-sm font-semibold uppercase tracking-[0.15em] text-red-100">
-                      Optimisé pour Hikvision
-                    </p>
-                    <p className="text-sm text-red-50/90">
-                      Référence officielle {product.default_code || product.slug} disponible immédiatement chez Label Retail.
-                      Livraison soignée en Côte d'Ivoire avec assistance à la configuration.
-                    </p>
-                    <ul className="list-disc space-y-1 pl-4 text-sm text-red-50/90">
-                      <li>Compatibilité garantie avec l'écosystème Hikvision (NVR, caméras, accessoires).</li>
-                      <li>Assistance locale pour la configuration, la maintenance et les mises à jour firmware.</li>
-                      <li>Conseils personnalisés pour optimiser la sécurité et la visibilité de vos projets.</li>
-                    </ul>
-                  </div>
-                )}
-
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  {serviceHighlights.map((item) => (
-                    <div
-                      key={item.title}
-                      className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-100 shadow-[0_20px_45px_-35px_rgba(14,165,233,0.65)]"
-                    >
-                      <p className="text-[11px] uppercase tracking-[0.28em] text-slate-300/60">{item.title}</p>
-                      <p className="mt-2 text-slate-200/80">{item.detail}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-6 shadow-inner">
-                <div className="absolute right-6 top-6 h-16 w-16 rounded-full bg-cyan-400/10 blur-xl" />
-                <div className="relative grid gap-4 sm:grid-cols-3">
-                  {infoHighlights.map((info) => (
-                    <div
-                      key={info.label}
-                      className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-100 shadow-[0_20px_45px_-35px_rgba(14,165,233,0.65)]"
-                    >
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-300/60">
-                        {info.label}
-                      </p>
-                      <p className="mt-2 font-semibold text-white">{info.value || '—'}</p>
-                    </div>
-                  ))}
-                </div>
+            {/* Visuel */}
+            <div className="relative bg-white p-8 lr-blueprint border-r border-[var(--lr-border)]">
+              <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-[var(--lr-orange-500)]" />
+              <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-[var(--lr-orange-500)]" />
+              <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-[var(--lr-orange-500)]" />
+              <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-[var(--lr-orange-500)]" />
+              <img
+                src={imageUrl}
+                alt={product.name}
+                className="h-96 w-full object-contain"
+              />
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 lr-mono text-[10px] text-[var(--lr-navy-800)] bg-white/80 px-2 py-0.5">
+                REF · {product.default_code || product.slug}
               </div>
             </div>
 
-            <div className="relative flex flex-col gap-6 rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/70 via-slate-900/30 to-slate-900/70 p-8 shadow-[0_45px_80px_-50px_rgba(59,130,246,0.55)]">
-              <div className="absolute -right-20 top-8 hidden h-48 w-48 rounded-full bg-cyan-500/30 blur-3xl lg:block" />
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/20">
-                <img
-                  src={imageUrl}
-                  alt={product.name}
-                  className="h-80 w-full object-contain object-center bg-gradient-to-br from-slate-900 via-slate-950 to-black"
+            {/* Bloc identité + actions */}
+            <div className="p-8 space-y-6">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className={`inline-flex items-center px-3 py-1 lr-eyebrow ${trustBadge.className}`}>
+                  {trustBadge.label}
+                </span>
+                {categoryChips.slice(0, 3).map((category) => (
+                  <span key={category} className="lr-tag">{category}</span>
+                ))}
+              </div>
+
+              <div>
+                <span className="lr-eyebrow text-[var(--lr-orange-700)]">{brand}</span>
+                <h1 className="font-display text-3xl md:text-4xl font-bold uppercase leading-tight tracking-tight text-[var(--lr-navy-900)] mt-2">
+                  {product.name}
+                </h1>
+              </div>
+
+              <p className="text-sm md:text-base text-[var(--lr-steel-700)] leading-relaxed border-l-2 border-[var(--lr-orange-500)] pl-4">
+                {seoIntro}
+              </p>
+
+              {/* Bloc prix */}
+              <div className="flex items-end justify-between border-y border-[var(--lr-border)] py-4">
+                <div>
+                  <span className="lr-eyebrow text-[var(--lr-steel-500)]">Prix indicatif</span>
+                  {priceDisplay ? (
+                    <div className="font-display text-4xl font-bold text-[var(--lr-navy-900)] lr-tnum mt-1">
+                      {priceDisplay}
+                    </div>
+                  ) : (
+                    <div className="font-display text-lg font-semibold text-[var(--lr-navy-900)] mt-1">
+                      Écrivez-nous pour obtenir un devis sur mesure.
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-emerald-500" />
+                  <span className="lr-eyebrow text-emerald-700">En stock</span>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="grid gap-3 sm:grid-cols-2">
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 px-5 py-3 font-display text-sm font-semibold uppercase tracking-widest text-white border border-emerald-700 transition-colors"
+                >
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                    alt="WhatsApp"
+                    className="h-5 w-5"
+                  />
+                  Discuter sur WhatsApp
+                </a>
+                <AddToCart
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    imageUrl,
+                    price: product.list_price,
+                  }}
                 />
               </div>
 
-              <div className="space-y-4">
-                {priceDisplay ? (
-                  <p className="text-3xl font-semibold text-white">
-                    <span className="block text-sm font-medium uppercase tracking-[0.3em] text-slate-300/70">
-                      Prix indicatif
-                    </span>
-                    {priceDisplay}
-                  </p>
-                ) : (
-                  <p className="text-lg font-medium text-slate-200">
-                    Contactez-nous pour obtenir un devis personnalisé.
-                  </p>
-                )}
+              <p className="lr-mono text-xs text-[var(--lr-steel-500)] tracking-wide">
+                // Livraison rapide partout en Côte d'Ivoire. Paramétrage inclus pour un démarrage sans accroc.
+              </p>
 
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <a
-                    href={whatsappLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center justify-center gap-2 rounded-full border border-emerald-400/60 bg-emerald-500/20 px-5 py-3 text-sm font-semibold uppercase tracking-wide text-emerald-100 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-400/30 hover:text-white"
-                  >
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-                      alt="WhatsApp"
-                      className="h-5 w-5"
-                    />
-                    Discuter sur WhatsApp
-                  </a>
-                  <div className="rounded-full border border-white/15 bg-white/5 p-[2px]">
-                    <AddToCart
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        imageUrl,
-                        price: product.list_price,
-                      }}
-                    />
+              {/* Specs grid */}
+              <div className="grid grid-cols-3 gap-px bg-[var(--lr-border)] border border-[var(--lr-border)]">
+                {infoHighlights.map((info) => (
+                  <div key={info.label} className="bg-white p-3">
+                    <p className="lr-eyebrow text-[var(--lr-steel-500)]">{info.label}</p>
+                    <p className="mt-1 font-display text-sm font-bold uppercase text-[var(--lr-navy-900)]">{info.value || '—'}</p>
                   </div>
-                </div>
-
-                <p className="text-sm text-slate-300/90">
-                  Livraison rapide sur toute la Côte d'Ivoire et paramétrage assisté pour un démarrage immédiat.
-                </p>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
-        <section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-slate-100 shadow-[0_35px_80px_-45px_rgba(14,165,233,0.65)] backdrop-blur">
-            <h2 className="text-xl font-semibold text-white">Description détaillée</h2>
-              <div className="prose prose-invert mt-4 max-w-none text-base leading-relaxed text-slate-200/90">
+        {/* Bandeau Hikvision */}
+        {isHikvision && (
+          <section className="mt-6 bg-[var(--lr-navy-900)] text-white border border-[var(--lr-orange-500)]">
+            <div className="grid md:grid-cols-[auto_1fr] gap-6 p-6 md:p-8">
+              <div className="flex flex-col items-start gap-2">
+                <span className="lr-mono text-[10px] text-[var(--lr-orange-400)]">// HIKVISION OFFICIEL</span>
+                <h2 className="font-display text-xl font-bold uppercase tracking-wide">Référence Hikvision officielle</h2>
+              </div>
+              <div className="space-y-3 text-sm text-white/80">
                 <p>
-                  {product.description && product.description !== 'False'
-                    ? product.description
-                    : product.meta_description || seoIntro}
+                  {product.default_code || product.slug} : on a la pièce en stock chez nous, prête à être expédiée
+                  partout en Côte d'Ivoire. On vous accompagne ensuite pour la mise en route.
                 </p>
-                <ul className="mt-4 space-y-2 text-slate-100">
-                  <li>Livraison rapide en Côte d'Ivoire avec suivi et emballage renforcé.</li>
-                  <li>Assistance pour la configuration réseau, l'accès mobile et les mises à jour de sécurité.</li>
-                  <li>
-                    Référence {product.default_code || product.slug} avec vérification de compatibilité{' '}
-                    {isHikvision ? 'Hikvision (NVR, caméras, accessoires).' : 'de votre infrastructure existante.'}
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2 border-l-2 border-[var(--lr-orange-500)] pl-3">
+                    <span>Compatible avec votre écosystème Hikvision (NVR, caméras, accessoires).</span>
                   </li>
-                  <li>Conseils d'experts et guides pratiques pour optimiser le référencement et la mise en service.</li>
+                  <li className="flex items-start gap-2 border-l-2 border-[var(--lr-orange-500)] pl-3">
+                    <span>Configuration, maintenance et mises à jour firmware assurées par nos techniciens.</span>
+                  </li>
+                  <li className="flex items-start gap-2 border-l-2 border-[var(--lr-orange-500)] pl-3">
+                    <span>Conseil sur le placement, le réseau et la sécurité de votre installation.</span>
+                  </li>
                 </ul>
               </div>
             </div>
+          </section>
+        )}
 
-          <div className="flex flex-col gap-6">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_70px_-50px_rgba(56,189,248,0.55)] backdrop-blur">
-              <h3 className="text-lg font-semibold text-white">Informations complémentaires</h3>
-              <dl className="mt-4 space-y-3 text-sm text-slate-200/80">
-                <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                  <dt className="uppercase tracking-[0.3em] text-xs text-slate-300/70">
-                    SKU
-                  </dt>
-                  <dd className="font-semibold text-white">{product.default_code || '—'}</dd>
+        {/* Service highlights */}
+        <section className="mt-6 grid gap-px bg-[var(--lr-border)] border border-[var(--lr-border)] sm:grid-cols-2 lg:grid-cols-4">
+          {serviceHighlights.map((item, idx) => (
+            <div key={item.title} className="bg-white p-5 relative">
+              <span className="absolute top-0 left-0 h-0.5 w-10 bg-[var(--lr-orange-500)]" />
+              <span className="lr-mono text-[10px] text-[var(--lr-steel-400)]">SERV.0{idx + 1}</span>
+              <h3 className="mt-2 font-display text-base font-bold uppercase tracking-wide text-[var(--lr-navy-900)] leading-tight">{item.title}</h3>
+              <p className="mt-2 text-xs text-[var(--lr-steel-700)] leading-relaxed">{item.detail}</p>
+            </div>
+          ))}
+        </section>
+
+        {/* Description + sidebar */}
+        <section className="mt-6 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="bg-white border border-[var(--lr-border)] p-6 md:p-8">
+            <div className="lr-section-heading mb-5">
+              <span className="bar" />
+              <h2 className="font-display text-xl font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">Description détaillée</h2>
+            </div>
+            <div className="text-base leading-relaxed text-[var(--lr-steel-700)] space-y-4">
+              <p>
+                {product.description && product.description !== 'False'
+                  ? product.description
+                  : product.meta_description || seoIntro}
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-start gap-2 text-sm border-l-2 border-[var(--lr-orange-500)] pl-3">Livraison suivie en Côte d'Ivoire, emballage renforcé pour les longs trajets.</li>
+                <li className="flex items-start gap-2 text-sm border-l-2 border-[var(--lr-border)] pl-3">Aide à la configuration réseau, à l'accès mobile et aux mises à jour de sécurité.</li>
+                <li className="flex items-start gap-2 text-sm border-l-2 border-[var(--lr-border)] pl-3">
+                  Référence {product.default_code || product.slug}, compatibilité vérifiée{' '}
+                  {isHikvision ? "avec l'écosystème Hikvision (NVR, caméras, accessoires)." : 'avec votre infrastructure existante.'}
+                </li>
+                <li className="flex items-start gap-2 text-sm border-l-2 border-[var(--lr-border)] pl-3">Préconisations et guides de pose rédigés par nos techniciens, pas par un robot.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-white border border-[var(--lr-border)] p-6 md:p-8">
+              <div className="lr-section-heading mb-5">
+                <span className="bar" />
+                <h3 className="font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">Informations complémentaires</h3>
+              </div>
+              <dl className="space-y-0 border-t border-[var(--lr-border)]">
+                <div className="grid grid-cols-[120px_1fr] gap-3 py-3 border-b border-[var(--lr-border)]">
+                  <dt className="lr-eyebrow text-[var(--lr-steel-500)]">SKU</dt>
+                  <dd className="lr-mono text-sm font-semibold text-[var(--lr-navy-900)]">{product.default_code || '—'}</dd>
                 </div>
-                <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                  <dt className="uppercase tracking-[0.3em] text-xs text-slate-300/70">
-                    Marque
-                  </dt>
-                  <dd className="font-semibold text-white">{product.brand || 'Hikvision'}</dd>
+                <div className="grid grid-cols-[120px_1fr] gap-3 py-3 border-b border-[var(--lr-border)]">
+                  <dt className="lr-eyebrow text-[var(--lr-steel-500)]">Marque</dt>
+                  <dd className="text-sm font-semibold text-[var(--lr-navy-900)]">{product.brand || 'Hikvision'}</dd>
                 </div>
-                <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                  <dt className="uppercase tracking-[0.3em] text-xs text-slate-300/70">
-                    Catégorie
-                  </dt>
-                  <dd className="font-semibold text-white">{categoryName || '—'}</dd>
+                <div className="grid grid-cols-[120px_1fr] gap-3 py-3 border-b border-[var(--lr-border)]">
+                  <dt className="lr-eyebrow text-[var(--lr-steel-500)]">Catégorie</dt>
+                  <dd className="text-sm font-semibold text-[var(--lr-navy-900)]">{categoryName || '—'}</dd>
                 </div>
-                <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                  <dt className="uppercase tracking-[0.3em] text-xs text-slate-300/70">
-                    Support
-                  </dt>
-                  <dd className="font-semibold text-white">Réponse sous 24h avec préconisation réseau</dd>
+                <div className="grid grid-cols-[120px_1fr] gap-3 py-3 border-b border-[var(--lr-border)]">
+                  <dt className="lr-eyebrow text-[var(--lr-steel-500)]">Support</dt>
+                  <dd className="text-sm text-[var(--lr-navy-900)]">Réponse sous 24 h avec préconisation réseau</dd>
                 </div>
-                <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                  <dt className="uppercase tracking-[0.3em] text-xs text-slate-300/70">
-                    Livraison
-                  </dt>
-                  <dd className="font-semibold text-white">Suivi colis sur Abidjan et l'intérieur du pays</dd>
+                <div className="grid grid-cols-[120px_1fr] gap-3 py-3">
+                  <dt className="lr-eyebrow text-[var(--lr-steel-500)]">Livraison</dt>
+                  <dd className="text-sm text-[var(--lr-navy-900)]">Colis suivi à Abidjan et en région</dd>
                 </div>
               </dl>
             </div>
 
-            <div className="rounded-3xl border border-cyan-400/40 bg-cyan-500/10 p-8 text-cyan-50 shadow-[0_30px_70px_-45px_rgba(14,165,233,0.55)]">
-              <h3 className="text-lg font-semibold">Besoin d'un accompagnement ?</h3>
-              <p className="mt-3 text-sm text-cyan-50/80">
-                Nos experts Label Retail vous conseillent sur le choix, la configuration et la maintenance de vos équipements de
-                sécurité.
+            <div className="bg-[var(--lr-navy-900)] text-white border border-[var(--lr-navy-800)] p-6 md:p-8 relative">
+              <span className="absolute top-0 left-0 h-1 w-16 bg-[var(--lr-orange-500)]" />
+              <h3 className="font-display text-lg font-bold uppercase tracking-wide">Vous voulez en parler à quelqu'un ?</h3>
+              <p className="mt-3 text-sm text-white/70 leading-relaxed">
+                Notre équipe vous aide à choisir, à configurer et à entretenir votre matériel. Un appel et c'est plié.
               </p>
               <a
                 href="tel:+2250788899965"
-                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-cyan-100 transition hover:text-white"
+                className="mt-5 inline-flex items-center gap-2 lr-mono text-sm font-semibold text-[var(--lr-orange-400)] hover:text-white border-b border-[var(--lr-orange-400)] hover:border-white pb-1 transition-colors"
               >
-                <span className="inline-flex h-2 w-2 rounded-full bg-cyan-300" />
-                Appeler le service commercial (+225 07 888 999 65)
+                <span className="inline-flex h-2 w-2 bg-[var(--lr-orange-400)]" />
+                Appeler le service commercial (+225 07 88 89 99 65)
               </a>
             </div>
 
-            <div className="rounded-3xl border border-white/15 bg-white/5 p-8 text-slate-100 shadow-[0_30px_70px_-50px_rgba(56,189,248,0.55)] backdrop-blur">
-              <h3 className="text-lg font-semibold text-white">FAQ rapide</h3>
-              <dl className="mt-4 space-y-4 text-sm text-slate-200/80">
+            <div className="bg-white border border-[var(--lr-border)] p-6 md:p-8">
+              <div className="lr-section-heading mb-5">
+                <span className="bar" />
+                <h3 className="font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">FAQ rapide</h3>
+              </div>
+              <dl className="space-y-3 text-sm">
                 {faqItems.map((item) => (
-                  <div
-                    key={item.question}
-                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
-                  >
-                    <dt className="font-semibold text-white">{item.question}</dt>
-                    <dd className="mt-1 text-slate-200/80">{item.answer}</dd>
+                  <div key={item.question} className="border-l-2 border-[var(--lr-orange-500)] pl-4 py-1">
+                    <dt className="font-display font-semibold uppercase tracking-wide text-[var(--lr-navy-900)] text-sm">{item.question}</dt>
+                    <dd className="mt-1 text-[var(--lr-steel-700)]">{item.answer}</dd>
                   </div>
                 ))}
               </dl>
             </div>
 
-            <div className="rounded-3xl border border-white/15 bg-white/5 p-8 text-slate-100 shadow-[0_30px_70px_-50px_rgba(56,189,248,0.55)] backdrop-blur">
-              <h3 className="text-lg font-semibold text-white">Ressources utiles</h3>
-              <p className="mt-2 text-sm text-slate-200/80">
-                Explorez nos guides et catégories pour préparer votre projet vidéosurveillance en Côte d'Ivoire.
+            <div className="bg-white border border-[var(--lr-border)] p-6 md:p-8">
+              <div className="lr-section-heading mb-5">
+                <span className="bar" />
+                <h3 className="font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">Pour aller plus loin</h3>
+              </div>
+              <p className="text-sm text-[var(--lr-steel-700)]">
+                Quelques ressources pour préparer votre projet vidéosurveillance en Côte d'Ivoire.
               </p>
-              <ul className="mt-4 space-y-2 text-sm text-cyan-100">
+              <ul className="mt-4 space-y-2 text-sm">
                 <li>
-                  <Link href="/blogs" className="hover:text-white" prefetch={false}>
-                    Conseils et tutoriels sécurité (blog Label Retail)
+                  <Link href="/blogs" className="lr-link flex items-center gap-2" prefetch={false}>
+                    <span className="text-[var(--lr-orange-500)]">›</span>
+                    Notre blog : conseils et retours de chantier
                   </Link>
                 </li>
                 <li>
-                  <Link href="/products/categories" className="hover:text-white" prefetch={false}>
-                    Voir toutes nos catégories produits
+                  <Link href="/products/categories" className="lr-link flex items-center gap-2" prefetch={false}>
+                    <span className="text-[var(--lr-orange-500)]">›</span>
+                    Toutes les catégories de produits
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="hover:text-white" prefetch={false}>
-                    Découvrir nos certifications et équipes locales
+                  <Link href="/about" className="lr-link flex items-center gap-2" prefetch={false}>
+                    <span className="text-[var(--lr-orange-500)]">›</span>
+                    L'équipe et nos certifications
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
         </section>
-      </div>
+      </main>
 
-      {/* ✅ JSON-LD SEO */}
+      {/* JSON-LD SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-    </main>
+    </div>
   );
 }

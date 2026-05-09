@@ -79,7 +79,7 @@ export default function InventoryPage() {
     }
   };
 
-  if (loading) return <p className="p-4">Chargement...</p>;
+  if (loading) return <p className="p-4">Chargement…</p>;
 
   return (
     <main className="container mx-auto py-8 px-4 space-y-6">
@@ -179,7 +179,7 @@ export default function InventoryPage() {
               onChange={(e) => setTransfer({ ...transfer, from: e.target.value })}
               className="border px-2 py-1 rounded"
             >
-              <option value="">De...</option>
+              <option value="">Depuis…</option>
               {sites.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
@@ -191,7 +191,7 @@ export default function InventoryPage() {
               onChange={(e) => setTransfer({ ...transfer, to: e.target.value })}
               className="border px-2 py-1 rounded"
             >
-              <option value="">Vers...</option>
+              <option value="">Vers…</option>
               {sites.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}

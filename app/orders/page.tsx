@@ -25,13 +25,13 @@ export default function OrdersPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="p-4">Chargement...</p>;
+  if (loading) return <p className="p-4">Chargement…</p>;
 
   return (
     <main className="container mx-auto py-8 px-4 space-y-4">
       <h1 className="text-2xl font-bold text-center mb-4">Mes commandes</h1>
       {orders.length === 0 ? (
-        <p>Aucune commande pour le moment.</p>
+        <p>Pas encore de commande à votre actif.</p>
       ) : (
         <ul className="space-y-2">
           {orders.map((order) => (

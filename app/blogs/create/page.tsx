@@ -43,15 +43,15 @@ export default function CreateBlogPage() {
       const blog = await createBlog(form);
       router.push(`/blogs/${blog.id}`);
     } catch {
-      alert("Erreur lors de la création du blog");
+      alert("L'article n'a pas pu être créé. Réessayez ou contactez l'admin.");
     }
   };
 
-  if (loading) return <p className="p-4">Chargement...</p>;
+  if (loading) return <p className="p-4">Chargement…</p>;
 
   return (
     <main className="container mx-auto py-8 px-4 space-y-4 max-w-xl">
-      <h1 className="text-2xl font-bold text-center mb-4">Nouveau Blog</h1>
+      <h1 className="text-2xl font-bold text-center mb-4">Nouvel article</h1>
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           value={title}

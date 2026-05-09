@@ -4,7 +4,7 @@ import ProductsByCategoryClient from './ProductsByCategoryClient';
 export const metadata: Metadata = {
   title: 'Catégories de produits | Vidéosurveillance & sécurité Label Retail',
   description:
-    "Découvrez les caméras, enregistreurs, alarmes et accessoires classés par catégorie pour une installation rapide en Côte d'Ivoire.",
+    "Caméras, enregistreurs, alarmes et accessoires rangés par catégorie. Pour trouver vite ce qu'il vous faut, en Côte d'Ivoire.",
   keywords: [
     'catégories vidéosurveillance',
     'caméras de sécurité Côte d\'Ivoire',
@@ -16,14 +16,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Catalogue par catégorie | Label Retail',
     description:
-      "Parcourez nos solutions de sécurité par catégorie : caméras, enregistreurs, alarmes et réseaux.",
+      "Caméras, enregistreurs, alarmes et réseau : nos solutions rangées par catégorie.",
     url: 'https://labelretail.ci/products/categories',
     type: 'website',
   },
   twitter: {
     card: 'summary',
     title: 'Label Retail - Produits par catégorie',
-    description: "Catalogue vidéosurveillance et contrôle d'accès classé par univers.",
+    description: "Vidéosurveillance et contrôle d'accès, classés par univers métier.",
   },
   robots: { index: true, follow: true },
 };
@@ -34,7 +34,7 @@ export default function ProductsByCategoryPage() {
     "@type": "CollectionPage",
     name: 'Produits par catégorie',
     description:
-      "Sélection Label Retail de caméras, enregistreurs, alarmes, solutions réseau et accessoires classés par catégorie.",
+      "Notre sélection de caméras, enregistreurs, alarmes, équipement réseau et accessoires, rangée par catégorie.",
     url: 'https://labelretail.ci/products/categories',
     breadcrumb: {
       "@type": "BreadcrumbList",

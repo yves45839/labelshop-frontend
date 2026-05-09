@@ -22,27 +22,29 @@ export default function FloatingMenu() {
   }, [open]);
 
   return (
-    <div ref={menuRef} className="fixed top-4 right-4 z-50">
+    <div ref={menuRef} className="fixed bottom-6 right-6 z-50">
       <button
         onClick={() => setOpen(!open)}
-        className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg"
+        aria-label="Menu rapide"
+        className="w-12 h-12 bg-[var(--lr-navy-900)] border border-[var(--lr-orange-500)] text-white flex items-center justify-center shadow-xl hover:bg-[var(--lr-orange-600)] transition-colors"
       >
-        <span className="text-xl">☰</span>
+        <span className="text-xl font-display">☰</span>
       </button>
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="mt-2 w-40 bg-white/80 rounded-md shadow-lg overflow-hidden"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.15 }}
+            className="absolute bottom-14 right-0 w-44 bg-white border border-[var(--lr-border)] shadow-2xl"
           >
-            <ul className="py-2 text-sm">
+            <div className="lr-stripe" />
+            <ul className="text-sm">
               <li>
                 <Link
                   href="/accounts/login"
-                  className="block px-4 py-2 hover:bg-gray-100"
+                  className="block px-4 py-2.5 font-display uppercase text-xs tracking-widest text-[var(--lr-navy-900)] hover:bg-[var(--lr-navy-900)] hover:text-white border-b border-[var(--lr-border)] transition-colors"
                   onClick={() => setOpen(false)}
                 >
                   Connexion
@@ -51,7 +53,7 @@ export default function FloatingMenu() {
               <li>
                 <Link
                   href="/orders"
-                  className="block px-4 py-2 hover:bg-gray-100"
+                  className="block px-4 py-2.5 font-display uppercase text-xs tracking-widest text-[var(--lr-navy-900)] hover:bg-[var(--lr-navy-900)] hover:text-white transition-colors"
                   onClick={() => setOpen(false)}
                 >
                   Commandes

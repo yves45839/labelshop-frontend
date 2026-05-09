@@ -50,7 +50,7 @@ export default function AddToCart({ product }: { product: ProductInfo }) {
     return (
       <button
         onClick={handleAdd}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-full transition"
+        className="w-full bg-[var(--lr-navy-900)] hover:bg-[var(--lr-orange-600)] text-white font-display text-sm font-semibold uppercase tracking-widest py-2.5 px-4 border border-[var(--lr-navy-900)] hover:border-[var(--lr-orange-600)] transition-colors"
       >
         Ajouter au panier
       </button>
@@ -58,12 +58,18 @@ export default function AddToCart({ product }: { product: ProductInfo }) {
   }
 
   return (
-    <div className="inline-flex border rounded w-full justify-center">
-      <button onClick={decrement} className="px-3 bg-gray-200 rounded-l">
-        -
+    <div className="inline-flex w-full justify-center border border-[var(--lr-navy-900)] bg-white">
+      <button
+        onClick={decrement}
+        className="px-4 py-2 bg-[var(--lr-steel-100)] hover:bg-[var(--lr-orange-500)] hover:text-white font-display font-bold text-[var(--lr-navy-900)] transition-colors border-r border-[var(--lr-navy-900)]"
+      >
+        −
       </button>
-      <span className="px-4 flex items-center">{qty}</span>
-      <button onClick={increment} className="px-3 bg-gray-200 rounded-r">
+      <span className="px-6 flex items-center font-display text-lg font-bold text-[var(--lr-navy-900)] lr-tnum">{qty}</span>
+      <button
+        onClick={increment}
+        className="px-4 py-2 bg-[var(--lr-steel-100)] hover:bg-[var(--lr-orange-500)] hover:text-white font-display font-bold text-[var(--lr-navy-900)] transition-colors border-l border-[var(--lr-navy-900)]"
+      >
         +
       </button>
     </div>

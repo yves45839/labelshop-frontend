@@ -17,16 +17,16 @@ function VerifyOTPForm() {
     e.preventDefault();
     try {
       await verifyOTP(form);
-      setMessage('OTP validé, vous pouvez vous connecter');
+      setMessage('Code validé. Vous pouvez vous connecter.');
       setTimeout(() => router.push('/accounts/login'), 1500);
     } catch (err: any) {
-      setMessage("Code invalide ou expiré");
+      setMessage("Le code est invalide ou a expiré. Demandez-en un nouveau.");
     }
   };
 
   return (
     <main className="container mx-auto py-12 px-4 max-w-md">
-      <h1 className="text-2xl font-bold mb-4 text-center">Vérification OTP</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">Vérification du code</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="email"
@@ -39,7 +39,7 @@ function VerifyOTPForm() {
           type="text"
           value={form.code}
           onChange={(e) => setForm({ ...form, code: e.target.value })}
-          placeholder="Code OTP"
+          placeholder="Code reçu par e-mail"
           className="w-full border px-3 py-2 rounded"
           required
         />

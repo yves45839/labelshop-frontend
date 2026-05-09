@@ -5,7 +5,29 @@ import FloatingMenu from '@/components/FloatingMenu';
 import FirebaseInit from '@/components/FirebaseInit';
 import Script from 'next/script';
 import type { Metadata } from 'next';
+import { Inter, Barlow_Condensed, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+});
+
+const barlow = Barlow_Condensed({
+  subsets: ['latin'],
+  variable: '--font-barlow',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
+  display: 'swap',
+  weight: ['400', '500', '600'],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://labelretail.ci'),
@@ -14,7 +36,7 @@ export const metadata: Metadata = {
     template: '%s | Label Retail',
   },
   description:
-    "Solutions de sécurité électronique et de télécommunication en Côte d'Ivoire",
+    "Sécurité électronique, télécommunications et gestion du temps : Label Retail accompagne les entreprises ivoiriennes du conseil à la maintenance.",
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
@@ -26,7 +48,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr">
+    <html
+      lang="fr"
+      className={`${inter.variable} ${barlow.variable} ${jetbrains.variable}`}
+    >
       <head>
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-MFV8XCTVGF" />
         <Script id="gtag-init">
@@ -38,12 +63,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           `}
         </Script>
       </head>
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen bg-white text-[var(--lr-navy-900)] antialiased">
         <Navbar />
         <FirebaseInit />
-        <div className="flex-grow content">
+        <main className="flex-grow content">
           {children}
-        </div>
+        </main>
         <Footer />
         <FloatingMenu />
       </body>

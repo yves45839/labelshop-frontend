@@ -24,7 +24,7 @@ export default function NotFound() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        Oups ! La page que vous cherchez n'existe pas ou a été déplacée.
+        On ne retrouve plus cette page. Elle a peut-être déménagé.
       </motion.p>
 
       {/* Animation de l’image */}

@@ -3,9 +3,9 @@
 import { FormEvent, useMemo, useState } from "react";
 
 function formatTimeslot(value: string): string {
-  if (!value) return "Non spécifié";
+  if (!value) return "À convenir";
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Non spécifié";
+  if (Number.isNaN(date.getTime())) return "À convenir";
 
   return new Intl.DateTimeFormat("fr-FR", {
     dateStyle: "full",
@@ -39,11 +39,11 @@ export default function ContactPage() {
 
   const whatsappLink = useMemo(() => {
     const message = [
-      "Bonjour, je souhaite planifier un échange.",
-      `Nom : ${lastName || "Non renseigné"}`,
-      `Prénom : ${firstName || "Non renseigné"}`,
-      `Email : ${email || "Non renseigné"}`,
-      `Entreprise : ${company || "Non spécifiée"}`,
+      "Bonjour Label Retail, j'aimerais qu'on échange.",
+      `Nom : ${lastName || "—"}`,
+      `Prénom : ${firstName || "—"}`,
+      `Email : ${email || "—"}`,
+      `Entreprise : ${company || "—"}`,
       `Créneau souhaité : ${formatTimeslot(timeslot)}`,
     ].join("\n");
 
@@ -54,7 +54,7 @@ export default function ContactPage() {
     event.preventDefault();
 
     if (!isWithinBusinessHours(timeslot)) {
-      setError("Merci de choisir un créneau en jour ouvrable entre 8h30 et 17h.");
+      setError("Merci de choisir un créneau du lundi au vendredi, entre 8 h 30 et 17 h.");
       return;
     }
 
@@ -63,94 +63,129 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      <section className="mx-auto flex max-w-4xl flex-col gap-8 px-6 pb-24 pt-16 md:px-12 lg:px-20">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
-          <div className="mb-8 space-y-3 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-300">Contact</p>
-            <h1 className="text-3xl font-semibold md:text-4xl">Planifier un échange</h1>
-            <p className="text-sm text-slate-300">
-              Complétez ce formulaire pour initier la prise de rendez-vous. Nous vous répondrons directement sur WhatsApp.
-            </p>
+    <div className="bg-[var(--lr-steel-50)] min-h-screen">
+      <header className="bg-[var(--lr-navy-900)] text-white border-b border-[var(--lr-orange-500)]">
+        <div className="lr-container py-12">
+          <span className="lr-eyebrow text-[var(--lr-orange-400)]">Contact</span>
+          <h1 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight mt-2">Parlons de votre projet</h1>
+          <p className="mt-3 text-sm text-white/70 max-w-xl">
+            Remplissez le formulaire, on vous recontacte sur WhatsApp pour fixer un rendez-vous.
+          </p>
+          <div className="lr-stripe mt-6 max-w-xs" />
+        </div>
+      </header>
+
+      <main className="lr-container py-10">
+        <div className="grid lg:grid-cols-[1fr_320px] gap-6 max-w-5xl mx-auto">
+          <div className="bg-white border border-[var(--lr-border)] p-6 md:p-8">
+            <div className="lr-section-heading mb-6">
+              <span className="bar" />
+              <h2 className="font-display text-xl font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">Formulaire de prise de contact</h2>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <label className="flex flex-col gap-1.5">
+                  <span className="lr-eyebrow text-[var(--lr-steel-500)]">Nom</span>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(event) => setLastName(event.target.value)}
+                    className="lr-input"
+                    placeholder="Dupont"
+                    required
+                  />
+                </label>
+
+                <label className="flex flex-col gap-1.5">
+                  <span className="lr-eyebrow text-[var(--lr-steel-500)]">Prénom</span>
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(event) => setFirstName(event.target.value)}
+                    className="lr-input"
+                    placeholder="Marie"
+                    required
+                  />
+                </label>
+              </div>
+
+              <label className="flex flex-col gap-1.5">
+                <span className="lr-eyebrow text-[var(--lr-steel-500)]">Email</span>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  className="lr-input"
+                  placeholder="prenom.nom@email.com"
+                  required
+                />
+              </label>
+
+              <label className="flex flex-col gap-1.5">
+                <span className="lr-eyebrow text-[var(--lr-steel-500)]">Entreprise (facultatif)</span>
+                <input
+                  type="text"
+                  value={company}
+                  onChange={(event) => setCompany(event.target.value)}
+                  className="lr-input"
+                  placeholder="Le nom de votre société"
+                />
+              </label>
+
+              <label className="flex flex-col gap-1.5">
+                <span className="lr-eyebrow text-[var(--lr-steel-500)]">Créneau souhaité (du lundi au vendredi, 8 h 30 – 17 h)</span>
+                <input
+                  type="datetime-local"
+                  value={timeslot}
+                  onChange={(event) => setTimeslot(event.target.value)}
+                  className="lr-input lr-mono"
+                />
+                <span className="lr-mono text-[10px] text-[var(--lr-steel-400)]">// Champ facultatif. Si vous le remplissez, choisissez un horaire ouvré.</span>
+              </label>
+
+              {error && (
+                <div className="border border-rose-300 bg-rose-50 px-4 py-3">
+                  <p className="lr-mono text-xs text-rose-700">// {error}</p>
+                </div>
+              )}
+
+              <div className="border-t border-[var(--lr-border)] pt-5 space-y-3">
+                <button type="submit" className="lr-btn-primary w-full md:w-auto">
+                  Envoyer sur WhatsApp
+                </button>
+                <p className="lr-mono text-xs text-[var(--lr-steel-500)]">
+                  // Cliquer sur ce bouton ouvre WhatsApp avec votre message prérempli, à destination du +225 07 88 89 99 65.
+                </p>
+              </div>
+            </form>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-                Nom
-                <input
-                  type="text"
-                  value={lastName}
-                  onChange={(event) => setLastName(event.target.value)}
-                  className="rounded-xl border border-white/10 bg-slate-900/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none"
-                  placeholder="Dupont"
-                  required
-                />
-              </label>
-
-              <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-                Prénom
-                <input
-                  type="text"
-                  value={firstName}
-                  onChange={(event) => setFirstName(event.target.value)}
-                  className="rounded-xl border border-white/10 bg-slate-900/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none"
-                  placeholder="Marie"
-                  required
-                />
-              </label>
-            </div>
-
-            <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-              Email
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                className="rounded-xl border border-white/10 bg-slate-900/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none"
-                placeholder="prenom.nom@email.com"
-                required
-              />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-              Entreprise (optionnelle)
-              <input
-                type="text"
-                value={company}
-                onChange={(event) => setCompany(event.target.value)}
-                className="rounded-xl border border-white/10 bg-slate-900/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none"
-                placeholder="Label Retail"
-              />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-              Créneau souhaité (jour ouvrable, 8h30 - 17h)
-              <input
-                type="datetime-local"
-                value={timeslot}
-                onChange={(event) => setTimeslot(event.target.value)}
-                className="rounded-xl border border-white/10 bg-slate-900/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none"
-              />
-              <span className="text-xs text-slate-400">Ce champ est facultatif mais doit respecter les horaires indiqués.</span>
-            </label>
-
-            {error && <p className="text-sm text-rose-400">{error}</p>}
-
-            <div className="flex flex-col gap-3 text-sm text-slate-300">
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:scale-[1.02]"
-              >
-                Soumettre
-              </button>
-              <p className="text-xs text-slate-400">
-                Le bouton enverra un message WhatsApp au +2250788899965 pour organiser votre rendez-vous.
-              </p>
-            </div>
-          </form>
+          <aside className="bg-[var(--lr-navy-900)] text-white border border-[var(--lr-navy-800)] p-6 md:p-8 h-fit relative">
+            <span className="absolute top-0 left-0 h-1 w-16 bg-[var(--lr-orange-500)]" />
+            <span className="lr-eyebrow text-[var(--lr-orange-400)]">Contact direct</span>
+            <h3 className="font-display text-xl font-bold uppercase tracking-wide mt-2">Une autre façon de nous joindre</h3>
+            <dl className="mt-5 space-y-3 text-sm">
+              <div className="border-l-2 border-[var(--lr-orange-500)] pl-3">
+                <dt className="lr-eyebrow text-white/50">Email</dt>
+                <dd className="lr-mono text-white mt-0.5">info@label-ci.com</dd>
+              </div>
+              <div className="border-l-2 border-white/10 pl-3">
+                <dt className="lr-eyebrow text-white/50">Tél.</dt>
+                <dd className="lr-mono text-white mt-0.5">+225 07 888 999 65</dd>
+              </div>
+              <div className="border-l-2 border-white/10 pl-3">
+                <dt className="lr-eyebrow text-white/50">Fixe</dt>
+                <dd className="lr-mono text-white mt-0.5">+225 27 21 58 56 77</dd>
+              </div>
+              <div className="border-l-2 border-white/10 pl-3">
+                <dt className="lr-eyebrow text-white/50">Horaires</dt>
+                <dd className="text-white mt-0.5 text-xs">Lun – Ven · 8 h 30 → 17 h</dd>
+              </div>
+            </dl>
+          </aside>
         </div>
-      </section>
-    </main>
+      </main>
+    </div>
   );
 }

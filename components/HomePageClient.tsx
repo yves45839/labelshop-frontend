@@ -33,24 +33,23 @@ export default function HomePageClient() {
   const shouldReduceMotion = useReducedMotion();
 
   const slides = [
-    { src: "/images/alarme_intrusion.jpg", desc: "Protection avancée avec nos systèmes d'alarme intrusion." },
-    { src: "/images/bureau_etude.jpg", desc: "Nos experts en sécurité conçoivent des solutions adaptées à vos besoins." },
-    { src: "/images/cloture_electrique.jpg", desc: "Renforcez la sécurité de votre périmètre avec nos clôtures électriques." },
-    { src: "/images/connectivite_reseau.jpg", desc: "Des solutions de connectivité réseau fiables pour votre entreprise." },
-    { src: "/images/controle_acces.jpg", desc: "Contrôlez l'accès à vos locaux avec nos solutions modernes." },
-    { src: "/images/energie_solaire.jpg", desc: "Optez pour l'énergie solaire et sécurisez tout en économisant." },
-    { src: "/images/ipbx.jpg", desc: "Des systèmes de communication IPBX performants pour vos besoins professionnels." },
-    { src: "/images/portail_motorise.jpg", desc: "Motorisation de portails pour plus de confort et de sécurité." },
-    { src: "/images/temps_presence.jpg", desc: "Gérez efficacement les présences et absences avec LR Time." },
-    { src: "/images/videosurveillance.jpg", desc: "Surveillez vos locaux en temps réel avec nos caméras haute définition." },
+    { src: "/images/alarme_intrusion.jpg", desc: "Alarmes intrusion installées et supervisées." },
+    { src: "/images/bureau_etude.jpg", desc: "Notre bureau d'études dessine la solution qui colle à votre site." },
+    { src: "/images/cloture_electrique.jpg", desc: "Clôtures électriques pour protéger le périmètre." },
+    { src: "/images/connectivite_reseau.jpg", desc: "Réseau d'entreprise stable, du câblage au Wi-Fi pro." },
+    { src: "/images/controle_acces.jpg", desc: "Contrôle d'accès pour vos bureaux, dépôts et chantiers." },
+    { src: "/images/energie_solaire.jpg", desc: "Énergie solaire pour faire tourner vos équipements sans coupure." },
+    { src: "/images/ipbx.jpg", desc: "Standard IPBX pour gérer vos communications internes." },
+    { src: "/images/portail_motorise.jpg", desc: "Motorisation de portails, pour ouvrir vos sites sans descendre de voiture." },
+    { src: "/images/temps_presence.jpg", desc: "Suivi des présences et des absences avec LR Time." },
+    { src: "/images/videosurveillance.jpg", desc: "Vidéosurveillance HD, en direct sur votre téléphone." },
   ];
 
-  // 4 pôles d'expertise — section pivot de la home
   const expertisePillars = [
     {
       key: "products",
       title: "Produits",
-      tagline: "Caméras, alarmes, contrôle d'accès Hikvision et solutions périphériques certifiées.",
+      tagline: "Caméras, alarmes et contrôle d'accès Hikvision, plus tout l'écosystème qui va autour.",
       cta: "Voir le catalogue",
       href: "/products",
       icon: FaBoxOpen,
@@ -59,7 +58,7 @@ export default function HomePageClient() {
     {
       key: "services",
       title: "Services & Intégration",
-      tagline: "Étude, câblage, déploiement, supervision 24/7. Du plan technique à la mise en service.",
+      tagline: "De l'étude au câblage, du déploiement à la supervision 24/7. On vous livre clé en main.",
       cta: "Demander un devis",
       href: "/contact?sujet=devis",
       icon: FaTools,
@@ -68,8 +67,8 @@ export default function HomePageClient() {
     {
       key: "lrtime",
       title: "LR Time",
-      tagline: "Notre SaaS de pointage et de gestion du temps, pensé pour le marché africain.",
-      cta: "Lancer une démo",
+      tagline: "Notre logiciel de pointage et de gestion du temps, développé à Abidjan pour les entreprises ivoiriennes.",
+      cta: "Voir une démo",
       href: "/lr-time",
       icon: FaClock,
       accent: "indigo",
@@ -77,7 +76,7 @@ export default function HomePageClient() {
     {
       key: "formations",
       title: "Formations",
-      tagline: "Techniques Hikvision, utilisateurs LR Time, certifiantes et programmes sur-mesure.",
+      tagline: "Techniques Hikvision, prise en main de LR Time, parcours certifiants et programmes sur mesure.",
       cta: "Voir les sessions",
       href: "/formations",
       icon: FaGraduationCap,
@@ -85,67 +84,62 @@ export default function HomePageClient() {
     },
   ] as const;
 
-  // Bandeau de réassurance — chiffres clés (à ajuster avec les vrais chiffres)
   const trustStats = [
-    { value: "+12 ans", label: "d'expertise Hikvision en Côte d'Ivoire" },
+    { value: "12 ans", label: "à installer du Hikvision en Côte d'Ivoire" },
     { value: "350+", label: "sites sécurisés" },
     { value: "40+", label: "entreprises sur LR Time" },
     { value: "600+", label: "professionnels formés" },
   ];
 
-  // Bénéfices LR Time pour le spotlight
   const lrTimeBenefits = [
-    "Pointage biométrique, badge ou mobile, en temps réel.",
-    "Calculs d'heures, congés et exports paie automatisés.",
-    "Hébergé localement, conforme à la réglementation ivoirienne.",
+    "Pointage par empreinte, badge ou mobile, mis à jour en temps réel.",
+    "Calcul des heures, suivi des congés et exports paie automatisés.",
+    "Hébergé en Côte d'Ivoire, aligné sur la réglementation locale.",
   ];
 
-  // 4 familles de formations
   const trainingFamilies = [
     {
       title: "Techniques Hikvision",
-      description: "Installation, configuration et maintenance des produits de vidéosurveillance et contrôle d'accès.",
+      description: "Installation, configuration et maintenance de la vidéosurveillance et du contrôle d'accès.",
     },
     {
       title: "Utilisateurs LR Time",
-      description: "Prise en main du logiciel pour managers, RH et utilisateurs finaux.",
+      description: "Prise en main du logiciel pour les managers, les RH et les utilisateurs finaux.",
     },
     {
       title: "Certifiantes & habilitations",
       description: "Courants faibles, sécurité électronique, habilitations électriques.",
     },
     {
-      title: "Sur-mesure entreprises",
-      description: "Programmes adaptés à la demande, déployés chez vous ou en salle.",
+      title: "Sur mesure pour entreprises",
+      description: "Un programme bâti à votre demande, dispensé chez vous ou dans nos salles.",
     },
   ];
 
-  // Sessions à venir — en dur pour démarrer, à brancher ensuite sur une route API
   const upcomingSessions = [
     { date: "15 juin", title: "Configuration HikCentral Pro", duration: "3 jours", location: "Plateau, Abidjan" },
     { date: "22 juin", title: "LR Time pour managers", duration: "1 jour", location: "En ligne" },
     { date: "5 juillet", title: "Habilitation B1V/H1V", duration: "2 jours", location: "Marcory, Abidjan" },
   ];
 
-  // Pillars repositionnés (pourquoi Label Retail)
   const pillars = [
     {
       icon: FaShieldAlt,
       title: "Un seul interlocuteur, quatre expertises",
       description:
-        "Fini les sous-traitants empilés : matériel, intégration, logiciel et formation, le tout chez nous.",
+        "Plus besoin d'aligner les sous-traitants. Matériel, intégration, logiciel et formation : tout vient de chez nous.",
     },
     {
       icon: FaMapMarkerAlt,
       title: "Ancrage local, support local",
       description:
-        "Équipes basées à Abidjan, intervention sous 48h, support en français à toute heure ouvrée.",
+        "Nos équipes sont à Abidjan. On intervient sous 48 h, et on répond en français pendant les heures ouvrées.",
     },
     {
       icon: FaUserGraduate,
-      title: "Continuité par la formation",
+      title: "L'autonomie par la formation",
       description:
-        "Vos équipes deviennent autonomes : moins de dépendance, moins de coût total de possession.",
+        "Vos équipes prennent le relais. Vous dépendez moins de nous, et votre coût total baisse.",
     },
   ];
 
@@ -169,134 +163,182 @@ export default function HomePageClient() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-white text-slate-900">
-      {/* ───────────────────────────── Section 1 — Hero recadré ───────────────────────────── */}
-      <section className="px-6 pb-16 pt-24 md:px-10 lg:px-20">
-        <div className="mx-auto grid max-w-screen-xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <div className="space-y-6">
-            <span className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">
-              Label Retail • Intégrateur certifié Hikvision
-            </span>
-            <h1 className="text-4xl font-bold leading-tight md:text-5xl">
-              Sécurité électronique, gestion du temps et formations certifiantes — sous un seul toit en Côte d'Ivoire.
-            </h1>
-            <p className="max-w-xl text-lg text-slate-700">
-              De la caméra Hikvision installée sur votre site à la solution <strong>LR Time</strong> qui pilote vos pointages,
-              jusqu'aux sessions certifiantes pour vos équipes : un partenaire local, quatre expertises.
-            </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href="/products"
-                className="inline-flex items-center justify-center rounded-full bg-amber-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-amber-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600"
-              >
-                Explorer les solutions
-              </Link>
-              <Link
-                href="/lr-time"
-                className="inline-flex items-center justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Découvrir LR Time
-              </Link>
-              <Link
-                href="/formations"
-                className="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700"
-              >
-                Voir les formations
-              </Link>
-            </div>
-          </div>
+    <div className="min-h-screen bg-white text-[var(--lr-navy-900)]">
 
-          <div className="relative">
-            <div className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-xl">
-              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[16/10]">
-                {slides.map((slide, index) => (
-                  <motion.div
-                    key={slide.src}
-                    className="absolute inset-0"
-                    animate={{ opacity: index === currentIndex ? 1 : 0 }}
-                    transition={{ duration: shouldReduceMotion ? 0.2 : 0.9 }}
-                    aria-hidden={index !== currentIndex}
-                  >
-                    <Image
-                      src={slide.src}
-                      alt={slide.desc}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 520px"
-                      priority={index === 0}
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900/80 via-slate-900/30 to-transparent p-4 text-sm font-medium text-white">
-                      {slide.desc}
-                    </div>
-                  </motion.div>
-                ))}
+      {/* ───────────── 1. HERO industriel ───────────── */}
+      <section className="relative overflow-hidden lr-blueprint">
+        <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-[var(--lr-steel-50)]" />
+        <div className="relative lr-container py-16 md:py-24">
+          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+            <div className="lg:col-span-7 space-y-6">
+              <div className="lr-section-heading">
+                <span className="bar" />
+                <span className="lr-eyebrow text-[var(--lr-orange-700)]">
+                  Intégrateur certifié Hikvision · Côte d'Ivoire
+                </span>
+              </div>
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] text-[var(--lr-navy-900)] uppercase tracking-tight">
+                Sécuriser vos sites,<br />
+                <span className="text-[var(--lr-orange-600)]">suivre vos équipes,</span><br />
+                former vos techniciens.
+              </h1>
+              <p className="max-w-xl text-base md:text-lg text-[var(--lr-steel-700)] leading-relaxed">
+                On installe vos caméras Hikvision, on développe <strong className="text-[var(--lr-navy-900)]">LR Time</strong> pour gérer vos pointages,
+                et on forme vos équipes. Quatre métiers, une seule équipe, à vos côtés sur le terrain.
+              </p>
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <Link href="/products" className="lr-btn-primary">
+                  Voir nos solutions
+                </Link>
+                <Link href="/lr-time" className="lr-btn-secondary">
+                  Découvrir LR Time
+                </Link>
+                <Link
+                  href="/formations"
+                  className="font-display text-sm font-semibold uppercase tracking-widest text-[var(--lr-navy-700)] hover:text-[var(--lr-orange-600)] border-b border-[var(--lr-navy-700)] hover:border-[var(--lr-orange-600)] pb-1 transition-colors"
+                >
+                  Voir les formations →
+                </Link>
+              </div>
+              <div className="flex flex-wrap gap-6 pt-4 border-t border-[var(--lr-border)]">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-emerald-500" />
+                  <span className="lr-eyebrow text-[var(--lr-steel-700)]">Support 24/7</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-[var(--lr-orange-500)]" />
+                  <span className="lr-eyebrow text-[var(--lr-steel-700)]">Intervention 48 h</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-[var(--lr-navy-800)]" />
+                  <span className="lr-eyebrow text-[var(--lr-steel-700)]">Hébergé en CI</span>
+                </div>
               </div>
             </div>
-            <div className="mt-4 flex items-center justify-between rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm">
-              <span>Visualisation {currentIndex + 1} / {slides.length}</span>
-              <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-700">Compatibilité multi-plateforme</span>
+
+            <div className="lg:col-span-5">
+              <div className="relative border border-[var(--lr-navy-900)] bg-[var(--lr-navy-900)] shadow-2xl">
+                {/* Header technique */}
+                <div className="flex items-center justify-between bg-[var(--lr-navy-950)] border-b border-white/10 px-3 py-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 bg-[var(--lr-orange-500)]" />
+                    <span className="lr-mono text-[10px] text-white/60">LR-CAM-FEED · LIVE</span>
+                  </div>
+                  <span className="lr-mono text-[10px] text-emerald-400">● REC</span>
+                </div>
+                <div className="relative aspect-[4/3]">
+                  {slides.map((slide, index) => (
+                    <motion.div
+                      key={slide.src}
+                      className="absolute inset-0"
+                      animate={{ opacity: index === currentIndex ? 1 : 0 }}
+                      transition={{ duration: shouldReduceMotion ? 0.2 : 0.6 }}
+                      aria-hidden={index !== currentIndex}
+                    >
+                      <Image
+                        src={slide.src}
+                        alt={slide.desc}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 520px"
+                        priority={index === 0}
+                      />
+                      {/* Crosshair central */}
+                      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                        <div className="w-8 h-px bg-[var(--lr-orange-500)]/80" />
+                        <div className="absolute w-px h-8 bg-[var(--lr-orange-500)]/80" />
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-3">
+                        <span className="lr-mono text-[10px] text-[var(--lr-orange-400)]">// {String(index + 1).padStart(2,'0')}</span>
+                        <p className="text-xs md:text-sm font-medium text-white mt-0.5">{slide.desc}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+                <div className="flex items-center justify-between bg-[var(--lr-navy-950)] border-t border-white/10 px-3 py-1.5">
+                  <span className="lr-mono text-[10px] text-white/60">FEED {String(currentIndex + 1).padStart(2,'0')} / {String(slides.length).padStart(2,'0')}</span>
+                  <span className="lr-mono text-[10px] text-white/60">MOBILE · DESKTOP</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ───────────────────────────── Section 2 — Bandeau de réassurance ───────────────────────────── */}
-      <section className="border-y border-slate-200 bg-slate-900 px-6 py-10 md:px-10 lg:px-20">
-        <div className="mx-auto grid max-w-screen-xl grid-cols-2 gap-6 text-center md:grid-cols-4">
-          {trustStats.map((stat) => (
-            <div key={stat.label} className="space-y-1">
-              <div className="text-3xl font-bold text-amber-400 md:text-4xl">{stat.value}</div>
-              <div className="text-xs uppercase tracking-wider text-slate-300 md:text-sm">{stat.label}</div>
-            </div>
-          ))}
+      {/* ───────────── 2. Bandeau de réassurance ───────────── */}
+      <section className="bg-[var(--lr-navy-900)] text-white border-y border-[var(--lr-orange-500)]">
+        <div className="lr-container py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+            {trustStats.map((stat, i) => (
+              <div key={stat.label} className={`px-4 py-2 ${i === 0 ? 'pl-0' : ''}`}>
+                <div className="font-display text-3xl md:text-4xl font-bold text-[var(--lr-orange-400)] lr-tnum leading-none">
+                  {stat.value}
+                </div>
+                <div className="lr-eyebrow text-white/70 mt-2">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ───────────────────────────── Section 3 — Les 4 pôles d'expertise ───────────────────────────── */}
-      <section className="px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-screen-xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Nos 4 pôles d'expertise</span>
-            <h2 className="mt-2 text-3xl font-semibold md:text-4xl">Un seul partenaire pour toute votre chaîne</h2>
-            <p className="mt-3 text-sm text-slate-700">
-              Choisissez votre point d'entrée : équipement, intégration, logiciel SaaS ou formation des équipes.
+      {/* ───────────── 3. 4 pôles d'expertise ───────────── */}
+      <section className="lr-section">
+        <div className="lr-container">
+          <div className="max-w-2xl mb-12">
+            <div className="lr-section-heading">
+              <span className="bar" />
+              <span className="lr-eyebrow text-[var(--lr-orange-700)]">Nos 4 pôles d'expertise</span>
+              <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">
+                Un partenaire qui couvre toute la chaîne
+              </h2>
+            </div>
+            <p className="mt-4 text-sm md:text-base text-[var(--lr-steel-700)]">
+              Équipement, intégration, logiciel ou formation : on commence par où vous voulez, on suit jusqu'au bout.
             </p>
           </div>
 
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {expertisePillars.map((pillar) => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--lr-border)] border border-[var(--lr-border)]">
+            {expertisePillars.map((pillar, idx) => {
               const Icon = pillar.icon;
               const isLrTime = pillar.accent === "indigo";
               return (
                 <motion.div
                   key={pillar.key}
-                  whileHover={shouldReduceMotion ? undefined : { y: -6 }}
-                  transition={{ type: "spring", stiffness: 240, damping: 20 }}
-                  className={`group flex flex-col gap-4 rounded-2xl border p-6 shadow-sm transition ${
-                    isLrTime
-                      ? "border-indigo-200 bg-indigo-50 hover:border-indigo-400"
-                      : "border-slate-200 bg-white hover:border-amber-300"
+                  whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+                  transition={{ duration: 0.15 }}
+                  className={`group relative flex flex-col gap-4 p-6 transition-colors ${
+                    isLrTime ? 'bg-[var(--lr-navy-900)] text-white' : 'bg-white hover:bg-[var(--lr-steel-50)]'
                   }`}
                 >
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl text-xl ${
-                      isLrTime ? "bg-indigo-600 text-white" : "bg-amber-100 text-amber-700"
-                    }`}
-                  >
+                  <span className={`absolute top-0 left-0 h-0.5 w-12 ${isLrTime ? 'bg-[var(--lr-orange-500)]' : 'bg-[var(--lr-orange-500)]'}`} />
+                  <span className={`lr-mono text-[10px] ${isLrTime ? 'text-white/40' : 'text-[var(--lr-steel-400)]'}`}>
+                    0{idx + 1} / 04
+                  </span>
+                  <div className={`flex h-12 w-12 items-center justify-center text-xl border ${
+                    isLrTime
+                      ? 'bg-[var(--lr-orange-600)] border-[var(--lr-orange-700)] text-white'
+                      : 'bg-[var(--lr-navy-900)] border-[var(--lr-navy-900)] text-white'
+                  }`}>
                     <Icon />
                   </div>
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-semibold text-slate-900">{pillar.title}</h3>
-                    <p className="text-sm text-slate-700">{pillar.tagline}</p>
+                  <div className="space-y-2 flex-1">
+                    <h3 className={`font-display text-xl font-bold uppercase tracking-wide ${isLrTime ? 'text-white' : 'text-[var(--lr-navy-900)]'}`}>
+                      {pillar.title}
+                    </h3>
+                    <p className={`text-sm leading-relaxed ${isLrTime ? 'text-white/70' : 'text-[var(--lr-steel-700)]'}`}>
+                      {pillar.tagline}
+                    </p>
                   </div>
                   <Link
                     href={pillar.href}
-                    className={`mt-auto inline-flex items-center gap-2 text-sm font-semibold transition ${
-                      isLrTime ? "text-indigo-700 hover:text-indigo-900" : "text-amber-700 hover:text-amber-900"
-                    }`}
+                    className={`inline-flex items-center gap-2 font-display text-xs font-semibold uppercase tracking-widest pt-2 border-t ${
+                      isLrTime
+                        ? 'text-[var(--lr-orange-400)] hover:text-white border-white/10'
+                        : 'text-[var(--lr-orange-600)] hover:text-[var(--lr-navy-900)] border-[var(--lr-border)]'
+                    } transition-colors`}
                   >
                     {pillar.cta}
-                    <FaArrowRight className="text-xs transition group-hover:translate-x-1" />
+                    <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-1" />
                   </Link>
                 </motion.div>
               );
@@ -305,82 +347,81 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* ───────────────────────────── Section 4 — Spotlight LR Time ───────────────────────────── */}
-      <section className="px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-screen-xl overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-700 via-indigo-800 to-slate-900 px-6 py-12 shadow-2xl md:px-12 md:py-16">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div className="space-y-6 text-white">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-indigo-100">
-                Notre logiciel maison
-              </span>
-              <h2 className="text-3xl font-semibold leading-tight md:text-4xl">
-                LR Time : la gestion du temps et des présences pensée pour l'Afrique.
+      {/* ───────────── 4. Spotlight LR Time ───────────── */}
+      <section className="lr-section bg-[var(--lr-steel-50)] border-y border-[var(--lr-border)]">
+        <div className="lr-container">
+          <div className="grid items-center gap-10 lg:grid-cols-2 bg-[var(--lr-navy-900)] border border-[var(--lr-navy-800)] shadow-2xl">
+            <div className="space-y-6 text-white p-8 md:p-12">
+              <div className="flex items-center gap-3">
+                <span className="lr-mono text-[10px] text-[var(--lr-orange-400)]">// MODULE 03</span>
+                <span className="h-px flex-1 bg-white/10" />
+              </div>
+              <span className="lr-eyebrow text-[var(--lr-orange-400)]">Notre logiciel maison</span>
+              <h2 className="font-display text-3xl md:text-4xl font-bold uppercase leading-[1.05] tracking-tight">
+                LR Time, le pointage et la gestion du temps adaptés à votre réalité.
               </h2>
-              <p className="text-base text-indigo-100">
-                Plus qu'une badgeuse : un SaaS complet pour piloter pointages, congés et exports paie depuis votre navigateur,
+              <p className="text-base text-white/70 leading-relaxed max-w-md">
+                Pointages, congés, heures supplémentaires, exports paie : tout se pilote depuis votre navigateur,
                 en temps réel, sur tous vos sites.
               </p>
               <ul className="space-y-3">
                 {lrTimeBenefits.map((benefit) => (
-                  <li key={benefit} className="flex items-start gap-3 text-sm text-indigo-50">
-                    <FaCheckCircle className="mt-0.5 flex-shrink-0 text-amber-400" />
+                  <li key={benefit} className="flex items-start gap-3 text-sm text-white/80 border-l-2 border-[var(--lr-orange-500)] pl-3">
+                    <FaCheckCircle className="mt-0.5 flex-shrink-0 text-[var(--lr-orange-400)]" />
                     <span>{benefit}</span>
                   </li>
                 ))}
               </ul>
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Link
-                  href="/contact?sujet=demo"
-                  className="inline-flex items-center justify-center rounded-full bg-amber-500 px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-amber-400"
-                >
+              <div className="flex flex-wrap items-center gap-3 pt-3">
+                <Link href="/contact?sujet=demo" className="lr-btn-primary">
                   Demander une démo gratuite
                 </Link>
                 <Link
                   href="/lr-time"
-                  className="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                  className="inline-flex items-center justify-center px-6 py-3 border border-white/30 font-display text-xs font-semibold uppercase tracking-widest text-white hover:bg-white/10 transition-colors"
                 >
                   En savoir plus
                 </Link>
               </div>
             </div>
 
-            <div className="relative">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur">
-                <div className="flex items-center gap-2 border-b border-white/10 pb-3">
-                  <span className="h-3 w-3 rounded-full bg-rose-400" />
-                  <span className="h-3 w-3 rounded-full bg-amber-400" />
-                  <span className="h-3 w-3 rounded-full bg-emerald-400" />
-                  <span className="ml-2 text-xs text-indigo-100">app.lr-time.ci</span>
+            <div className="relative p-8 md:p-12 lr-blueprint-dark border-l border-white/10">
+              <div className="border border-white/15 bg-black/30 backdrop-blur">
+                <div className="flex items-center gap-2 border-b border-white/10 px-3 py-2">
+                  <span className="h-2 w-2 bg-rose-400" />
+                  <span className="h-2 w-2 bg-amber-400" />
+                  <span className="h-2 w-2 bg-emerald-400" />
+                  <span className="ml-2 lr-mono text-[10px] text-white/60">app.lr-time.ci</span>
                 </div>
-                <div className="mt-4 space-y-3">
-                  <div className="flex items-center justify-between rounded-lg bg-white/5 p-3 text-xs text-indigo-100">
-                    <span>Présents aujourd'hui</span>
-                    <span className="font-semibold text-white">128 / 142</span>
+                <div className="p-4 space-y-3">
+                  <div className="flex items-center justify-between bg-white/5 border border-white/10 p-3 text-xs">
+                    <span className="lr-eyebrow text-white/60">Présents aujourd'hui</span>
+                    <span className="font-display font-bold text-white text-lg lr-tnum">128 / 142</span>
                   </div>
-                  <div className="flex items-center justify-between rounded-lg bg-white/5 p-3 text-xs text-indigo-100">
-                    <span>Heures sup. ce mois</span>
-                    <span className="font-semibold text-amber-300">+ 87 h</span>
+                  <div className="flex items-center justify-between bg-white/5 border border-white/10 p-3 text-xs">
+                    <span className="lr-eyebrow text-white/60">Heures sup. ce mois</span>
+                    <span className="font-display font-bold text-[var(--lr-orange-400)] text-lg lr-tnum">+ 87 h</span>
                   </div>
-                  <div className="flex items-center justify-between rounded-lg bg-white/5 p-3 text-xs text-indigo-100">
-                    <span>Congés à valider</span>
-                    <span className="font-semibold text-white">6</span>
+                  <div className="flex items-center justify-between bg-white/5 border border-white/10 p-3 text-xs">
+                    <span className="lr-eyebrow text-white/60">Congés à valider</span>
+                    <span className="font-display font-bold text-white text-lg lr-tnum">06</span>
                   </div>
-                  <div className="grid grid-cols-7 gap-1 pt-2">
+                  <div className="grid grid-cols-7 gap-1 pt-3">
                     {Array.from({ length: 28 }).map((_, i) => (
                       <div
                         key={i}
-                        className={`h-6 rounded ${
+                        className={`h-6 ${
                           i % 7 === 5 || i % 7 === 6
                             ? "bg-white/5"
                             : i % 5 === 0
-                            ? "bg-amber-400/70"
-                            : "bg-emerald-400/60"
+                            ? "bg-[var(--lr-orange-500)]/80"
+                            : "bg-emerald-500/70"
                         }`}
                       />
                     ))}
                   </div>
-                  <p className="pt-2 text-center text-[10px] uppercase tracking-wider text-indigo-200">
-                    Aperçu indicatif du tableau de bord
+                  <p className="pt-2 text-center lr-eyebrow text-white/40">
+                    Aperçu du tableau de bord
                   </p>
                 </div>
               </div>
@@ -389,28 +430,31 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* ───────────────────────────── Section 5 — Catalogue produits phares ───────────────────────────── */}
-      <section className="border-y border-slate-200 bg-slate-50 px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-screen-xl">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Catalogue</span>
-              <h2 className="mt-2 text-3xl font-semibold md:text-4xl">Sélection prête à déployer</h2>
-              <p className="mt-2 max-w-2xl text-sm text-slate-700">
-                Produits en ligne mis en avant pour leur stabilité, leur support mobile et leur popularité chez nos clients pros.
+      {/* ───────────── 5. Catalogue produits phares ───────────── */}
+      <section className="lr-section">
+        <div className="lr-container">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-10">
+            <div className="max-w-2xl">
+              <div className="lr-section-heading">
+                <span className="bar" />
+                <span className="lr-eyebrow text-[var(--lr-orange-700)]">Catalogue</span>
+                <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">
+                  Une sélection prête à installer
+                </h2>
+              </div>
+              <p className="mt-4 text-sm text-[var(--lr-steel-700)]">
+                Les produits qu'on installe le plus souvent : stables, faciles à piloter depuis le mobile, plébiscités par nos clients pros.
               </p>
             </div>
-            <Link
-              href="/search"
-              className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-800 hover:border-slate-400 hover:text-slate-900"
-            >
+            <Link href="/search" className="lr-btn-secondary self-start md:self-auto">
               Voir tout le catalogue
             </Link>
           </div>
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {products.length === 0 && (
-              <div className="col-span-full rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-700">
-                Patience... Nous synchronisons nos produits phares.
+              <div className="col-span-full border border-dashed border-[var(--lr-border)] bg-[var(--lr-steel-50)] p-10 text-center text-sm text-[var(--lr-steel-700)]">
+                <span className="lr-mono">// </span>On charge la sélection du moment…
               </div>
             )}
             {products.map((product) => {
@@ -418,28 +462,29 @@ export default function HomePageClient() {
               return (
                 <motion.div
                   key={product.id}
-                  whileHover={shouldReduceMotion ? undefined : { y: -4 }}
-                  transition={{ type: "spring", stiffness: 240, damping: 20 }}
-                  className="group relative flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-lg"
+                  whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+                  transition={{ duration: 0.15 }}
+                  className="group relative flex flex-col bg-white border border-[var(--lr-border)] hover:border-[var(--lr-navy-800)] transition-colors hover:shadow-lg"
                 >
-                  <Link href={`/products/${product.slug}`} className="space-y-4">
-                    <div className="relative h-44 w-full overflow-hidden rounded-xl bg-slate-100">
+                  <span className="absolute top-0 left-0 h-0.5 w-12 bg-[var(--lr-orange-500)] z-10" />
+                  <Link href={`/products/${product.slug}`} className="flex-1 flex flex-col">
+                    <div className="relative h-44 w-full lr-blueprint border-b border-[var(--lr-border)]">
                       <Image
                         src={`${imageUrl}?t=${Date.now()}`}
                         alt={product.name}
                         fill
                         unoptimized
-                        className="object-contain p-4 transition duration-500 group-hover:scale-105"
+                        className="object-contain p-4 transition duration-300 group-hover:scale-105"
                         sizes="(max-width: 1024px) 100vw, 350px"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-700">
-                        Disponible
-                      </span>
-                      <h3 className="text-base font-semibold text-slate-900">{product.name}</h3>
-                      <p className="text-sm text-slate-700">
-                        Fiche détaillée, options d'installation et compatibilité multi-site.
+                    <div className="p-4 space-y-2 flex-1">
+                      <span className="lr-tag lr-tag--green">Disponible</span>
+                      <h3 className="font-display text-base font-bold uppercase tracking-wide text-[var(--lr-navy-900)] line-clamp-2">
+                        {product.name}
+                      </h3>
+                      <p className="text-xs text-[var(--lr-steel-700)] leading-relaxed">
+                        Fiche complète, options d'installation et compatibilité multi-sites.
                       </p>
                     </div>
                   </Link>
@@ -450,104 +495,122 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* ───────────────────────────── Section 6 — Catalogue formations ───────────────────────────── */}
-      <section className="px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-screen-xl">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      {/* ───────────── 6. Catalogue formations ───────────── */}
+      <section className="lr-section bg-[var(--lr-steel-50)] border-y border-[var(--lr-border)]">
+        <div className="lr-container">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-10">
             <div className="max-w-2xl">
-              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Formations</span>
-              <h2 className="mt-2 text-3xl font-semibold md:text-4xl">Montez en compétence avec nos formateurs</h2>
-              <p className="mt-2 text-sm text-slate-700">
-                Catalogue construit autour de quatre familles, animé par des formateurs Hikvision et LR Time certifiés,
-                à Abidjan ou en distanciel.
+              <div className="lr-section-heading">
+                <span className="bar" />
+                <span className="lr-eyebrow text-[var(--lr-orange-700)]">Formations</span>
+                <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">
+                  Apprenez avec nos formateurs
+                </h2>
+              </div>
+              <p className="mt-4 text-sm text-[var(--lr-steel-700)]">
+                Quatre familles de formations, animées par des formateurs Hikvision et LR Time certifiés.
+                À Abidjan ou en visio.
               </p>
             </div>
-            <Link
-              href="/formations"
-              className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-800 hover:border-slate-400 hover:text-slate-900"
-            >
+            <Link href="/formations" className="lr-btn-secondary self-start md:self-auto">
               Tout le catalogue
             </Link>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-            {trainingFamilies.map((family) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {trainingFamilies.map((family, idx) => (
               <div
                 key={family.title}
-                className="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-amber-300 hover:shadow-md"
+                className="flex items-start gap-4 bg-white border border-[var(--lr-border)] p-5 hover:border-[var(--lr-navy-800)] transition-colors"
               >
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-                  <FaGraduationCap />
+                <div className="flex flex-col items-center gap-2">
+                  <div className="flex h-11 w-11 items-center justify-center bg-[var(--lr-navy-900)] text-white">
+                    <FaGraduationCap />
+                  </div>
+                  <span className="lr-mono text-[10px] text-[var(--lr-steel-400)]">
+                    0{idx + 1}
+                  </span>
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900">{family.title}</h3>
-                  <p className="mt-1 text-sm text-slate-700">{family.description}</p>
+                <div className="flex-1">
+                  <h3 className="font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">{family.title}</h3>
+                  <p className="mt-2 text-sm text-[var(--lr-steel-700)] leading-relaxed">{family.description}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6 md:p-8">
-            <div className="flex items-center gap-2">
-              <FaCalendarAlt className="text-amber-700" />
-              <h3 className="text-lg font-semibold text-slate-900">Prochaines sessions ouvertes</h3>
+          <div className="mt-10 bg-white border border-[var(--lr-border)] p-6 md:p-8">
+            <div className="flex items-center gap-3 pb-4 border-b border-[var(--lr-border)]">
+              <FaCalendarAlt className="text-[var(--lr-orange-600)]" />
+              <h3 className="font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">Prochaines sessions ouvertes</h3>
+              <span className="ml-auto lr-mono text-[10px] text-[var(--lr-steel-400)]">
+                {upcomingSessions.length} sessions
+              </span>
             </div>
-            <ul className="mt-5 divide-y divide-slate-200">
+            <ul className="divide-y divide-[var(--lr-border)]">
               {upcomingSessions.map((session) => (
                 <li
                   key={session.title}
-                  className="flex flex-col gap-2 py-4 text-sm text-slate-700 md:flex-row md:items-center md:justify-between"
+                  className="flex flex-col gap-2 py-4 text-sm text-[var(--lr-steel-700)] md:flex-row md:items-center md:justify-between hover:bg-[var(--lr-steel-50)] -mx-6 md:-mx-8 px-6 md:px-8 transition-colors"
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+                  <div className="flex items-center gap-4">
+                    <span className="lr-mono text-xs font-bold text-[var(--lr-orange-700)] bg-[var(--lr-orange-500)]/10 border border-[var(--lr-orange-500)]/30 px-3 py-1 lr-tnum">
                       {session.date}
                     </span>
-                    <span className="font-semibold text-slate-900">{session.title}</span>
+                    <span className="font-display font-semibold uppercase tracking-wide text-[var(--lr-navy-900)]">{session.title}</span>
                   </div>
-                  <div className="text-xs text-slate-600 md:text-sm">
-                    {session.duration} • {session.location}
+                  <div className="lr-mono text-xs text-[var(--lr-steel-500)] tracking-wider">
+                    {session.duration} · {session.location}
                   </div>
                 </li>
               ))}
             </ul>
             <div className="mt-6">
-              <Link
-                href="/formations"
-                className="inline-flex items-center gap-2 rounded-full bg-amber-600 px-5 py-2 text-sm font-semibold text-white shadow transition hover:bg-amber-700"
-              >
+              <Link href="/formations" className="lr-btn-primary">
                 S'inscrire à une session
-                <FaArrowRight className="text-xs" />
+                <FaArrowRight className="text-[10px] ml-1" />
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ───────────────────────────── Section 7 — Pourquoi Label Retail ───────────────────────────── */}
-      <section className="border-y border-slate-200 bg-white px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-screen-xl">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-xl space-y-4">
-              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Pourquoi Label Retail</span>
-              <h2 className="text-3xl font-semibold md:text-4xl">L'intégrateur qui pense aussi à l'après-installation</h2>
-              <p className="text-sm text-slate-700">
-                Notre objectif n'est pas de vendre une caméra, c'est de rendre votre exploitation autonome, sécurisée et
-                pilotable, de bout en bout.
+      {/* ───────────── 7. Pourquoi Label Retail ───────────── */}
+      <section className="lr-section">
+        <div className="lr-container">
+          <div className="grid lg:grid-cols-12 gap-10 items-start">
+            <div className="lg:col-span-4 space-y-4">
+              <div className="lr-section-heading">
+                <span className="bar" />
+                <span className="lr-eyebrow text-[var(--lr-orange-700)]">Pourquoi Label Retail</span>
+                <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">
+                  Notre travail ne s'arrête pas à la mise en service
+                </h2>
+              </div>
+              <p className="text-sm text-[var(--lr-steel-700)] leading-relaxed">
+                On ne se contente pas de livrer du matériel. On vous laisse une exploitation sécurisée, que vos équipes
+                savent piloter, et qui tient dans la durée.
               </p>
             </div>
-            <div className="grid w-full gap-4 lg:max-w-2xl lg:grid-cols-3">
-              {pillars.map((pillar) => {
+            <div className="lg:col-span-8 grid gap-px bg-[var(--lr-border)] border border-[var(--lr-border)] md:grid-cols-3">
+              {pillars.map((pillar, idx) => {
                 const Icon = pillar.icon;
                 return (
                   <div
                     key={pillar.title}
-                    className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left shadow-sm"
+                    className="bg-white p-5 relative"
                   >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
+                    <span className="absolute top-0 left-0 h-0.5 w-10 bg-[var(--lr-orange-500)]" />
+                    <span className="lr-mono text-[10px] text-[var(--lr-steel-400)]">
+                      0{idx + 1}
+                    </span>
+                    <div className="flex h-10 w-10 items-center justify-center bg-[var(--lr-navy-900)] text-white mt-3">
                       <Icon />
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold text-slate-900">{pillar.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-slate-700">{pillar.description}</p>
+                    <h3 className="mt-4 font-display text-base font-bold uppercase tracking-wide text-[var(--lr-navy-900)] leading-tight">
+                      {pillar.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-[var(--lr-steel-700)]">{pillar.description}</p>
                   </div>
                 );
               })}
@@ -556,46 +619,48 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* ───────────────────────────── Section 8 — Double CTA ───────────────────────────── */}
-      <section className="px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
-          <div className="flex flex-col gap-4 rounded-3xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-amber-50 p-8 shadow-lg">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-              <FaTools />
+      {/* ───────────── 8. Double CTA ───────────── */}
+      <section className="lr-section bg-[var(--lr-navy-950)] text-white relative overflow-hidden">
+        <div className="absolute inset-0 lr-blueprint-dark opacity-50" />
+        <div className="lr-stripe absolute top-0 left-0 right-0" />
+        <div className="relative lr-container">
+          <div className="grid gap-px bg-white/10 md:grid-cols-2 max-w-5xl mx-auto border border-white/10">
+            <div className="bg-[var(--lr-navy-900)] p-8 md:p-10 space-y-4 relative">
+              <span className="absolute top-0 left-0 h-1 w-16 bg-[var(--lr-orange-500)]" />
+              <span className="lr-mono text-[10px] text-[var(--lr-orange-400)]">// 01 — DEVIS</span>
+              <div className="flex h-12 w-12 items-center justify-center bg-[var(--lr-orange-600)] text-white">
+                <FaTools />
+              </div>
+              <h2 className="font-display text-2xl font-bold uppercase tracking-tight">Vous avez un projet sécurité ou réseau ?</h2>
+              <p className="text-sm text-white/70 leading-relaxed">
+                Étude technique, devis chiffré et plan de déploiement sous 48 h ouvrées. Dites-nous ce que vous avez sur le terrain.
+              </p>
+              <div className="pt-2">
+                <Link href="/contact?sujet=devis" className="lr-btn-primary">
+                  Demander un devis
+                </Link>
+              </div>
             </div>
-            <h2 className="text-2xl font-semibold">Vous avez un projet sécurité ou réseau ?</h2>
-            <p className="text-sm text-slate-700">
-              Étude technique, devis chiffré et plan de déploiement sous 48h ouvrées. Parlez-nous de vos contraintes terrain.
-            </p>
-            <div>
-              <Link
-                href="/contact?sujet=devis"
-                className="inline-flex items-center justify-center rounded-full bg-amber-600 px-6 py-3 text-sm font-semibold text-white shadow transition hover:bg-amber-700"
-              >
-                Demander un devis
-              </Link>
-            </div>
-          </div>
 
-          <div className="flex flex-col gap-4 rounded-3xl border border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-indigo-50 p-8 shadow-lg">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700">
-              <FaClock />
-            </div>
-            <h2 className="text-2xl font-semibold">Vous voulez tester LR Time ?</h2>
-            <p className="text-sm text-slate-700">
-              Démo de 30 min, données de votre secteur, scénarios concrets. Réservez un créneau, on s'occupe du reste.
-            </p>
-            <div>
-              <Link
-                href="/contact?sujet=demo"
-                className="inline-flex items-center justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow transition hover:bg-indigo-700"
-              >
-                Réserver une démo
-              </Link>
+            <div className="bg-[var(--lr-navy-900)] p-8 md:p-10 space-y-4 relative">
+              <span className="absolute top-0 left-0 h-1 w-16 bg-[var(--lr-orange-500)]" />
+              <span className="lr-mono text-[10px] text-[var(--lr-orange-400)]">// 02 — DÉMO</span>
+              <div className="flex h-12 w-12 items-center justify-center bg-[var(--lr-orange-600)] text-white">
+                <FaClock />
+              </div>
+              <h2 className="font-display text-2xl font-bold uppercase tracking-tight">Vous voulez tester LR Time ?</h2>
+              <p className="text-sm text-white/70 leading-relaxed">
+                Une démo de 30 min, avec des cas concrets de votre secteur. Réservez un créneau, on s'occupe du reste.
+              </p>
+              <div className="pt-2">
+                <Link href="/contact?sujet=demo" className="lr-btn-primary">
+                  Réserver une démo
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

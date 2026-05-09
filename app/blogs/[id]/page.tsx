@@ -33,13 +33,13 @@ export default function BlogDetailPage() {
 
   const handleDelete = async () => {
     if (!blog) return;
-    if (!confirm('Supprimer ce blog ?')) return;
+    if (!confirm('Supprimer cet article ?')) return;
     await deleteBlog(blog.id);
     window.location.href = '/blogs';
   };
 
-  if (loading) return <p className="p-4">Chargement...</p>;
-  if (!blog) return <p className="p-4">Blog introuvable.</p>;
+  if (loading) return <p className="p-4">Chargement…</p>;
+  if (!blog) return <p className="p-4">Cet article n'est plus en ligne.</p>;
 
   return (
     <main className="container mx-auto py-8 px-4 space-y-4">
@@ -51,7 +51,7 @@ export default function BlogDetailPage() {
       <div dangerouslySetInnerHTML={{ __html: blog.content }} />
       {blog.attachments && blog.attachments.length > 0 && (
         <div className="space-y-2">
-          <h2 className="font-semibold">Fichiers</h2>
+          <h2 className="font-semibold">Pièces jointes</h2>
           <ul className="list-disc ml-6 space-y-1">
             {blog.attachments.map((att, idx) => (
               <li key={idx}>

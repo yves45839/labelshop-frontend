@@ -1,27 +1,330 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   LABEL RETAIL — DESIGN SYSTEM INDUSTRIEL
+   Palette retravaillée : bleu nuit + orange/ambre + neutres acier
+   Typo : Barlow Condensed (titres) + Inter (corps)
+   Esthétique : grilles strictes, bordures nettes, peu d'arrondis
+   --------------------------------------------------------------------------- */
+
 :root {
+  /* Couleurs de marque */
+  --lr-navy-950: #050f1f;
+  --lr-navy-900: #0a1a33;
+  --lr-navy-800: #0b2545;
+  --lr-navy-700: #133b6f;
+  --lr-navy-600: #1f5198;
+  --lr-navy-500: #2d6cb6;
+
+  --lr-orange-700: #b45309;
+  --lr-orange-600: #c2410c;
+  --lr-orange-500: #ea580c;
+  --lr-orange-400: #f97316;
+  --lr-orange-300: #fb923c;
+  --lr-amber-500: #f59e0b;
+  --lr-amber-400: #fbbf24;
+
+  --lr-steel-50:  #f5f7fa;
+  --lr-steel-100: #e8edf3;
+  --lr-steel-200: #d4dbe4;
+  --lr-steel-300: #b3bdcc;
+  --lr-steel-400: #8a93a3;
+  --lr-steel-500: #5d6679;
+  --lr-steel-600: #3d465a;
+  --lr-steel-700: #29314a;
+  --lr-steel-800: #18203a;
+  --lr-steel-900: #0e1530;
+
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: var(--lr-navy-900);
+
+  /* Bordures techniques */
+  --lr-border: #d4dbe4;
+  --lr-border-strong: #8a93a3;
+  --lr-border-dark: #0b2545;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-lr-navy-950: var(--lr-navy-950);
+  --color-lr-navy-900: var(--lr-navy-900);
+  --color-lr-navy-800: var(--lr-navy-800);
+  --color-lr-navy-700: var(--lr-navy-700);
+  --color-lr-navy-600: var(--lr-navy-600);
+
+  --color-lr-orange-700: var(--lr-orange-700);
+  --color-lr-orange-600: var(--lr-orange-600);
+  --color-lr-orange-500: var(--lr-orange-500);
+  --color-lr-orange-400: var(--lr-orange-400);
+  --color-lr-amber-500: var(--lr-amber-500);
+
+  --color-lr-steel-50:  var(--lr-steel-50);
+  --color-lr-steel-100: var(--lr-steel-100);
+  --color-lr-steel-200: var(--lr-steel-200);
+  --color-lr-steel-300: var(--lr-steel-300);
+  --color-lr-steel-700: var(--lr-steel-700);
+  --color-lr-steel-800: var(--lr-steel-800);
+  --color-lr-steel-900: var(--lr-steel-900);
+
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Barlow Condensed', 'Oswald', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Geist Mono', monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---------------------------------------------------------------------------
+   BASE
+   --------------------------------------------------------------------------- */
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-feature-settings: 'cv11', 'ss01';
+  letter-spacing: -0.005em;
 }
 
+h1, h2, h3, h4, .lr-display {
+  font-family: 'Barlow Condensed', 'Oswald', 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  line-height: 1.05;
+  text-transform: none;
+}
+
+.lr-eyebrow {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+.lr-mono {
+  font-family: 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
+  font-feature-settings: 'tnum', 'zero';
+}
+
+/* ---------------------------------------------------------------------------
+   COMPOSANTS UTILITAIRES INDUSTRIELS
+   --------------------------------------------------------------------------- */
+
+/* Carte technique : bordure nette, coin coupé (très léger), header rayé */
+.lr-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid var(--lr-border);
+  border-radius: 2px;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.lr-card:hover {
+  border-color: var(--lr-navy-800);
+  box-shadow: 0 8px 24px -12px rgba(11, 37, 69, .25);
+}
+
+/* Carte avec accent orange en haut */
+.lr-card--accent::before {
+  content: "";
+  position: absolute; top: 0; left: 0;
+  width: 48px; height: 3px;
+  background: var(--lr-orange-500);
+}
+
+/* Carte sombre (sur fond navy) */
+.lr-card-dark {
+  background: var(--lr-navy-800);
+  border: 1px solid rgba(255,255,255,.08);
+  color: #fff;
+}
+
+/* Bouton industriel primaire (orange tranchant) */
+.lr-btn-primary {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .5rem;
+  padding: .8rem 1.5rem;
+  background: var(--lr-orange-600);
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  font-size: .95rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  border: 1px solid var(--lr-orange-700);
+  border-radius: 2px;
+  transition: background .15s ease, transform .15s ease;
+  cursor: pointer;
+}
+.lr-btn-primary:hover { background: var(--lr-orange-700); }
+.lr-btn-primary:active { transform: translateY(1px); }
+
+/* Bouton industriel secondaire (navy outline) */
+.lr-btn-secondary {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .5rem;
+  padding: .8rem 1.5rem;
+  background: transparent;
+  color: var(--lr-navy-800);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  font-size: .95rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  border: 1px solid var(--lr-navy-800);
+  border-radius: 2px;
+  transition: background .15s ease, color .15s ease;
+  cursor: pointer;
+}
+.lr-btn-secondary:hover { background: var(--lr-navy-800); color: #fff; }
+
+/* Bouton ghost (texte seul + flèche) */
+.lr-btn-ghost {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  font-size: .85rem;
+  color: var(--lr-orange-600);
+  border-bottom: 1px solid var(--lr-orange-600);
+  padding-bottom: 2px;
+  transition: color .15s, border-color .15s;
+}
+.lr-btn-ghost:hover { color: var(--lr-navy-800); border-color: var(--lr-navy-800); }
+
+/* Etiquette / chip technique */
+.lr-tag {
+  display: inline-flex; align-items: center;
+  padding: .25rem .55rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  font-size: .7rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  background: var(--lr-steel-100);
+  color: var(--lr-navy-800);
+  border: 1px solid var(--lr-steel-200);
+  border-radius: 2px;
+}
+.lr-tag--orange { background: #fff7ed; color: var(--lr-orange-700); border-color: #fed7aa; }
+.lr-tag--dark   { background: var(--lr-navy-800); color: #fff; border-color: var(--lr-navy-700); }
+.lr-tag--green  { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+
+/* Section heading : eyebrow + barre orange + titre */
+.lr-section-heading {
+  display: flex; flex-direction: column; gap: .65rem;
+}
+.lr-section-heading .bar {
+  display: inline-block;
+  width: 48px; height: 3px;
+  background: var(--lr-orange-500);
+}
+
+/* Coins techniques (corner brackets) */
+.lr-corners {
+  position: relative;
+}
+.lr-corners::before,
+.lr-corners::after {
+  content: "";
+  position: absolute;
+  width: 14px; height: 14px;
+  border: 2px solid var(--lr-orange-500);
+}
+.lr-corners::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+.lr-corners::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+/* Grille technique en arrière-plan (motif blueprint) */
+.lr-blueprint {
+  background-image:
+    linear-gradient(rgba(11,37,69,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11,37,69,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.lr-blueprint-dark {
+  background-color: var(--lr-navy-900);
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Hachures / safety stripe */
+.lr-stripe {
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--lr-amber-500) 0 12px,
+    #18203a 12px 24px
+  );
+  height: 4px;
+}
+
+/* Séparateur titre/contenu */
+.lr-divider {
+  height: 1px;
+  background: var(--lr-border);
+  position: relative;
+}
+.lr-divider::before {
+  content: "";
+  position: absolute; left: 0; top: 0;
+  width: 64px; height: 1px;
+  background: var(--lr-orange-500);
+}
+
+/* Input industriel */
+.lr-input {
+  width: 100%;
+  padding: .65rem .85rem;
+  background: #fff;
+  border: 1px solid var(--lr-border);
+  border-radius: 2px;
+  font-size: .9rem;
+  color: var(--lr-navy-900);
+  transition: border-color .15s, box-shadow .15s;
+}
+.lr-input:focus {
+  outline: none;
+  border-color: var(--lr-navy-800);
+  box-shadow: 0 0 0 2px rgba(11,37,69,.15);
+}
+
+/* Conteneur principal */
+.lr-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 768px) { .lr-container { padding-inline: 2rem; } }
+@media (min-width: 1280px) { .lr-container { padding-inline: 2.5rem; } }
+
+/* Section padding */
+.lr-section { padding-block: 4rem; }
+@media (min-width: 768px) { .lr-section { padding-block: 5.5rem; } }
+
+/* Tabular numbers pour stats */
+.lr-tnum { font-variant-numeric: tabular-nums; }
+
+/* Lien hover underline animé */
+.lr-link {
+  color: var(--lr-navy-800);
+  position: relative;
+  transition: color .15s;
+}
+.lr-link:hover { color: var(--lr-orange-600); }
+
+/* Scrollbar discrète */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--lr-steel-50); }
+::-webkit-scrollbar-thumb { background: var(--lr-steel-300); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--lr-navy-700); }
+
+/* Force corners droits sur tout (override Tailwind si besoin) */
+.lr-square { border-radius: 0 !important; }

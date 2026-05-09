@@ -61,30 +61,27 @@ const benefits = [
 
 export default function LrTimePage() {
   return (
-    <main className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-white text-[var(--lr-navy-900)]">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-indigo-700 via-indigo-800 to-slate-900 px-6 py-20 text-white md:px-10 lg:px-20">
-        <div className="mx-auto max-w-screen-xl">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-indigo-100">
-            Logiciel maison Label Retail
-          </span>
-          <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
-            LR Time — pilotez le temps de travail de vos équipes, sans tableur.
+      <section className="relative bg-[var(--lr-navy-900)] text-white border-b border-[var(--lr-orange-500)] overflow-hidden">
+        <div className="absolute inset-0 lr-blueprint-dark opacity-50" />
+        <div className="lr-stripe absolute top-0 left-0 right-0" />
+        <div className="relative lr-container py-20">
+          <span className="lr-eyebrow text-[var(--lr-orange-400)]">Logiciel maison Label Retail</span>
+          <h1 className="font-display text-4xl md:text-6xl font-bold uppercase leading-[1.05] tracking-tight max-w-4xl mt-3">
+            LR Time — <span className="text-[var(--lr-orange-400)]">pilotez le temps</span> de travail de vos équipes, sans tableur.
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-indigo-100">
+          <p className="mt-5 max-w-2xl text-lg text-white/70 leading-relaxed">
             Pointage, plannings, congés, heures sup, exports paie : un seul SaaS pour remplacer vos cahiers,
             tableurs et fichiers Excel disséminés.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/contact?sujet=demo"
-              className="inline-flex items-center justify-center rounded-full bg-amber-500 px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-amber-400"
-            >
+            <Link href="/contact?sujet=demo" className="lr-btn-primary">
               Demander une démo
             </Link>
             <Link
               href="/contact?sujet=devis"
-              className="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="inline-flex items-center justify-center px-6 py-3 border border-white/30 font-display text-xs font-semibold uppercase tracking-widest text-white hover:bg-white/10 transition-colors"
             >
               Recevoir un devis
             </Link>
@@ -93,17 +90,22 @@ export default function LrTimePage() {
       </section>
 
       {/* Bénéfices */}
-      <section className="px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-screen-xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-700">Pourquoi LR Time</span>
-            <h2 className="mt-2 text-3xl font-semibold md:text-4xl">Conçu chez nous, déployé chez vous</h2>
+      <section className="lr-section">
+        <div className="lr-container">
+          <div className="lr-section-heading mb-10">
+            <span className="bar" />
+            <span className="lr-eyebrow text-[var(--lr-orange-700)]">Pourquoi LR Time</span>
+            <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">
+              Conçu chez nous, déployé chez vous
+            </h2>
           </div>
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {benefits.map((benefit) => (
-              <div key={benefit.title} className="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-slate-900">{benefit.title}</h3>
-                <p className="mt-2 text-sm text-slate-700">{benefit.description}</p>
+          <div className="grid gap-px bg-[var(--lr-border)] border border-[var(--lr-border)] md:grid-cols-3">
+            {benefits.map((benefit, idx) => (
+              <div key={benefit.title} className="bg-white p-6 relative">
+                <span className="absolute top-0 left-0 h-0.5 w-12 bg-[var(--lr-orange-500)]" />
+                <span className="lr-mono text-[10px] text-[var(--lr-steel-400)]">0{idx + 1} / 03</span>
+                <h3 className="mt-3 font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)] leading-tight">{benefit.title}</h3>
+                <p className="mt-2 text-sm text-[var(--lr-steel-700)] leading-relaxed">{benefit.description}</p>
               </div>
             ))}
           </div>
@@ -111,23 +113,25 @@ export default function LrTimePage() {
       </section>
 
       {/* Modules */}
-      <section className="border-y border-slate-200 bg-slate-50 px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-screen-xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-700">Les modules</span>
-            <h2 className="mt-2 text-3xl font-semibold md:text-4xl">Tout ce qu'il faut, rien de plus</h2>
-            <p className="mt-3 text-sm text-slate-700">
+      <section className="lr-section bg-[var(--lr-steel-50)] border-y border-[var(--lr-border)]">
+        <div className="lr-container">
+          <div className="lr-section-heading mb-10">
+            <span className="bar" />
+            <span className="lr-eyebrow text-[var(--lr-orange-700)]">Les modules</span>
+            <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">Tout ce qu'il faut, rien de plus</h2>
+            <p className="mt-2 text-sm text-[var(--lr-steel-700)] max-w-2xl">
               Six modules couvrant la chaîne complète, du pointage de l'employé à l'export pour le service paie.
             </p>
           </div>
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {modules.map((module) => (
+          <div className="grid gap-px bg-[var(--lr-border)] border border-[var(--lr-border)] md:grid-cols-2 lg:grid-cols-3">
+            {modules.map((module, idx) => (
               <div
                 key={module.title}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-indigo-300 hover:shadow-md"
+                className="bg-white p-6 relative hover:bg-[var(--lr-steel-50)] transition-colors"
               >
-                <h3 className="text-lg font-semibold text-slate-900">{module.title}</h3>
-                <p className="mt-2 text-sm text-slate-700">{module.description}</p>
+                <span className="lr-mono text-[10px] text-[var(--lr-steel-400)]">MOD.{String(idx + 1).padStart(2, '0')}</span>
+                <h3 className="mt-2 font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)] leading-tight">{module.title}</h3>
+                <p className="mt-2 text-sm text-[var(--lr-steel-700)] leading-relaxed">{module.description}</p>
               </div>
             ))}
           </div>
@@ -135,41 +139,47 @@ export default function LrTimePage() {
       </section>
 
       {/* Tarification indicative */}
-      <section className="px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto max-w-3xl rounded-3xl border border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-indigo-50 p-10 text-center shadow-lg">
-          <span className="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-700">Tarification</span>
-          <h2 className="mt-2 text-2xl font-semibold md:text-3xl">À partir d'un forfait par utilisateur actif et par mois</h2>
-          <p className="mt-3 text-sm text-slate-700">
-            Le tarif final dépend du nombre de sites, des modules retenus et du périphérique de pointage choisi.
-            Demandez-nous une simulation chiffrée — réponse sous 24h.
-          </p>
-          <div className="mt-6">
-            <Link
-              href="/contact?sujet=devis"
-              className="inline-flex items-center justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow transition hover:bg-indigo-700"
-            >
-              Recevoir une simulation
-            </Link>
+      <section className="lr-section">
+        <div className="lr-container">
+          <div className="max-w-3xl mx-auto bg-[var(--lr-navy-900)] text-white border border-[var(--lr-navy-800)] p-10 relative">
+            <span className="absolute top-0 left-0 h-1 w-16 bg-[var(--lr-orange-500)]" />
+            <span className="lr-eyebrow text-[var(--lr-orange-400)]">Tarification</span>
+            <h2 className="mt-2 font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
+              À partir d'un forfait par utilisateur actif et par mois
+            </h2>
+            <p className="mt-4 text-sm text-white/70 leading-relaxed">
+              Le tarif final dépend du nombre de sites, des modules retenus et du périphérique de pointage choisi.
+              Demandez-nous une simulation chiffrée — réponse sous 24h.
+            </p>
+            <div className="mt-6">
+              <Link href="/contact?sujet=devis" className="lr-btn-primary">
+                Recevoir une simulation
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* CTA final */}
-      <section className="border-t border-slate-200 bg-slate-50 px-6 py-16 md:px-10 lg:px-20">
-        <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
-          <h2 className="text-3xl font-semibold md:text-4xl">Prêt à voir LR Time sur vos données ?</h2>
-          <p className="max-w-2xl text-sm text-slate-700">
-            Une démo de 30 minutes suffit pour valider l'adéquation avec votre organisation. Nous vous montrons les
-            écrans qui comptent pour votre activité — pas de slide générique.
-          </p>
-          <Link
-            href="/contact?sujet=demo"
-            className="inline-flex items-center justify-center rounded-full bg-amber-500 px-6 py-3 text-sm font-semibold text-slate-900 shadow transition hover:bg-amber-400"
-          >
-            Réserver ma démo
-          </Link>
+      <section className="lr-section bg-[var(--lr-steel-50)] border-t border-[var(--lr-border)]">
+        <div className="lr-container">
+          <div className="max-w-4xl mx-auto text-center bg-white border border-[var(--lr-border)] p-10">
+            <div className="lr-stripe -mx-10 -mt-10 mb-6" />
+            <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">
+              Prêt à voir LR Time sur vos données ?
+            </h2>
+            <p className="mt-4 max-w-2xl mx-auto text-sm text-[var(--lr-steel-700)] leading-relaxed">
+              Une démo de 30 minutes suffit pour valider l'adéquation avec votre organisation. Nous vous montrons les
+              écrans qui comptent pour votre activité — pas de slide générique.
+            </p>
+            <div className="mt-6">
+              <Link href="/contact?sujet=demo" className="lr-btn-primary">
+                Réserver ma démo
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

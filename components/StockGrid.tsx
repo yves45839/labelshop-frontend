@@ -36,7 +36,7 @@ export default function StockGrid({
             <p className="mt-auto font-bold">{p.price.toLocaleString()} FCFA</p>
           )}
           <div className="mt-2 flex items-center justify-between">
-            <span className="text-sm">Stock: {p.quantity}</span>
+            <span className="text-sm">Stock : {p.quantity}</span>
             {onUpdate && (
               <div className="space-x-1">
                 <button

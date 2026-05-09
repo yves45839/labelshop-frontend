@@ -36,67 +36,60 @@ export default function CreateProductPage() {
         reference,
         price: parseFloat(price) || 0,
       });
-      setMessage('Produit ajouté');
+      setMessage('Produit ajouté.');
       setName('');
       setSlug('');
       setReference('');
       setPrice('');
     } catch {
-      setMessage("Erreur lors de l'ajout du produit");
+      setMessage("L'ajout n'a pas abouti. Vérifiez les champs et réessayez.");
     }
   };
 
-  if (loading) return <p className="p-4">Chargement...</p>;
+  if (loading) return <p className="lr-container py-12 lr-mono text-sm text-[var(--lr-steel-500)]">// Chargement…</p>;
 
   return (
-    <main className="container mx-auto py-8 px-4 space-y-6">
-      <h1 className="text-2xl font-bold text-center mb-4">Ajouter un produit</h1>
-      <div className="flex justify-center gap-4">
-        <Link href="/inventory" className="text-blue-600 underline">
-          Inventaire
-        </Link>
-        <Link href="/stock" className="text-blue-600 underline">
-          Stock
-        </Link>
-      </div>
-      {message && <p className="text-green-600 text-center">{message}</p>}
-      <form onSubmit={handleSubmit} className="space-y-2 max-w-md mx-auto">
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Nom"
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          value={slug}
-          onChange={(e) => setSlug(e.target.value)}
-          placeholder="Slug"
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          value={reference}
-          onChange={(e) => setReference(e.target.value)}
-          placeholder="Référence"
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder="Prix"
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
-        >
-          Créer
-        </button>
-      </form>
-    </main>
+    <div className="bg-[var(--lr-steel-50)] min-h-screen">
+      <header className="bg-[var(--lr-navy-900)] text-white border-b border-[var(--lr-orange-500)]">
+        <div className="lr-container py-10">
+          <span className="lr-eyebrow text-[var(--lr-orange-400)]">Console admin</span>
+          <h1 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight mt-1">Ajouter un produit</h1>
+        </div>
+      </header>
+
+      <main className="lr-container py-10">
+        <div className="flex justify-center gap-3 mb-8">
+          <Link href="/inventory" className="lr-btn-secondary">Inventaire</Link>
+          <Link href="/stock" className="lr-btn-secondary">Stock</Link>
+        </div>
+
+        {message && (
+          <div className="max-w-md mx-auto mb-4 border border-emerald-300 bg-emerald-50 text-emerald-800 px-4 py-3 lr-mono text-sm">
+            // {message}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto bg-white border border-[var(--lr-border)] p-6">
+          <div className="lr-stripe -mx-6 -mt-6 mb-4" />
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Nom</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nom" className="lr-input" required />
+          </div>
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Slug</label>
+            <input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="Slug" className="lr-input" required />
+          </div>
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Référence</label>
+            <input value={reference} onChange={(e) => setReference(e.target.value)} placeholder="Référence" className="lr-input lr-mono" required />
+          </div>
+          <div>
+            <label className="lr-eyebrow text-[var(--lr-steel-500)] block mb-1">Prix</label>
+            <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Prix" className="lr-input lr-mono" required />
+          </div>
+          <button type="submit" className="lr-btn-primary w-full">Créer</button>
+        </form>
+      </main>
+    </div>
   );
 }

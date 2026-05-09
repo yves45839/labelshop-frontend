@@ -36,21 +36,21 @@ export default function StockPage() {
     }
   };
 
-  if (loading) return <p className="p-4">Chargement...</p>;
+  if (loading) return <p className="p-4">Chargement…</p>;
 
   return (
     <main className="container mx-auto py-8 px-4 space-y-4">
-      <h1 className="text-2xl font-bold text-center mb-4">Gestion de stock</h1>
+      <h1 className="text-2xl font-bold text-center mb-4">Gestion du stock</h1>
       <div className="flex justify-center gap-4">
         <Link href="/inventory" className="text-blue-600 underline">
           Inventaire
         </Link>
         <Link href="/products/create" className="text-blue-600 underline">
-          Ajouter produit
+          Ajouter un produit
         </Link>
       </div>
       {items.length === 0 ? (
-        <p>Aucun produit en stock.</p>
+        <p>Le stock est vide pour le moment.</p>
       ) : (
         <StockGrid products={items} onUpdate={handleUpdate} />
       )}

@@ -25,25 +25,25 @@ export default function BlogsPage() {
   }, []);
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Supprimer ce blog ?')) return;
+    if (!confirm('Supprimer cet article ?')) return;
     await deleteBlog(id);
     setBlogs(blogs.filter((b) => b.id !== id));
   };
 
-  if (loading) return <p className="p-4">Chargement...</p>;
+  if (loading) return <p className="p-4">Chargement…</p>;
 
   return (
     <main className="container mx-auto py-8 px-4 space-y-4">
-      <h1 className="text-2xl font-bold text-center mb-4">Blogs</h1>
+      <h1 className="text-2xl font-bold text-center mb-4">Le blog</h1>
       {isAdmin && (
         <div className="text-center">
           <Link href="/blogs/create" className="text-blue-600 underline">
-            Nouveau blog
+            Nouvel article
           </Link>
         </div>
       )}
       {blogs.length === 0 ? (
-        <p>Aucun blog disponible.</p>
+        <p>Pas encore d'article publié. Revenez bientôt.</p>
       ) : (
         <ul className="space-y-2">
           {blogs.map((blog) => (
