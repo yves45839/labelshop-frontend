@@ -53,6 +53,9 @@ export function markdownToHtml(md: string): string {
     // Italique
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
 
+    // Images (doit précéder les liens)
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="w-full object-cover my-6 max-h-[480px]" loading="lazy" />')
+
     // Liens
     .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="text-[var(--lr-orange-600)] underline hover:text-[var(--lr-orange-800)]" target="_blank">$1</a>')
 
