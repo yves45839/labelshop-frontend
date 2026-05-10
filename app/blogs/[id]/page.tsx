@@ -151,7 +151,7 @@ export default function BlogDetailPage() {
               <h2 className="font-display text-base font-bold uppercase tracking-wide text-[var(--lr-navy-900)]">Pièces jointes</h2>
             </div>
             <ul className="space-y-2 text-sm">
-              {(blog.attachments as string[]).map((att, i) => (
+              {(blog.attachments as unknown as string[]).map((att, i) => (
                 <li key={i} className="flex items-center gap-2">
                   <span className="text-[var(--lr-orange-600)]">›</span>
                   <a href={att} target="_blank" rel="noopener noreferrer"
