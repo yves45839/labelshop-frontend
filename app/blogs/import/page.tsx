@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { createBlog } from '@/lib/blogs';
+import { createBlogJson } from '@/lib/blogs';
 import { getCurrentUser, isAdminEmail } from '@/lib/user';
 import { markdownToHtml } from '@/lib/markdown';
 import { ARTICLES as SOURCE_ARTICLES } from './articles-data';
@@ -70,14 +70,14 @@ export default function ImportBlogsPage() {
     setStatuses((prev) => { const n = [...prev]; n[idx] = { status: 'loading' }; return n; });
     try {
       const art = edits[idx];
-      const form = new FormData();
-      form.append('title', art.title);
-      form.append('content', art.content);
-      form.append('author_name', art.author_name);
-      form.append('category', art.category);
-      form.append('language', art.language);
-      form.append('published_date', art.published_date);
-      await createBlog(form);
+      await createBlogJson({
+        title: art.title,
+        content: art.content,
+        author_name: art.author_name,
+        category: art.category,
+        language: art.language,
+        published_date: art.published_date,
+      });
       setStatuses((prev) => { const n = [...prev]; n[idx] = { status: 'success' }; return n; });
       return true;
     } catch (err: any) {

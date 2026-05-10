@@ -30,21 +30,66 @@ export async function getBlog(id: number | string): Promise<BlogData> {
 }
 
 export async function createBlog(data: FormData): Promise<BlogData> {
-  const res = await api.post('/blogs/create/', data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
-  return res.data;
+  // Try standard DRF POST /blogs/ first, fall back to /blogs/create/
+  try {
+    const res = await api.post('/blogs/', data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return res.data;
+  } catch (err: any) {
+    if (err?.response?.status === 405) {
+      const res = await api.post('/blogs/create/', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return res.data;
+    }
+    throw err;
+  }
+}
+
+/** Version JSON pour l'import en masse (pas de fichiers joints) */
+export async function createBlogJson(data: Record<string, string>): Promise<BlogData> {
+  try {
+    const res = await api.post('/blogs/', data);
+    return res.data;
+  } catch (err: any) {
+    if (err?.response?.status === 405) {
+      const res = await api.post('/blogs/create/', data);
+      return res.data;
+    }
+    throw err;
+  }
 }
 
 export async function updateBlog(id: number | string, data: FormData): Promise<BlogData> {
-  const res = await api.post(`/blogs/${id}/update/`, data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
-  return res.data;
+  // Try PATCH /blogs/{id}/ (standard DRF), fall back to POST /blogs/{id}/update/
+  try {
+    const res = await api.patch(`/blogs/${id}/`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return res.data;
+  } catch (err: any) {
+    if (err?.response?.status === 405) {
+      const res = await api.post(`/blogs/${id}/update/`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return res.data;
+    }
+    throw err;
+  }
 }
 
 export async function deleteBlog(id: number | string): Promise<void> {
-  await api.delete(`/blogs/${id}/delete/`);
+  // Try DELETE /blogs/{id}/ first, fall back to /blogs/{id}/delete/
+  try {
+    await api.delete(`/blogs/${id}/`);
+  } catch (err: any) {
+    if (err?.response?.status === 405) {
+      await api.delete(`/blogs/${id}/delete/`);
+      return;
+    }
+    throw err;
+  }
 }
 
 /** Formate une date ISO en texte lisible (ex: "15 janvier 2025") */
