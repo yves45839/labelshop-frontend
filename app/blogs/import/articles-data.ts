@@ -766,7 +766,7 @@ La fibre optique utilisée comme capteur (DAS — Distributed Acoustic Sensor) d
 
 Avantage majeur : immunité totale aux orages, aux perturbations électromagnétiques, aux variations de température. Idéal pour les infrastructures de transport d'hydrocarbures.
 
-### Barri&egrave;res infrarouges actives : le standard périmétrique
+### Barrières infrarouges actives : le standard périmétrique
 
 Pour les clôtures et périmètres rectilignes, les barrières infrarouge à faisceaux multiples (4, 8 ou 16 faisceaux) restent la solution la plus économique pour une détection fiable.
 
@@ -842,16 +842,14 @@ Les installateurs ouvrent souvent des ports sur le routeur pour l'accès à dist
 
 ### Architecture réseau recommandée
 
-```
-Internet
-    │
-[Routeur/Firewall]
-    │
-    ├── VLAN 10 : Réseau bureautique (PC, téléphones)
-    ├── VLAN 20 : Caméras IP (isolated, pas d'accès internet sortant)
-    │       └── [NVR] ← accès lecture seule depuis VLAN 30
-    └── VLAN 30 : Opérateurs sécurité (poste supervision)
-```
+    Internet
+        │
+    [Routeur/Firewall]
+        │
+        ├── VLAN 10 : Réseau bureautique (PC, téléphones)
+        ├── VLAN 20 : Caméras IP (pas d'accès internet sortant)
+        │       └── [NVR] ← accès lecture seule depuis VLAN 30
+        └── VLAN 30 : Opérateurs sécurité (poste supervision)
 
 Les caméras sur VLAN 20 ne peuvent pas initier de connexions vers internet. L'accès distant se fait via VPN → VLAN 30 → NVR uniquement.
 
