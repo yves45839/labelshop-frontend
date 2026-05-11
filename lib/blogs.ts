@@ -1,5 +1,3 @@
-import { api } from './api';
-
 export interface BlogData {
   id?: number;
   title: string;
@@ -19,77 +17,69 @@ export interface BlogData {
   [key: string]: any;
 }
 
+/** Tous les appels passent par le proxy Next.js → zéro CORS, zéro CSRF */
 export async function listBlogs(): Promise<BlogData[]> {
-  const res = await api.get('/blogs/');
-  return res.data;
+  const res = await fetch('/api/blogs', { cache: 'no-store' });
+  if (!res.ok) throw new Error(`listBlogs: erreur ${res.status}`);
+  return res.json();
 }
 
 export async function getBlog(id: number | string): Promise<BlogData> {
-  const res = await api.get(`/blogs/${id}/`);
-  return res.data;
+  const res = await fetch(`/api/blogs?id=${id}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`getBlog: erreur ${res.status}`);
+  return res.json();
+}
+
+/** Proxy interne Next.js — contourne le CSRF Django côté serveur */
+async function proxyPost(body: Record<string, unknown>): Promise<BlogData> {
+  const res = await fetch('/api/blogs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  if (!res.ok) throw { response: { status: res.status, data } };
+  return data;
+}
+
+async function proxyPatch(id: number | string, body: Record<string, unknown>): Promise<BlogData> {
+  const res = await fetch(`/api/blogs?id=${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  if (!res.ok) throw { response: { status: res.status, data } };
+  return data;
+}
+
+async function proxyDelete(id: number | string): Promise<void> {
+  const res = await fetch(`/api/blogs?id=${id}`, { method: 'DELETE' });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw { response: { status: res.status, data } };
+  }
 }
 
 export async function createBlog(data: FormData): Promise<BlogData> {
-  // Try standard DRF POST /blogs/ first, fall back to /blogs/create/
-  try {
-    const res = await api.post('/blogs/', data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-    return res.data;
-  } catch (err: any) {
-    if (err?.response?.status === 405) {
-      const res = await api.post('/blogs/create/', data, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      return res.data;
-    }
-    throw err;
-  }
+  const body: Record<string, unknown> = {};
+  data.forEach((v, k) => { body[k] = v; });
+  return proxyPost(body);
 }
 
 /** Version JSON pour l'import en masse (pas de fichiers joints) */
 export async function createBlogJson(data: Record<string, string>): Promise<BlogData> {
-  try {
-    const res = await api.post('/blogs/', data);
-    return res.data;
-  } catch (err: any) {
-    if (err?.response?.status === 405) {
-      const res = await api.post('/blogs/create/', data);
-      return res.data;
-    }
-    throw err;
-  }
+  return proxyPost(data);
 }
 
 export async function updateBlog(id: number | string, data: FormData): Promise<BlogData> {
-  // Try PATCH /blogs/{id}/ (standard DRF), fall back to POST /blogs/{id}/update/
-  try {
-    const res = await api.patch(`/blogs/${id}/`, data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-    return res.data;
-  } catch (err: any) {
-    if (err?.response?.status === 405) {
-      const res = await api.post(`/blogs/${id}/update/`, data, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      return res.data;
-    }
-    throw err;
-  }
+  const body: Record<string, unknown> = {};
+  data.forEach((v, k) => { body[k] = v; });
+  return proxyPatch(id, body);
 }
 
 export async function deleteBlog(id: number | string): Promise<void> {
-  // Try DELETE /blogs/{id}/ first, fall back to /blogs/{id}/delete/
-  try {
-    await api.delete(`/blogs/${id}/`);
-  } catch (err: any) {
-    if (err?.response?.status === 405) {
-      await api.delete(`/blogs/${id}/delete/`);
-      return;
-    }
-    throw err;
-  }
+  return proxyDelete(id);
 }
 
 /** Formate une date ISO en texte lisible (ex: "15 janvier 2025") */
