@@ -125,7 +125,9 @@ export default function BlogsPage() {
             {filtered.map((blog, idx) => {
               const pubDate = formatDate(blog.published_date || blog.created_at);
               const modDate = formatDateTime(blog.updated_at);
-              const hasBeenEdited = blog.updated_at && blog.created_at && blog.updated_at !== blog.created_at;
+              // Plus de 60s d'écart pour ne pas afficher la mention sur les articles fraîchement créés
+              const hasBeenEdited = blog.updated_at && blog.created_at &&
+                Math.abs(new Date(blog.updated_at).getTime() - new Date(blog.created_at).getTime()) > 60_000;
 
               return (
                 <article
