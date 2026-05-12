@@ -62,11 +62,11 @@ function ChapterItem({
       <ul className={`mt-1 space-y-1 ${depth === 0 ? 'pl-6' : 'pl-4'}`}>
         {item.items.map((sub) => (
           <li
-            key={typeof sub === 'string' ? sub : sub.title}
+            key={sub}
             className="flex items-start gap-2 text-sm text-[var(--lr-steel-700)]"
           >
             <span className="mt-0.5 text-[var(--lr-steel-400)] shrink-0">·</span>
-            <span>{typeof sub === 'string' ? sub : sub.title}</span>
+            <span>{sub}</span>
           </li>
         ))}
       </ul>
