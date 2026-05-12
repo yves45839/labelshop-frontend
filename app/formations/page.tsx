@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
+import { formations } from '@/lib/formations-data';
 
 export const metadata: Metadata = {
   title: 'Formations — Label Retail',
@@ -57,7 +59,7 @@ const sessions = [
     title: 'Configuration HikCentral Pro',
     family: 'Techniques Hikvision',
     duration: '3 jours',
-    location: 'Plateau, Abidjan',
+    format: 'En présentiel',
     seats: '8 places',
   },
   {
@@ -65,7 +67,7 @@ const sessions = [
     title: 'LR Time pour managers',
     family: 'Utilisateurs LR Time',
     duration: '1 jour',
-    location: 'En ligne',
+    format: 'En ligne',
     seats: '12 places',
   },
   {
@@ -73,7 +75,7 @@ const sessions = [
     title: 'Habilitation B1V/H1V',
     family: 'Certifiantes & habilitations',
     duration: '2 jours',
-    location: 'Marcory, Abidjan',
+    format: 'En présentiel',
     seats: '10 places',
   },
   {
@@ -81,7 +83,7 @@ const sessions = [
     title: 'Maintenance des caméras IP',
     family: 'Techniques Hikvision',
     duration: '2 jours',
-    location: 'Plateau, Abidjan',
+    format: 'En présentiel',
     seats: '8 places',
   },
 ];
@@ -103,12 +105,18 @@ export default function FormationsPage() {
             à Abidjan ou en distanciel.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="#sessions" className="lr-btn-primary">Voir les sessions ouvertes</Link>
+            <Link href="#catalogue" className="lr-btn-primary">Voir le catalogue détaillé</Link>
+            <Link
+              href="#sessions"
+              className="inline-flex items-center justify-center px-6 py-3 border border-white/30 font-display text-xs font-semibold uppercase tracking-widest text-white hover:bg-white/10 transition-colors"
+            >
+              Sessions ouvertes
+            </Link>
             <Link
               href="/contact?sujet=formation"
               className="inline-flex items-center justify-center px-6 py-3 border border-white/30 font-display text-xs font-semibold uppercase tracking-widest text-white hover:bg-white/10 transition-colors"
             >
-              Demander une formation sur-mesure
+              Formation sur-mesure
             </Link>
           </div>
         </div>
@@ -153,8 +161,110 @@ export default function FormationsPage() {
         </div>
       </section>
 
+      {/* Catalogue détaillé */}
+      <section id="catalogue" className="lr-section">
+        <div className="lr-container">
+          <div className="lr-section-heading mb-10">
+            <span className="bar" />
+            <span className="lr-eyebrow text-[var(--lr-orange-700)]">Catalogue détaillé</span>
+            <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">
+              Cinq parcours techniques, du débutant au niveau avancé
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm text-[var(--lr-steel-700)]">
+              Programmes construits par des installateurs et formateurs Label Retail.
+              Chaque parcours couvre la théorie, l&apos;installation, la configuration, la
+              cybersécurité et des travaux pratiques sur du matériel réel.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {formations.map((formation, idx) => (
+              <article
+                key={formation.slug}
+                className="flex flex-col bg-white border border-[var(--lr-border)] hover:border-[var(--lr-orange-500)] transition-colors"
+              >
+                <div className="relative aspect-[16/9] overflow-hidden bg-[var(--lr-steel-100)]">
+                  <Image
+                    src={formation.cover}
+                    alt={`Apprenants en formation ${formation.shortTitle} — Label Retail`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  <div className="absolute top-3 left-3 flex flex-wrap gap-2">
+                    <span className="lr-tag lr-tag--orange">{formation.level}</span>
+                    <span className="lr-tag bg-white/90 text-[var(--lr-navy-900)] border-white">
+                      {formation.duration}
+                    </span>
+                  </div>
+                  <div className="absolute bottom-3 left-3 right-3 text-white">
+                    <span className="lr-mono text-[10px] uppercase tracking-widest text-white/80">
+                      CAT.0{idx + 1} · {formation.family}
+                    </span>
+                    <h3 className="mt-1 font-display text-lg md:text-xl font-bold uppercase tracking-tight leading-tight">
+                      {formation.shortTitle}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-4 p-6">
+                  <p className="text-sm text-[var(--lr-steel-700)] leading-relaxed">
+                    {formation.summary}
+                  </p>
+
+                  <div className="border-t border-[var(--lr-border)] pt-3">
+                    <span className="lr-eyebrow text-[var(--lr-steel-500)]">Public visé</span>
+                    <p className="mt-1 text-sm text-[var(--lr-navy-900)]">{formation.audience}</p>
+                  </div>
+
+                  <details className="group border-t border-[var(--lr-border)] pt-3">
+                    <summary className="flex items-center justify-between gap-2 cursor-pointer list-none">
+                      <span className="lr-eyebrow text-[var(--lr-orange-700)]">
+                        Voir le programme ({formation.chapters.length} chapitres)
+                      </span>
+                      <span className="font-display text-xs text-[var(--lr-steel-500)] group-open:rotate-180 transition-transform">
+                        ▼
+                      </span>
+                    </summary>
+                    <ul className="mt-4 space-y-2 text-sm text-[var(--lr-steel-700)]">
+                      {formation.chapters.slice(0, 8).map((chapter) => (
+                        <li key={chapter.title} className="flex items-start gap-2">
+                          <span className="mt-0.5 text-[var(--lr-orange-600)]">›</span>
+                          <span>{chapter.title}</span>
+                        </li>
+                      ))}
+                      {formation.chapters.length > 8 && (
+                        <li className="text-xs text-[var(--lr-steel-500)] lr-mono pl-4">
+                          + {formation.chapters.length - 8} autres chapitres détaillés
+                        </li>
+                      )}
+                    </ul>
+                  </details>
+
+                  <div className="mt-auto flex flex-wrap gap-3 pt-3 border-t border-[var(--lr-border)]">
+                    <Link
+                      href={`/formations/${formation.slug}`}
+                      className="inline-flex items-center justify-center bg-[var(--lr-navy-900)] hover:bg-black px-4 py-2 font-display text-xs font-semibold uppercase tracking-widest text-white transition-colors"
+                    >
+                      Programme détaillé
+                    </Link>
+                    <Link
+                      href={`/contact?sujet=formation&formation=${encodeURIComponent(formation.shortTitle)}`}
+                      className="inline-flex items-center justify-center bg-[var(--lr-orange-600)] hover:bg-[var(--lr-orange-700)] px-4 py-2 font-display text-xs font-semibold uppercase tracking-widest text-white border border-[var(--lr-orange-700)] transition-colors"
+                    >
+                      Demander un devis
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Sessions */}
-      <section id="sessions" className="lr-section">
+      <section id="sessions" className="lr-section bg-[var(--lr-steel-50)] border-t border-[var(--lr-border)]">
         <div className="lr-container">
           <div className="lr-section-heading mb-10">
             <span className="bar" />
@@ -165,6 +275,9 @@ export default function FormationsPage() {
             <p className="mt-2 max-w-2xl text-sm text-[var(--lr-steel-700)]">
               Inscrivez-vous en quelques clics. Les places sont limitées pour garantir la qualité pédagogique.
             </p>
+            <p className="mt-2 max-w-2xl text-xs text-[var(--lr-steel-500)] lr-mono">
+              // Le lieu précis de la formation en présentiel vous est communiqué après inscription, via WhatsApp ou email.
+            </p>
           </div>
 
           <div className="border border-[var(--lr-border)] bg-white overflow-x-auto">
@@ -174,7 +287,7 @@ export default function FormationsPage() {
                   <th className="px-4 py-3 md:px-6 font-display uppercase tracking-widest text-xs">Date</th>
                   <th className="px-4 py-3 md:px-6 font-display uppercase tracking-widest text-xs">Formation</th>
                   <th className="hidden px-4 py-3 md:table-cell md:px-6 font-display uppercase tracking-widest text-xs">Famille</th>
-                  <th className="hidden px-4 py-3 md:table-cell md:px-6 font-display uppercase tracking-widest text-xs">Lieu</th>
+                  <th className="hidden px-4 py-3 md:table-cell md:px-6 font-display uppercase tracking-widest text-xs">Format</th>
                   <th className="px-4 py-3 md:px-6 font-display uppercase tracking-widest text-xs">Action</th>
                 </tr>
               </thead>
@@ -187,11 +300,11 @@ export default function FormationsPage() {
                     </td>
                     <td className="px-4 py-4 md:px-6">
                       <div className="font-display font-semibold uppercase tracking-wide text-[var(--lr-navy-900)]">{session.title}</div>
-                      <div className="text-xs text-[var(--lr-steel-500)] md:hidden">{session.family} · {session.location}</div>
+                      <div className="text-xs text-[var(--lr-steel-500)] md:hidden">{session.family} · {session.format}</div>
                     </td>
                     <td className="hidden px-4 py-4 text-[var(--lr-steel-700)] md:table-cell md:px-6">{session.family}</td>
                     <td className="hidden px-4 py-4 text-[var(--lr-steel-700)] md:table-cell md:px-6">
-                      <div>{session.location}</div>
+                      <div>{session.format}</div>
                       <div className="lr-mono text-[10px] text-emerald-700">{session.seats}</div>
                     </td>
                     <td className="px-4 py-4 md:px-6">

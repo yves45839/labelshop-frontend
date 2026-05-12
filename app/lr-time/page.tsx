@@ -2,60 +2,66 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'LR Time — Logiciel de gestion du temps et des présences',
+  title: 'LR Time — Pointage Hikvision, plannings et rapports de présence',
   description:
-    "LR Time est le SaaS de Label Retail pour piloter pointages, congés, heures supplémentaires et exports paie. Pensé pour les entreprises ivoiriennes et africaines.",
+    "LR Time est le SaaS multi-tenant de Label Retail pour piloter pointage Hikvision, plannings, congés, employés, terminaux et rapports de présence. Pensé pour les entreprises ivoiriennes et africaines.",
   alternates: { canonical: '/lr-time' },
 };
 
 const modules = [
   {
-    title: 'Pointage multi-canaux',
+    slug: 'pointage',
+    title: 'Pointage Hikvision',
     description:
-      'Biométrie, badges RFID/NFC, application mobile géolocalisée ou web. Chaque collaborateur pointe avec le canal qui lui convient.',
+      'Terminaux Hikvision (biométrie visage, empreinte, carte RFID) intégrés via Hik Device Gateway. Ingestion temps réel par webhook + rattrapage automatique en cas de coupure réseau.',
   },
   {
-    title: 'Plannings & équipes',
+    slug: 'plannings',
+    title: 'Plannings & shifts',
     description:
-      'Construisez les rotations de vos équipes, gérez les remplacements et anticipez la couverture des postes critiques.',
+      "Plannings hebdomadaires, périodes datées, work shifts (heures de travail, pauses, marges de retard et de départ anticipé, heures supplémentaires). Affectation par employé ou par département, avec règles weekend flexible.",
   },
   {
+    slug: 'conges',
     title: 'Congés & absences',
     description:
-      'Workflow de demande, validation managériale, soldes calculés automatiquement, alertes et notifications email.',
+      "Demandes de congés (payés, maladie, sans solde, spéciaux) avec workflow de validation manager : approbation, rejet motivé, annulation. Soldes et statuts traçables.",
   },
   {
-    title: 'Heures sup & primes',
+    slug: 'rapports',
+    title: 'Rapports & corrections',
     description:
-      'Règles paramétrables par convention ou par site. Heures normales, sup., dimanches et jours fériés calculés sans intervention.',
+      "Rapports de présence agrégés par jour, semaine ou mois, exportables en CSV/Excel pour intégration manuelle dans Sage, Odoo ou Excel paie. Corrections de pointage avec piste d'audit complète.",
   },
   {
-    title: 'Exports paie',
+    slug: 'employes',
+    title: 'Employés & organisation',
     description:
-      'Exports CSV/Excel prêts à intégrer dans Sage, Odoo, Excel paie ou tout autre logiciel RH/comptable utilisé.',
+      "Annuaire employés multi-sites, départements hiérarchiques, organisations, groupes d'accès. Données biométriques (visage, empreinte, carte) chiffrées au repos par Fernet. Invitations utilisateurs internes par email.",
   },
   {
-    title: 'Tableau de bord temps réel',
+    slug: 'terminaux',
+    title: 'Terminaux & accès',
     description:
-      'Présents, retards, absences, heures cumulées : visualisez l\'activité de tous vos sites en un seul écran.',
+      "Onboarding et supervision centralisés des terminaux Hikvision via la gateway : synchronisation, redémarrage à distance, lecture de carte, configuration des lecteurs et webhooks. Multi-tenant strictement isolé.",
   },
-];
+] as const;
 
 const benefits = [
   {
-    title: 'Pensé pour le marché africain',
+    title: 'Pensé pour les coupures réseau',
     description:
-      'Tolérant aux coupures réseau, hébergé localement, conforme à la réglementation ivoirienne et accessible en français.',
+      "Les pointages sont conservés sur le terminal Hikvision puis rattrapés automatiquement par le gateway dès le retour du réseau. Aucun pointage perdu, même en cas d'incident internet.",
   },
   {
     title: 'Mis en place par des pros',
     description:
-      "Nos équipes installent, paramètrent et forment vos managers et utilisateurs finaux. Pas de chantier laissé à mi-chemin.",
+      "Nos équipes installent les terminaux, paramètrent les plannings et forment vos managers et collaborateurs finaux. Pas de chantier laissé à mi-chemin.",
   },
   {
-    title: 'Évolutif sans friction',
+    title: 'Sécurité & conformité au cœur',
     description:
-      "Démarrez sur un site, étendez à votre groupe quand vous êtes prêts. Le tarif suit le nombre d'utilisateurs actifs.",
+      "Multi-tenant strictement isolé, biométrie chiffrée Fernet, audit log de toutes les actions, exports et suppression de données sur demande (RGPD-ready). JWT pour l'API, RBAC par organisation.",
   },
 ];
 
@@ -72,8 +78,8 @@ export default function LrTimePage() {
             LR Time — <span className="text-[var(--lr-orange-400)]">pilotez le temps</span> de travail de vos équipes, sans tableur.
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-white/70 leading-relaxed">
-            Pointage, plannings, congés, heures sup, exports paie : un seul SaaS pour remplacer vos cahiers,
-            tableurs et fichiers Excel disséminés.
+            Pointage Hikvision, plannings, congés, rapports de présence, employés et terminaux :
+            un SaaS multi-tenant pour remplacer vos cahiers, tableurs et fichiers Excel disséminés.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/contact?sujet=demo" className="lr-btn-primary">
@@ -125,16 +131,22 @@ export default function LrTimePage() {
           </div>
           <div className="grid gap-px bg-[var(--lr-border)] border border-[var(--lr-border)] md:grid-cols-2 lg:grid-cols-3">
             {modules.map((module, idx) => (
-              <div
-                key={module.title}
-                className="bg-white p-6 relative hover:bg-[var(--lr-steel-50)] transition-colors"
+              <Link
+                key={module.slug}
+                href={`/lr-time/fonctionnalites/${module.slug}`}
+                className="bg-white p-6 relative hover:bg-[var(--lr-steel-50)] transition-colors group"
               >
                 <span className="lr-mono text-[10px] text-[var(--lr-steel-400)]">MOD.{String(idx + 1).padStart(2, '0')}</span>
-                <h3 className="mt-2 font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)] leading-tight">{module.title}</h3>
+                <h3 className="mt-2 font-display text-lg font-bold uppercase tracking-wide text-[var(--lr-navy-900)] leading-tight group-hover:text-[var(--lr-orange-600)] transition-colors">{module.title}</h3>
                 <p className="mt-2 text-sm text-[var(--lr-steel-700)] leading-relaxed">{module.description}</p>
-              </div>
+              </Link>
             ))}
           </div>
+          <p className="mt-6 text-xs text-[var(--lr-steel-500)] leading-relaxed">
+            <span className="lr-mono uppercase text-[var(--lr-orange-600)]">Roadmap</span>
+            {' '}— application mobile collaborateur (consultation pointage, demande de congé, validation manager) prévue en 2026.
+            Les connecteurs paie directs (Sage, Odoo) sont à l'étude ; aujourd'hui les rapports s'exportent en CSV/Excel.
+          </p>
         </div>
       </section>
 
