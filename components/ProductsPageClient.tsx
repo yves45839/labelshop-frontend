@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import ProductCard from '@/components/ProductCard';
 import { addToCart } from '@/lib/cart';
 import { mapProductCategory, MAIN_CATEGORIES } from '@/lib/category';
-import { api, apiUrl } from '@/lib/api';
+import { apiUrl } from '@/lib/api';
 
 type Product = {
   id: number;
@@ -39,8 +40,8 @@ export default function ProductsPageClient() {
   const [selectedCategory, setSelectedCategory] = useState('Toutes les catégories');
 
   useEffect(() => {
-    api
-      .get('/products/get-products/')
+    axios
+      .get(apiUrl('/products/get-products/'))
       .then((res) => {
         const products = res.data as Product[];
         const groups: ProductsByCategory = {};
