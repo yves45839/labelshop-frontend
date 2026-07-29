@@ -178,13 +178,14 @@ export default function HomePageClient() {
                 </span>
               </div>
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] text-[var(--lr-navy-900)] uppercase tracking-tight">
-                Sécuriser vos sites,<br />
-                <span className="text-[var(--lr-orange-600)]">suivre vos équipes,</span><br />
-                former vos techniciens.
+                Sécurité électronique &<br />
+                <span className="text-[var(--lr-orange-600)]">vidéosurveillance Hikvision</span><br />
+                à Abidjan.
               </h1>
               <p className="max-w-xl text-base md:text-lg text-[var(--lr-steel-700)] leading-relaxed">
-                On installe vos caméras Hikvision, on développe <strong className="text-[var(--lr-navy-900)]">LR Time</strong> pour gérer vos pointages,
-                et on forme vos équipes. Quatre métiers, une seule équipe, à vos côtés sur le terrain.
+                Sécuriser vos sites, suivre vos équipes, former vos techniciens : on installe vos
+                caméras Hikvision, on développe <strong className="text-[var(--lr-navy-900)]">LR Time</strong> pour
+                gérer vos pointages, et on forme vos équipes partout en Côte d'Ivoire.
               </p>
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <Link href="/products" className="lr-btn-primary">
@@ -446,7 +447,7 @@ export default function HomePageClient() {
                 Les produits qu'on installe le plus souvent : stables, faciles à piloter depuis le mobile, plébiscités par nos clients pros.
               </p>
             </div>
-            <Link href="/search" className="lr-btn-secondary self-start md:self-auto">
+            <Link href="/products" className="lr-btn-secondary self-start md:self-auto">
               Voir tout le catalogue
             </Link>
           </div>

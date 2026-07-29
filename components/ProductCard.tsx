@@ -29,7 +29,7 @@ export default function ProductCard({
       itemType="https://schema.org/Product"
     >
       <meta itemProp="sku" content={reference} />
-      <link itemProp="url" href={whatsappLink} />
+      <link itemProp="url" href={`/products/${slug}`} />
 
       {/* Header technique : référence + statut */}
       <div className="flex items-center justify-between border-b border-[var(--lr-border)] bg-[var(--lr-steel-50)] px-4 py-2">
@@ -93,11 +93,7 @@ export default function ProductCard({
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 bg-emerald-600 px-3 py-3 font-display text-xs font-semibold uppercase tracking-widest text-white hover:bg-emerald-700 transition-colors border-r border-emerald-700"
-          itemProp="potentialAction"
-          itemScope
-          itemType="https://schema.org/BuyAction"
         >
-          <meta itemProp="target" content={whatsappLink} />
           <FaWhatsapp className="text-base" />
           Acheter
         </a>

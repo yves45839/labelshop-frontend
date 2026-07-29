@@ -7,6 +7,7 @@ import {
   getFormationBySlug,
   type FormationChapter,
 } from '@/lib/formations-data';
+import { JsonLd, breadcrumbJsonLd, courseJsonLd } from '@/lib/seo';
 
 export function generateStaticParams() {
   return formations.map((f) => ({ slug: f.slug }));
@@ -22,6 +23,7 @@ export async function generateMetadata(props: {
     return {
       title: 'Formation introuvable — Label Retail',
       description: 'Cette formation n’existe pas ou plus.',
+      robots: { index: false, follow: false },
     };
   }
 
@@ -88,6 +90,16 @@ export default async function FormationDetailPage(props: {
 
   return (
     <div className="min-h-screen bg-white text-[var(--lr-navy-900)]">
+      <JsonLd
+        data={[
+          courseJsonLd(formation),
+          breadcrumbJsonLd([
+            { name: 'Accueil', path: '/' },
+            { name: 'Formations', path: '/formations' },
+            { name: formation.shortTitle, path: `/formations/${formation.slug}` },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section className="relative bg-[var(--lr-navy-900)] text-white border-b border-[var(--lr-orange-500)] overflow-hidden">
         <div className="absolute inset-0 lr-blueprint-dark opacity-40" />

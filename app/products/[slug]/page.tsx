@@ -1,8 +1,14 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { FaWhatsapp } from 'react-icons/fa';
 import type { Metadata, ResolvingMetadata } from 'next';
 import AddToCart from '@/components/AddToCart';
 import { mapProductCategory } from '@/lib/category';
 import { apiUrl } from '@/lib/api';
+import { categoryPath } from '@/lib/products';
+import { absoluteUrl, productJsonLd } from '@/lib/seo';
+import { relatedArticlesForCategory } from '@/lib/related';
 
 // 🔁 Récupère l'image
 function getImageUrl(product: any): string {
@@ -44,6 +50,7 @@ export async function generateMetadata(
     return {
       title: 'Produit introuvable',
       description: "Le produit recherché n'existe pas.",
+      robots: { index: false, follow: false },
     };
   }
 
@@ -63,7 +70,7 @@ export async function generateMetadata(
 
   const priceMeta: Metadata['other'] = {
     'product:brand': brand,
-    'product:availability': 'instock',
+    'product:availability': product.is_available === false ? 'oos' : 'instock',
     ...(!product.hide_price && typeof product.list_price === 'number'
       ? {
           'product:price:amount': product.list_price.toString(),
@@ -124,13 +131,7 @@ export default async function ProductDetailPage({
   const product = await getProduct(slug);
 
   if (!product) {
-    return (
-      <div className="lr-container py-24 text-center">
-        <span className="lr-mono text-xs text-[var(--lr-orange-600)]">// 404 / NOT_FOUND</span>
-        <h1 className="font-display text-3xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)] mt-3">Produit introuvable</h1>
-        <p className="mt-3 text-[var(--lr-steel-700)]">Cette référence n'est plus en ligne. Elle a peut-être changé de nom ou été retirée.</p>
-      </div>
-    );
+    notFound();
   }
 
   const imageUrl = getImageUrl(product);
@@ -140,6 +141,7 @@ export default async function ProductDetailPage({
     `Bonjour Label Retail, je m'intéresse au produit ${product.name} (Réf : ${product.default_code}). Pouvez-vous m'en dire plus ?`
   )}`;
   const categoryName = mapProductCategory(product);
+  const relatedArticles = await relatedArticlesForCategory(categoryName);
   const categoryChips = Array.from(
     new Set(
       [
@@ -239,13 +241,13 @@ export default async function ProductDetailPage({
         "@type": "ListItem",
         position: 3,
         name: categoryName,
-        item: `https://labelretail.ci/products/categories#${categoryName?.toLowerCase().replace(/\s+/g, '-')}`,
+        item: absoluteUrl(categoryPath(categoryName)),
       },
       {
         "@type": "ListItem",
         position: 4,
         name: product.name,
-        item: `https://labelretail.ci/products/${product.slug}`,
+        item: absoluteUrl(`/products/${product.slug}`),
       },
     ].filter((item) => Boolean(item.name)),
   };
@@ -265,27 +267,7 @@ export default async function ProductDetailPage({
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "Product",
-        name: product.name,
-        image: [imageUrl],
-        description:
-          product.meta_description || product.description || 'Produit Label Retail',
-        sku: product.default_code,
-        brand: {
-          "@type": "Brand",
-          name: brand,
-        },
-        mpn: product.default_code,
-        category: categoryName,
-        offers: {
-          "@type": "Offer",
-          priceCurrency: "XOF",
-          price: product.list_price,
-          url: `https://labelretail.ci/products/${product.slug}`,
-          areaServed: "CI",
-        },
-      },
+      productJsonLd(product, imageUrl, categoryName),
       breadcrumbList,
       faqJsonLd,
     ],
@@ -304,7 +286,7 @@ export default async function ProductDetailPage({
               <>
                 <span className="text-white/30">/</span>
                 <Link
-                  href={`/products/categories#${categoryName.toLowerCase().replace(/\s+/g, '-')}`}
+                  href={categoryPath(categoryName)}
                   className="hover:text-[var(--lr-orange-400)]"
                   prefetch={false}
                 >
@@ -330,9 +312,12 @@ export default async function ProductDetailPage({
               <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-[var(--lr-orange-500)]" />
               <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-[var(--lr-orange-500)]" />
               <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-[var(--lr-orange-500)]" />
-              <img
+              <Image
                 src={imageUrl}
                 alt={product.name}
+                width={768}
+                height={384}
+                priority
                 className="h-96 w-full object-contain"
               />
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 lr-mono text-[10px] text-[var(--lr-navy-800)] bg-white/80 px-2 py-0.5">
@@ -390,11 +375,7 @@ export default async function ProductDetailPage({
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 px-5 py-3 font-display text-sm font-semibold uppercase tracking-widest text-white border border-emerald-700 transition-colors"
                 >
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-                    alt="WhatsApp"
-                    className="h-5 w-5"
-                  />
+                  <FaWhatsapp aria-hidden className="h-5 w-5" />
                   Discuter sur WhatsApp
                 </a>
                 <AddToCart
@@ -559,6 +540,14 @@ export default async function ProductDetailPage({
                 Quelques ressources pour préparer votre projet vidéosurveillance en Côte d'Ivoire.
               </p>
               <ul className="mt-4 space-y-2 text-sm">
+                {relatedArticles.map((article) => (
+                  <li key={article.path}>
+                    <Link href={article.path} className="lr-link flex items-center gap-2" prefetch={false}>
+                      <span className="text-[var(--lr-orange-500)]">›</span>
+                      {article.title}
+                    </Link>
+                  </li>
+                ))}
                 <li>
                   <Link href="/blogs" className="lr-link flex items-center gap-2" prefetch={false}>
                     <span className="text-[var(--lr-orange-500)]">›</span>

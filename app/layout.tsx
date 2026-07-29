@@ -6,6 +6,7 @@ import FirebaseInit from '@/components/FirebaseInit';
 import Script from 'next/script';
 import type { Metadata } from 'next';
 import { Inter, Barlow_Condensed, JetBrains_Mono } from 'next/font/google';
+import { JsonLd, organizationJsonLd, webSiteJsonLd, SITE_URL, SITE_NAME } from '@/lib/seo';
 import './globals.css';
 
 const inter = Inter({
@@ -30,20 +31,22 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://labelretail.ci'),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Label Retail',
-    template: '%s | Label Retail',
+    default: `${SITE_NAME} — Sécurité électronique & Hikvision à Abidjan`,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
     "Sécurité électronique, télécommunications et gestion du temps : Label Retail accompagne les entreprises ivoiriennes du conseil à la maintenance.",
-  alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
-    url: 'https://labelretail.ci',
-    siteName: 'Label Retail',
+    url: SITE_URL,
+    siteName: SITE_NAME,
   },
+  ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
+    : {}),
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -52,18 +55,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       lang="fr"
       className={`${inter.variable} ${barlow.variable} ${jetbrains.variable}`}
     >
-      <head>
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-MFV8XCTVGF" />
-        <Script id="gtag-init">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-MFV8XCTVGF');
-          `}
-        </Script>
-      </head>
       <body className="flex flex-col min-h-screen bg-white text-[var(--lr-navy-900)] antialiased">
+        <JsonLd data={[organizationJsonLd(), webSiteJsonLd()]} />
         <Navbar />
         <FirebaseInit />
         <main className="flex-grow content">
@@ -71,6 +64,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </main>
         <Footer />
         <FloatingMenu />
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-MFV8XCTVGF"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MFV8XCTVGF');
+          `}
+        </Script>
       </body>
     </html>
   );

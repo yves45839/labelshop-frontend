@@ -1,53 +1,41 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import axios from 'axios';
-import ProductCard from '@/components/ProductCard';
-import { addToCart } from '@/lib/cart';
-import { mapProductCategory, MAIN_CATEGORIES } from '@/lib/category';
+import ProductGridClient from '@/components/ProductGridClient';
+import { MAIN_CATEGORIES } from '@/lib/category';
 import { apiUrl } from '@/lib/api';
+import {
+  categoryPath,
+  groupProductsByCategory,
+  type Product,
+  type ProductsByCategory,
+} from '@/lib/products';
 
-interface Product {
-  id: number;
-  name: string;
-  slug: string;
-  image_1024?: string;
-  default_code?: string;
-  list_price: number;
-  categ_id?: string;
-  category_main?: string;
-  category_sub?: string;
-  category_type?: string;
-  [key: string]: any;
-}
+export default function ProductsByCategoryClient({
+  initialGrouped,
+}: {
+  initialGrouped?: ProductsByCategory;
+}) {
+  const hasInitialData = Boolean(initialGrouped);
+  const [grouped, setGrouped] = useState<ProductsByCategory>(initialGrouped ?? {});
+  const [isLoading, setIsLoading] = useState(!hasInitialData);
 
-interface ProductsByCategory {
-  [category: string]: Product[];
-}
-
-export default function ProductsByCategoryClient() {
-  const [grouped, setGrouped] = useState<ProductsByCategory>({});
-  const [isLoading, setIsLoading] = useState(true);
-
+  // Repli client si la page n'a pas pu précharger le catalogue côté serveur.
   useEffect(() => {
+    if (hasInitialData) return;
     axios
       .get(apiUrl('/products/get-products/'))
       .then((res) => {
-        const products = res.data as Product[];
-        const groups: ProductsByCategory = {};
-        products.forEach((p) => {
-          const category = mapProductCategory(p);
-          if (!groups[category]) groups[category] = [];
-          groups[category].push(p);
-        });
-        setGrouped(groups);
+        setGrouped(groupProductsByCategory(res.data as Product[]));
         setIsLoading(false);
       })
       .catch((err) => {
         console.error('Erreur lors de la récupération des produits :', err);
         setIsLoading(false);
       });
-  }, []);
+  }, [hasInitialData]);
 
   if (isLoading) {
     return (
@@ -75,39 +63,21 @@ export default function ProductsByCategoryClient() {
               <span className="lr-mono text-[10px] text-[var(--lr-steel-400)]">
                 CAT.{String(idx + 1).padStart(2, '0')}
               </span>
-              <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">{category}</h2>
+              <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">
+                <Link href={categoryPath(category)} className="hover:text-[var(--lr-orange-700)]" prefetch={false}>
+                  {category}
+                </Link>
+              </h2>
               <span className="h-px flex-1 bg-[var(--lr-border)]" />
-              <span className="lr-mono text-xs text-[var(--lr-steel-500)]">{grouped[category].length} réf.</span>
+              <Link
+                href={categoryPath(category)}
+                className="lr-mono text-xs text-[var(--lr-orange-600)] hover:text-[var(--lr-navy-900)]"
+                prefetch={false}
+              >
+                {grouped[category].length} réf. →
+              </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {grouped[category].map((product) => {
-              const imageUrl = `${apiUrl(product.image_1024 || '')}?t=${Date.now()}`;
-              const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
-                `Bonjour Label Retail, je m'intéresse au produit ${product.name} (Réf : ${product.default_code}). Pouvez-vous m'en dire plus ?`
-              )}`;
-              const handleAdd = async () => {
-                await addToCart({
-                  product_id: product.id,
-                  quantity: 1,
-                  product_name: product.name,
-                  product_image: imageUrl,
-                  price: product.list_price,
-                });
-              };
-              return (
-                <ProductCard
-                  key={product.id}
-                  imageUrl={imageUrl}
-                  name={product.name}
-                  reference={product.default_code || ''}
-                  slug={product.slug}
-                  price={product.list_price}
-                  whatsappLink={whatsappLink}
-                  onAddToCart={handleAdd}
-                />
-              );
-            })}
-            </div>
+            <ProductGridClient products={grouped[category]} />
           </section>
         ))}
       </main>

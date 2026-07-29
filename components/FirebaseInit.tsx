@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect } from 'react';
-import { initFirebase } from '@/lib/firebase';
 
 export default function FirebaseInit() {
   useEffect(() => {
-    initFirebase();
+    // Import dynamique : sort le SDK Firebase du bundle initial de chaque page.
+    import('@/lib/firebase').then(({ initFirebase }) => initFirebase());
   }, []);
   return null;
 }

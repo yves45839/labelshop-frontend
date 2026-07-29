@@ -17,6 +17,40 @@ export interface BlogData {
   [key: string]: any;
 }
 
+/* ------------------------------------------------------------------ */
+/* Côté serveur (SSR/SSG/sitemap) : appels directs au backend, ISR 1h  */
+/* ------------------------------------------------------------------ */
+
+import { apiUrl } from '@/lib/api';
+import { slugify } from '@/lib/seo';
+
+export async function listBlogsServer(): Promise<BlogData[]> {
+  const res = await fetch(apiUrl('/blogs/'), { next: { revalidate: 3600 } });
+  if (!res.ok) throw new Error(`listBlogsServer: erreur ${res.status}`);
+  const data = await res.json();
+  return Array.isArray(data) ? data : data?.results ?? [];
+}
+
+export async function getBlogServer(id: number | string): Promise<BlogData | null> {
+  const res = await fetch(apiUrl(`/blogs/${id}/`), { next: { revalidate: 3600 } });
+  if (res.ok) return res.json();
+  if (res.status === 404) return null;
+  // Certains backends n'exposent pas /blogs/<id>/ : repli sur la liste.
+  const all = await listBlogsServer().catch(() => [] as BlogData[]);
+  return all.find((b) => String(b.id) === String(id)) ?? null;
+}
+
+/** URL canonique d'un article : /blogs/{slug-du-titre}-{id} (le backend ne fournit pas de slug). */
+export function blogPath(blog: Pick<BlogData, 'id' | 'title'>): string {
+  return `/blogs/${slugify(blog.title)}-${blog.id}`;
+}
+
+/** Extrait l'id numérique d'un segment "/blogs/mon-titre-42" ou "/blogs/42". */
+export function parseBlogId(segment: string): number | null {
+  const match = segment.match(/(\d+)$/);
+  return match ? Number(match[1]) : null;
+}
+
 /** Tous les appels passent par le proxy Next.js → zéro CORS, zéro CSRF */
 export async function listBlogs(): Promise<BlogData[]> {
   const res = await fetch('/api/blogs', { cache: 'no-store' });

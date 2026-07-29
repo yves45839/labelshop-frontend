@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { LR_TIME_MODULES as modules } from '@/lib/lr-time-data';
 
 export const metadata: Metadata = {
   title: 'LR Time — Pointage Hikvision, plannings et rapports de présence',
@@ -8,44 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/lr-time' },
 };
 
-const modules = [
-  {
-    slug: 'pointage',
-    title: 'Pointage Hikvision',
-    description:
-      'Terminaux Hikvision (biométrie visage, empreinte, carte RFID) intégrés via Hik Device Gateway. Ingestion temps réel par webhook + rattrapage automatique en cas de coupure réseau.',
-  },
-  {
-    slug: 'plannings',
-    title: 'Plannings & shifts',
-    description:
-      "Plannings hebdomadaires, périodes datées, work shifts (heures de travail, pauses, marges de retard et de départ anticipé, heures supplémentaires). Affectation par employé ou par département, avec règles weekend flexible.",
-  },
-  {
-    slug: 'conges',
-    title: 'Congés & absences',
-    description:
-      "Demandes de congés (payés, maladie, sans solde, spéciaux) avec workflow de validation manager : approbation, rejet motivé, annulation. Soldes et statuts traçables.",
-  },
-  {
-    slug: 'rapports',
-    title: 'Rapports & corrections',
-    description:
-      "Rapports de présence agrégés par jour, semaine ou mois, exportables en CSV/Excel pour intégration manuelle dans Sage, Odoo ou Excel paie. Corrections de pointage avec piste d'audit complète.",
-  },
-  {
-    slug: 'employes',
-    title: 'Employés & organisation',
-    description:
-      "Annuaire employés multi-sites, départements hiérarchiques, organisations, groupes d'accès. Données biométriques (visage, empreinte, carte) chiffrées au repos par Fernet. Invitations utilisateurs internes par email.",
-  },
-  {
-    slug: 'terminaux',
-    title: 'Terminaux & accès',
-    description:
-      "Onboarding et supervision centralisés des terminaux Hikvision via la gateway : synchronisation, redémarrage à distance, lecture de carte, configuration des lecteurs et webhooks. Multi-tenant strictement isolé.",
-  },
-] as const;
+
 
 const benefits = [
   {
