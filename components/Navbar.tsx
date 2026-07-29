@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import axios from 'axios';
-import { watchAuth } from '@/lib/firebase';
 import { getCurrentUser, isAdminEmail } from '@/lib/user';
 import { viewCart, type CartItemData } from '@/lib/cart';
 import { apiUrl } from '@/lib/api';
@@ -23,6 +22,8 @@ import {
   FaUser,
   FaClock,
   FaGraduationCap,
+  FaThLarge,
+  FaEnvelope,
 } from 'react-icons/fa';
 
 type Product = {
@@ -51,39 +52,54 @@ export default function Navbar() {
     }
   };
 
+  // Suggestions : endpoint de recherche dédié + debounce, au lieu de
+  // télécharger tout le catalogue à chaque frappe.
   useEffect(() => {
     if (searchQuery.length < 2) {
       setSuggestions([]);
       return;
     }
 
-    const fetchSuggestions = async () => {
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
       try {
-        const res = await axios.get(apiUrl('/products/get-products/'));
-        const query = searchQuery.toLowerCase();
-        const filtered = res.data.filter((p: Product) =>
-          p.name.toLowerCase().includes(query) ||
-          p.slug.toLowerCase().includes(query) ||
-          p.default_code?.toLowerCase().includes(query)
+        const res = await axios.get(
+          apiUrl(`/products/search-products/?q=${encodeURIComponent(searchQuery)}`),
+          { signal: controller.signal }
         );
-        setSuggestions(filtered.slice(0, 5));
+        const results = Array.isArray(res.data) ? res.data : [];
+        setSuggestions(results.slice(0, 5));
       } catch (err) {
-        console.error('Erreur suggestions :', err);
+        if (!axios.isCancel(err)) {
+          console.error('Erreur suggestions :', err);
+        }
       }
-    };
+    }, 300);
 
-    fetchSuggestions();
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [searchQuery]);
 
   useEffect(() => {
-    const unsubscribe = watchAuth((u) => {
-      if (u) {
-        setUser({ id: u.uid, email: u.email, name: u.displayName });
-      } else {
-        setUser(null);
-      }
+    // Import dynamique : sort le SDK Firebase du bundle initial partagé.
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
+    import('@/lib/firebase').then(({ watchAuth }) => {
+      if (cancelled) return;
+      unsubscribe = watchAuth((u) => {
+        if (u) {
+          setUser({ id: u.uid, email: u.email, name: u.displayName });
+        } else {
+          setUser(null);
+        }
+      });
     });
-    return unsubscribe;
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
   }, []);
 
   useEffect(() => {
@@ -130,6 +146,7 @@ const navLinks: {
 }[] = [
   { href: '/', label: 'ACCUEIL', icon: <FaHome /> },
   { href: '/products', label: 'PRODUITS', icon: <FaBoxOpen /> },
+  { href: '/products/categories', label: 'CATÉGORIES', icon: <FaThLarge /> },
   { href: '/lr-time', label: 'LR TIME', icon: <FaClock /> },
   { href: '/formations', label: 'FORMATIONS', icon: <FaGraduationCap /> },
   { href: '/cart', label: 'PANIER', icon: <FaShoppingCart />, showCount: true },
@@ -146,6 +163,7 @@ const navLinks: {
     : [{ href: '/accounts/login', label: 'CONNEXION', icon: <FaSignInAlt /> }]),
   { href: '/blogs', label: 'BLOG', icon: <FaNewspaper /> },
   { href: '/about', label: 'À PROPOS', icon: <FaInfoCircle /> },
+  { href: '/contact', label: 'CONTACT', icon: <FaEnvelope /> },
 ];
 
   return (
@@ -269,7 +287,7 @@ const navLinks: {
                     className="flex items-center gap-3 px-3 py-2 border-b border-[var(--lr-steel-100)] last:border-0 hover:bg-[var(--lr-steel-50)] cursor-pointer transition-colors"
                   >
                     <Image
-                      src={`${imageUrl}?t=${Date.now()}`}
+                      src={imageUrl}
                       alt={product.name}
                       width={32}
                       height={32}

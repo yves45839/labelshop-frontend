@@ -1,54 +1,36 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import ProductCard from '@/components/ProductCard';
-import { addToCart } from '@/lib/cart';
-import { mapProductCategory, MAIN_CATEGORIES } from '@/lib/category';
-import { api, apiUrl } from '@/lib/api';
+import Link from 'next/link';
+import ProductGridClient from '@/components/ProductGridClient';
+import { MAIN_CATEGORIES } from '@/lib/category';
+import { api } from '@/lib/api';
+import {
+  categoryPath,
+  groupProductsByCategory,
+  type Product,
+  type ProductsByCategory,
+} from '@/lib/products';
 
-type Product = {
-  id: number;
-  name: string;
-  slug: string;
-  image_1024?: string;
-  default_code?: string;
-  list_price: number;
-  categ_id?: string;
-  category_main?: string;
-  category_sub?: string;
-  category_type?: string;
-  [key: string]: unknown;
+type Props = {
+  initialGrouped?: ProductsByCategory;
+  initialCategories?: string[];
 };
 
-// ✅ Utilise uniquement image_1024 (format complet ou relatif)
-function getProductImage(product: Product): string {
-  if (product.image_1024 && typeof product.image_1024 === 'string') {
-    return `${apiUrl(product.image_1024)}?t=${Date.now()}`;
-  }
-  return '/default-product.png';
-}
-
-interface ProductsByCategory {
-  [category: string]: Product[];
-}
-
-export default function ProductsPageClient() {
-  const [grouped, setGrouped] = useState<ProductsByCategory>({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [categories, setCategories] = useState<string[]>([]);
+export default function ProductsPageClient({ initialGrouped, initialCategories }: Props) {
+  const hasInitialData = Boolean(initialGrouped && initialCategories);
+  const [grouped, setGrouped] = useState<ProductsByCategory>(initialGrouped ?? {});
+  const [isLoading, setIsLoading] = useState(!hasInitialData);
+  const [categories, setCategories] = useState<string[]>(initialCategories ?? []);
   const [selectedCategory, setSelectedCategory] = useState('Toutes les catégories');
 
+  // Repli client si la page n'a pas pu précharger le catalogue côté serveur.
   useEffect(() => {
+    if (hasInitialData) return;
     api
       .get('/products/get-products/')
       .then((res) => {
-        const products = res.data as Product[];
-        const groups: ProductsByCategory = {};
-        products.forEach((p) => {
-          const category = mapProductCategory(p);
-          if (!groups[category]) groups[category] = [];
-          groups[category].push(p);
-        });
+        const groups = groupProductsByCategory(res.data as Product[]);
         setGrouped(groups);
         setCategories(MAIN_CATEGORIES.filter((c) => groups[c]?.length));
         setIsLoading(false);
@@ -57,7 +39,7 @@ export default function ProductsPageClient() {
         console.error('Erreur lors de la récupération des produits :', error);
         setIsLoading(false);
       });
-  }, []);
+  }, [hasInitialData]);
 
   if (isLoading) {
     return (
@@ -75,6 +57,11 @@ export default function ProductsPageClient() {
         <div className="lr-container py-12">
           <span className="lr-eyebrow text-[var(--lr-orange-400)]">Catalogue · Hikvision & écosystème</span>
           <h1 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight mt-2">Nos produits</h1>
+          <p className="mt-3 text-white/70 text-sm max-w-2xl">
+            Caméras de vidéosurveillance, enregistreurs NVR/DVR, alarmes, contrôle d'accès et
+            équipement réseau : tout le matériel que Label Retail installe et maintient en
+            Côte d'Ivoire, livré depuis Abidjan.
+          </p>
           <div className="lr-stripe mt-6 max-w-xs" />
         </div>
       </header>
@@ -108,42 +95,20 @@ export default function ProductsPageClient() {
                 CAT.{String(idx + 1).padStart(2, '0')}
               </span>
               <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-[var(--lr-navy-900)]">
-                {category}
+                <Link href={categoryPath(category)} className="hover:text-[var(--lr-orange-700)]" prefetch={false}>
+                  {category}
+                </Link>
               </h2>
               <span className="h-px flex-1 bg-[var(--lr-border)]" />
-              <span className="lr-mono text-xs text-[var(--lr-steel-500)]">
-                {grouped[category].length} réf.
-              </span>
+              <Link
+                href={categoryPath(category)}
+                className="lr-mono text-xs text-[var(--lr-orange-600)] hover:text-[var(--lr-navy-900)]"
+                prefetch={false}
+              >
+                {grouped[category].length} réf. →
+              </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {grouped[category].map((product) => {
-              const imageUrl = getProductImage(product);
-              const whatsappLink = `https://wa.me/22588899965?text=${encodeURIComponent(
-                `Bonjour Label Retail, je suis intéressé par le produit ${product.name} (Réf : ${product.default_code}). Pouvez-vous m'en dire plus ?`
-              )}`;
-              const handleAdd = async () => {
-                await addToCart({
-                  product_id: product.id,
-                  quantity: 1,
-                  product_name: product.name,
-                  product_image: imageUrl,
-                  price: product.list_price,
-                });
-              };
-              return (
-                <ProductCard
-                  key={product.id}
-                  imageUrl={imageUrl}
-                  name={product.name}
-                  reference={product.default_code || ''}
-                  slug={product.slug}
-                  price={product.list_price}
-                  whatsappLink={whatsappLink}
-                  onAddToCart={handleAdd}
-                />
-              );
-            })}
-            </div>
+            <ProductGridClient products={grouped[category]} />
           </section>
         ))}
       </main>

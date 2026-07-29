@@ -1,5 +1,14 @@
+import type { Metadata } from 'next';
 import SearchResultsClient from '@/components/SearchResultsClient';
 import { apiUrl } from '@/lib/api';
+
+// Résultats de recherche : utiles aux visiteurs, mais pas à indexer
+// (contenu dupliqué du catalogue) — noindex, follow.
+export const metadata: Metadata = {
+  title: 'Recherche produits',
+  description: 'Recherchez une référence dans le catalogue Label Retail.',
+  robots: { index: false, follow: true },
+};
 
 interface Product {
   id: number;

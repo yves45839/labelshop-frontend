@@ -1,73 +1,54 @@
 import type { Metadata } from 'next';
 import ProductsByCategoryClient from './ProductsByCategoryClient';
+import {
+  groupProductsByCategory,
+  listProductsServer,
+  type ProductsByCategory,
+} from '@/lib/products';
+import { JsonLd, absoluteUrl, breadcrumbJsonLd, buildMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const revalidate = 3600;
+
+export const metadata: Metadata = buildMetadata({
   title: 'Catégories de produits | Vidéosurveillance & sécurité Label Retail',
   description:
     "Caméras, enregistreurs, alarmes et accessoires rangés par catégorie. Pour trouver vite ce qu'il vous faut, en Côte d'Ivoire.",
+  path: '/products/categories',
   keywords: [
     'catégories vidéosurveillance',
-    'caméras de sécurité Côte d\'Ivoire',
+    "caméras de sécurité Côte d'Ivoire",
     'NVR et DVR',
     'alarmes intrusion Abidjan',
     'Label Retail produits',
   ],
-  alternates: { canonical: 'https://labelretail.ci/products/categories' },
-  openGraph: {
-    title: 'Catalogue par catégorie | Label Retail',
-    description:
-      "Caméras, enregistreurs, alarmes et réseau : nos solutions rangées par catégorie.",
-    url: 'https://labelretail.ci/products/categories',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary',
-    title: 'Label Retail - Produits par catégorie',
-    description: "Vidéosurveillance et contrôle d'accès, classés par univers métier.",
-  },
-  robots: { index: true, follow: true },
-};
+});
 
-export default function ProductsByCategoryPage() {
+export default async function ProductsByCategoryPage() {
+  let initialGrouped: ProductsByCategory | undefined;
+  try {
+    initialGrouped = groupProductsByCategory(await listProductsServer());
+  } catch (error) {
+    console.error('Catégories : préchargement serveur impossible', error);
+  }
+
   const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
     name: 'Produits par catégorie',
     description:
-      "Notre sélection de caméras, enregistreurs, alarmes, équipement réseau et accessoires, rangée par catégorie.",
-    url: 'https://labelretail.ci/products/categories',
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: 'Accueil',
-          item: 'https://labelretail.ci/',
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: 'Produits',
-          item: 'https://labelretail.ci/products',
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: 'Catégories',
-          item: 'https://labelretail.ci/products/categories',
-        },
-      ],
-    },
+      'Notre sélection de caméras, enregistreurs, alarmes, équipement réseau et accessoires, rangée par catégorie.',
+    url: absoluteUrl('/products/categories'),
+    breadcrumb: breadcrumbJsonLd([
+      { name: 'Accueil', path: '/' },
+      { name: 'Produits', path: '/products' },
+      { name: 'Catégories', path: '/products/categories' },
+    ]),
   };
 
   return (
     <>
-      <ProductsByCategoryClient />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={structuredData} />
+      <ProductsByCategoryClient initialGrouped={initialGrouped} />
     </>
   );
 }

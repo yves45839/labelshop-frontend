@@ -62,6 +62,36 @@ export const MAIN_CATEGORIES = [
   'Non classé',
 ];
 
+/** Intro éditoriale FR unique par catégorie (pages /products/categories/[slug]). */
+export const CATEGORY_INTROS: Record<string, string> = {
+  Accessoires:
+    "Kits, périphériques et accessoires indispensables pour compléter votre installation de sécurité électronique. Chaque référence est vérifiée par nos techniciens pour garantir sa compatibilité avec votre matériel existant.",
+  'Accessoires generaux':
+    "Alimentations, onduleurs, câbles, connectique, supports et boîtiers : les fondations discrètes d'une installation fiable. Du matériel sélectionné pour durer sous le climat ivoirien.",
+  'Affichage & mur d’images':
+    "Moniteurs professionnels, murs d'images LED et décodeurs pour vos salles de supervision. Des solutions d'affichage adaptées aux PC de sécurité, commissariats et centres de contrôle à Abidjan.",
+  'Alarme intrusion':
+    "Centrales AX PRO, détecteurs, contacts et sirènes Hikvision pour protéger vos locaux contre l'intrusion. Installation et télésurveillance assurées par nos équipes partout en Côte d'Ivoire.",
+  'Controle d’acces':
+    "Badges, terminaux biométriques, portillons, serrures et ventouses électromagnétiques : maîtrisez qui entre et qui sort de vos bâtiments. Solutions de pointage et temps de présence incluses.",
+  Enregistreurs:
+    "Enregistreurs NVR IP et DVR analogiques pour stocker et relire vos flux de vidéosurveillance. Dimensionnement du stockage et configuration réseau réalisés par nos techniciens certifiés.",
+  Interphonie:
+    "Visiophones, platines de rue et moniteurs intérieurs pour sécuriser l'accueil de vos résidences et bureaux. Compatible avec les écosystèmes Hikvision existants.",
+  'Reseau & transmission':
+    "Switches PoE, câbles réseau et équipements de transmission pour relier vos caméras et terminaux. L'infrastructure réseau qui fait tenir votre système de sécurité au quotidien.",
+  Stockage:
+    "Disques durs spécialisés vidéosurveillance et serveurs de stockage pour conserver vos enregistrements en toute fiabilité, avec les capacités adaptées à votre durée de rétention.",
+  'Trafic / Parking':
+    "Barrières, gestion d'accès véhicules et reconnaissance de plaques d'immatriculation pour vos parkings et sites logistiques en Côte d'Ivoire.",
+  'Videosurveillance IP':
+    "Caméras IP fixes, PTZ et kits vidéo Hikvision : l'image haute définition et l'intelligence embarquée pour surveiller vos sites à distance depuis votre téléphone.",
+  'Videosurveillance analogique':
+    "Caméras analogiques HD et DVR : la solution économique et robuste pour moderniser une installation coaxiale existante sans tout recâbler.",
+  'Videosurveillance specialisee':
+    "Caméras panoramiques et thermiques pour les besoins avancés : périmètres sensibles, détection d'intrusion nocturne, sites industriels et zones à risque.",
+};
+
 export function mapCategory(raw?: string): string {
   if (!raw) return 'Non classé';
   const normalized = normalizeCategory(raw);

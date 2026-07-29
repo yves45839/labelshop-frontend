@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import NextLink from 'next/link';
-import { getBlog, updateBlog, formatDateTime, type BlogData } from '@/lib/blogs';
+import { getBlog, updateBlog, formatDateTime, parseBlogId, type BlogData } from '@/lib/blogs';
 import { getCurrentUser, isAdminEmail } from '@/lib/user';
 import { markdownToHtml } from '@/lib/markdown';
 
@@ -22,7 +22,8 @@ const LANGUAGES = ['FR/EN (Bilingue)', 'Français', 'English'];
 
 export default function EditBlogPage() {
   const params = useParams();
-  const id = params?.id as string | undefined;
+  const slug = params?.slug as string | undefined;
+  const id = slug ? parseBlogId(slug) ?? undefined : undefined;
 
   const [title, setTitle]         = useState('');
   const [content, setContent]     = useState('');

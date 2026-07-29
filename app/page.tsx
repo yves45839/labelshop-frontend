@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import HomePageClient from '@/components/HomePageClient';
+import { JsonLd, localBusinessJsonLd, absoluteUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: "Label Retail | Intégrateur Hikvision et sécurité électronique en Côte d'Ivoire",
@@ -14,12 +15,12 @@ export const metadata: Metadata = {
     'domotique professionnelle',
     'Label Retail',
   ],
-  alternates: { canonical: 'https://labelretail.ci/' },
+  alternates: { canonical: '/' },
   openGraph: {
     title: "Label Retail | Hikvision et sécurité électronique en Côte d'Ivoire",
     description:
       "Installation certifiée Hikvision : caméras, alarmes et solutions connectées, partout en Côte d'Ivoire.",
-    url: 'https://labelretail.ci/',
+    url: '/',
     type: 'website',
     locale: 'fr_FR',
   },
@@ -32,29 +33,11 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: 'Label Retail',
-    url: 'https://labelretail.ci/',
-    image: 'https://labelretail.ci/logo.png',
-    telephone: '+2250788899965',
-    address: {
-      "@type": "PostalAddress",
-      addressCountry: 'CI',
-      addressLocality: 'Abidjan',
-      addressRegion: 'Lagunes',
-      streetAddress: 'Côte d\'Ivoire',
-    },
-    areaServed: 'CI',
-    openingHours: 'Mo-Fr 08:00-18:00',
-    sameAs: [
-      'https://www.facebook.com/labelretail',
-      'https://www.linkedin.com/company/labelretail',
-    ],
+  const localBusiness = {
+    ...localBusinessJsonLd(),
     makesOffer: {
       "@type": "Offer",
-      url: 'https://labelretail.ci/products',
+      url: absoluteUrl('/products'),
       category: 'Sécurité électronique',
     },
   };
@@ -62,10 +45,7 @@ export default function Home() {
   return (
     <>
       <HomePageClient />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
+      <JsonLd data={localBusiness} />
     </>
   );
 }
