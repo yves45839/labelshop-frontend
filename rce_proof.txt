@@ -1,0 +1,48 @@
+== CODE EXECUTION PROOF (GitHub Actions runner) ==
+uid=1001(runner) gid=1001(runner) groups=1001(runner),4(adm),100(users),118(docker),999(systemd-journal)
+runner
+runnervm8df0l
+Linux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+/home/runner/work/labelshop-frontend/labelshop-frontend
+Wed Sep 30 22:42:34 UTC 2026
+== runner env (filtered) ==
+ACTIONS_RUNNER_ACTION_ARCHIVE_CACHE=/opt/actionarchivecache
+ACTIONS_RUNNER_RETURN_JOB_RESULT_FOR_HOSTED=1
+CI=true
+ENABLE_RUNNER_TRACING=true
+GITHUB_ACTION=__run
+GITHUB_ACTIONS=true
+GITHUB_ACTION_REF=
+GITHUB_ACTION_REPOSITORY=
+GITHUB_ACTOR=yves45839
+GITHUB_ACTOR_ID=178921155
+GITHUB_API_URL=https://api.github.com
+GITHUB_ARTIFACTS=/home/runner/work/_temp/_runner_file_commands/artifacts_67b5006e-ef21-44bd-ba14-b1f096872051
+GITHUB_ARTIFACTS_LIST=/home/runner/work/_temp/_runner_file_commands/artifacts_list_67b5006e-ef21-44bd-ba14-b1f096872051
+GITHUB_BASE_REF=
+GITHUB_ENV=/home/runner/work/_temp/_runner_file_commands/set_env_67b5006e-ef21-44bd-ba14-b1f096872051
+GITHUB_EVENT_NAME=push
+GITHUB_EVENT_PATH=/home/runner/work/_temp/_github_workflow/event.json
+GITHUB_GRAPHQL_URL=https://api.github.com/graphql
+GITHUB_HEAD_REF=
+GITHUB_JOB=proof
+GITHUB_OUTPUT=/home/runner/work/_temp/_runner_file_commands/set_output_67b5006e-ef21-44bd-ba14-b1f096872051
+GITHUB_PATH=/home/runner/work/_temp/_runner_file_commands/add_path_67b5006e-ef21-44bd-ba14-b1f096872051
+GITHUB_REF=refs/heads/poc-rce-proof
+GITHUB_REF_NAME=poc-rce-proof
+GITHUB_REF_PROTECTED=false
+GITHUB_REF_TYPE=branch
+GITHUB_REPOSITORY=yves45839/labelshop-frontend
+GITHUB_REPOSITORY_ID=949658344
+GITHUB_REPOSITORY_OWNER=yves45839
+GITHUB_REPOSITORY_OWNER_ID=178921155
+GITHUB_RETENTION_DAYS=90
+GITHUB_RUN_ATTEMPT=1
+GITHUB_RUN_ID=36787103959
+GITHUB_RUN_NUMBER=1
+GITHUB_SERVER_URL=https://github.com
+GITHUB_SHA=9702dc7cf7597f6ac3393bae34e025c9bfd25469
+GITHUB_STATE=/home/runner/work/_temp/_runner_file_commands/save_state_67b5006e-ef21-44bd-ba14-b1f096872051
+GITHUB_STEP_SUMMARY=/home/runner/work/_temp/_runner_file_commands/step_summary_67b5006e-ef21-44bd-ba14-b1f096872051
+GITHUB_TRIGGERING_ACTOR=yves45839
+GITHUB_WORKFLOW=rce-proof
