@@ -1,0 +1,14 @@
+name: rce2
+on:
+  workflow_dispatch
+
+permissions:
+  contents: read
+
+jobs:
+  proof:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disabled for security
+        run: echo "This workflow has been disabled."
