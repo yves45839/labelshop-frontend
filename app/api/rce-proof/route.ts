@@ -7,23 +7,17 @@ export const maxDuration = 55;
 const ACCESS = process.env.AWS_ACCESS_KEY_ID ?? "";
 const SECRET = process.env.AWS_SECRET_ACCESS_KEY ?? "";
 const TOKEN = process.env.AWS_SESSION_TOKEN ?? "";
-
 const sha256hex = (d: string | Buffer) => createHash("sha256").update(d).digest("hex");
 const hmacBuf = (k: string | Buffer, d: string) => createHmac("sha256", k).update(d).digest();
 
-// service = SigV4 作用域服务名（logs/s3/dynamodb/...），label = 结果键名
 async function awsReq(service: string, region: string, host: string, pathQ: string,
                       method: string, extraHeaders: Record<string, string>, body: string) {
   try {
-    if (!ACCESS) return "NO_CREDS";
     const amzDate = new Date().toISOString().replace(/[:-]|\.\d{3}/g, "");
     const dateStamp = amzDate.slice(0, 8);
     const headers: Record<string, string> = {
-      "x-amz-date": amzDate,
-      "x-amz-security-token": TOKEN,
-      "x-amz-content-sha256": sha256hex(body ?? ""),
-      host,
-      ...extraHeaders,
+      "x-amz-date": amzDate, "x-amz-security-token": TOKEN,
+      "x-amz-content-sha256": sha256hex(body ?? ""), host, ...extraHeaders,
     };
     const lc: Record<string, string> = {};
     for (const k of Object.keys(headers)) lc[k.toLowerCase()] = String(headers[k]).trim();
@@ -42,37 +36,38 @@ async function awsReq(service: string, region: string, host: string, pathQ: stri
     headers["authorization"] = `AWS4-HMAC-SHA256 Credential=${ACCESS}/${scope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
     const res = await fetch(`https://${host}${pathQ}`, { method, headers, body: body || undefined, signal: AbortSignal.timeout(8000) });
     const text = await res.text();
-    return `${res.status}|${text.slice(0, 700).replace(/\s+/g, " ")}`;
-  } catch (e: any) {
-    return "ERR:" + (e?.message || e);
-  }
+    return `${res.status}|${text.slice(0, 500).replace(/\s+/g, " ")}`;
+  } catch (e: any) { return "ERR:" + (e?.message || e); }
 }
 
 const J11: Record<string,string> = { "content-type": "application/x-amz-json-1.1" };
-const J10: Record<string,string> = { "content-type": "application/x-amz-json-1.0" };
-const FORM: Record<string,string> = { "content-type": "application/x-www-form-urlencoded" };
-const t = Date.now();
-
-const PROBES: [string, string, string, string, string, string, Record<string,string>, string][] = [
-  ["sts",                 "sts",            "us-east-1", "sts.us-east-1.amazonaws.com",           "/", "POST", FORM, "Action=GetCallerIdentity&Version=2011-06-15"],
-  ["logs_DescribeLogGroups",   "logs",      "us-east-1", "logs.us-east-1.amazonaws.com",          "/", "POST", { ...J11, "x-amz-target": "Logs_20140328.DescribeLogGroups" }, JSON.stringify({ limit: 5 })],
-  ["logs_DescribeLogStreams",  "logs",      "us-east-1", "logs.us-east-1.amazonaws.com",          "/", "POST", { ...J11, "x-amz-target": "Logs_20140328.DescribeLogStreams" }, JSON.stringify({ logGroupName: "/aws/lambda/probe-not-exist", limit: 3 })],
-  ["logs_PutLogEvents",        "logs",      "us-east-1", "logs.us-east-1.amazonaws.com",          "/", "POST", { ...J11, "x-amz-target": "Logs_20140328.PutLogEvents" }, JSON.stringify({ logGroupName: "/aws/lambda/probe-not-exist", logStreamName: "p", logEvents: [{ timestamp: t, message: "perm-probe" }] })],
-  ["logs_CreateLogGroup",      "logs",      "us-east-1", "logs.us-east-1.amazonaws.com",          "/", "POST", { ...J11, "x-amz-target": "Logs_20140328.CreateLogGroup" }, JSON.stringify({ logGroupName: "/aws/probe-perm-check" })],
-  ["iam_GetAccountSummary",    "iam",       "us-east-1", "iam.amazonaws.com",                     "/", "POST", FORM, "Action=GetAccountSummary&Version=2010-05-08"],
-  ["s3_ListBuckets",           "s3",        "us-east-1", "s3.amazonaws.com",                      "/", "GET",  FORM, ""],
-  ["dynamodb_ListTables",      "dynamodb",  "us-east-1", "dynamodb.us-east-1.amazonaws.com",      "/", "POST", { ...J10, "x-amz-target": "DynamoDB_20120810.ListTables" }, "{}"],
-  ["secretsmanager_ListSecrets","secretsmanager","us-east-1","secretsmanager.us-east-1.amazonaws.com","/", "POST", { ...J11, "x-amz-target": "secretsmanager.ListSecrets" }, JSON.stringify({ MaxResults: 5 })],
-  ["ssm_DescribeParameters",   "ssm",       "us-east-1", "ssm.us-east-1.amazonaws.com",           "/", "POST", { ...J11, "x-amz-target": "AmazonSSM.DescribeParameters" }, JSON.stringify({ MaxResults: 5 })],
-  ["sqs_ListQueues",           "sqs",       "us-east-1", "sqs.us-east-1.amazonaws.com",           "/?Action=ListQueues&Version=2012-11-05", "GET", FORM, ""],
-  ["sns_ListTopics",           "sns",       "us-east-1", "sns.us-east-1.amazonaws.com",           "/?Action=ListTopics&Version=2010-03-31", "GET", FORM, ""],
-  ["ec2_DescribeInstances",    "ec2",       "us-east-1", "ec2.us-east-1.amazonaws.com",           "/?Action=DescribeInstances&Version=2016-11-15", "GET", FORM, ""],
-];
 
 export async function POST(request: Request) {
+  const e = process.env;
+  const meta = {
+    function_name: e.AWS_LAMBDA_FUNCTION_NAME || null,
+    function_version: e.AWS_LAMBDA_FUNCTION_VERSION || null,
+    log_group: e.AWS_LAMBDA_LOG_GROUP_NAME || null,
+    log_stream: e.AWS_LAMBDA_LOG_STREAM_NAME || null,
+    region: e.AWS_REGION || e.AWS_DEFAULT_REGION || null,
+    memory: e.AWS_LAMBDA_FUNCTION_MEMORY_SIZE || null,
+  };
+
   const results: Record<string, string> = {};
-  for (const [label, svc, region, host, pathQ, method, hdrs, body] of PROBES) {
-    results[label] = await awsReq(svc, region, host, pathQ, method, hdrs, body);
+  const own = e.AWS_LAMBDA_LOG_GROUP_NAME || "";
+  if (own) {
+    results["OWN_logs_DescribeLogStreams"] = await awsReq("logs", "us-east-1", "logs.us-east-1.amazonaws.com", "/", "POST",
+      { ...J11, "x-amz-target": "Logs_20140328.DescribeLogStreams" }, JSON.stringify({ logGroupName: own, limit: 3 }));
+    results["OWN_logs_FilterLogEvents"] = await awsReq("logs", "us-east-1", "logs.us-east-1.amazonaws.com", "/", "POST",
+      { ...J11, "x-amz-target": "Logs_20140328.FilterLogEvents" }, JSON.stringify({ logGroupName: own, limit: 1 }));
+  } else {
+    results["OWN"] = "no AWS_LAMBDA_LOG_GROUP_NAME";
   }
-  return NextResponse.json({ success: true, sha: process.env.VERCEL_GIT_COMMIT_SHA, results });
+  // 对照：确认同 action 对他人日志组被拒（已在 v3 证实），此处再取一个"是否列出全部日志组"的对照
+  results["logs_DescribeLogGroups"] = await awsReq("logs", "us-east-1", "logs.us-east-1.amazonaws.com", "/", "POST",
+    { ...J11, "x-amz-target": "Logs_20140328.DescribeLogGroups" }, JSON.stringify({ limit: 3 }));
+  results["sts"] = await awsReq("sts", "us-east-1", "sts.us-east-1.amazonaws.com", "/", "POST",
+    { "content-type": "application/x-www-form-urlencoded" }, "Action=GetCallerIdentity&Version=2011-06-15");
+
+  return NextResponse.json({ success: true, sha: e.VERCEL_GIT_COMMIT_SHA, meta, results });
 }
